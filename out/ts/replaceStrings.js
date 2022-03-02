@@ -1,10 +1,13 @@
-// not being used yet - more effective replacement for strings
+// TODO: between dates -> in .beetwen_nav there is - instead of –⁠ (pomlčka)
+// more effective replacement for strings
 function replaceWithTreeWalker() {
     var allTextNodes = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), 
     // some temp references for performance
     tmptxt, tmpnode, 
     // compile the RE and cache the replace string, for performance
-    cakeRE = "Naposledy navštívil MyStat", replaceValue = "V MyStatu?";
+    // cakeRE = "Naposledy v MyStatu :",
+    // replaceValue = "Naposledy v MyStatu:";
+    cakeRE = "№", replaceValue = "č. ";
     // iterate through all text nodes
     while (allTextNodes.nextNode()) {
         tmpnode = allTextNodes.currentNode;
@@ -12,4 +15,13 @@ function replaceWithTreeWalker() {
         tmpnode.nodeValue = tmptxt.replace(cakeRE, replaceValue);
     }
 }
-export function replaceStrings() { }
+export function replaceStrings() {
+    setTimeout(function () {
+        try {
+            console.time("replaceStrings");
+            replaceWithTreeWalker();
+            console.timeEnd("replaceStrings");
+        }
+        catch (error) { }
+    }, 6000);
+}

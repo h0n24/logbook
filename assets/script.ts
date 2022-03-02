@@ -23,21 +23,48 @@ document.body.addEventListener("contextmenu", onContextMenu);
 // after angular ---------------------------------------------------------------
 (function () {
   // @ts-ignore: Not in this file, it's on the website
-  angular
-    .element(document)
-    .scope()
-    .$on(
-      "$stateChangeSuccess",
-      function (event, toState, toParams, fromState, fromParams) {
-        console.warn("hlavní", event, toState, toParams, fromState, fromParams);
+  // console.log(angular);
+  try {
+    // replace dates to better format
+    // @ts-ignore: Not in this file, it's on the website
+    angular.element(document).scope().dateFormat = "d. M. yyyy";
+    // @ts-ignore: Not in this file, it's on the website
+    angular.element(document).scope().dateFormatShort = "d. M.";
 
-        // UX QOL improvements
-        addInfoForMenu();
+    // @ts-ignore: Not in this file, it's on the website
+    angular
+      .element(document)
+      .scope()
+      .$on(
+        "$stateChangeSuccess",
+        function (event, toState, toParams, fromState, fromParams) {
+          console.warn(
+            "hlavní",
+            event,
+            toState,
+            toParams,
+            fromState,
+            fromParams
+          );
 
-        // localization
-        createPageTitle(toState.name);
+          // UX QOL improvements
+          addInfoForMenu();
 
-        replaceDates();
-      }
-    );
+          // localization
+          createPageTitle(toState.name);
+
+          replaceDates();
+
+          replaceStrings();
+        }
+      );
+
+    // @ts-ignore: Not in this file, it's on the website
+    angular
+      .element(document)
+      .scope()
+      .$broadcast("dataFetchComplete", function () {
+        alert("dataFetchComplete");
+      });
+  } catch (error) {}
 })();

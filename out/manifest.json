@@ -29,7 +29,12 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["script-dist.js"],
+      "resources": [
+        "script-dist.js",
+        "js/jquery.js",
+        "js/angular.min.js",
+        "js/angular-material.min.js"
+      ],
       "matches": ["https://logbook.itstep.org/*"]
     }
   ],

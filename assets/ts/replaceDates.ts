@@ -1,66 +1,112 @@
-// Time since
+// using forced czech date format:
+// dateFormat = "d. M. yyyy"
+function detectDate(element: HTMLElement): Number | string {
+  const elementText = element.innerText;
+  const testElementText = elementText.replace(/\s/g, "");
+
+  let [day, month, year] = testElementText.split(".");
+  if (day.length === 1) {
+    day = "0" + day;
+  }
+  if (month.length === 1) {
+    month = "0" + month;
+  }
+
+  const date = `${year}-${month}-${day}`;
+  const parsedDate = Date.parse(date);
+
+  if (isNaN(parsedDate)) {
+    return elementText as string;
+  }
+  return parsedDate as Number;
+}
+
+// time since
 function timeSince(date) {
   const now = +new Date();
   const seconds = Math.floor((now - date) / 1000);
 
   let interval = seconds / 31536000;
 
+  // if not recognized, return original
+  if (typeof interval !== "number") {
+    return date;
+  }
+
   if (interval > 1) {
-    return Math.floor(interval) + " let";
+    if (interval > 2) {
+      return "před " + Math.floor(interval) + " lety";
+    }
+    return "před rokem";
   }
   interval = seconds / 2592000;
   if (interval > 1) {
-    return Math.floor(interval) + " měsíců";
+    if (interval > 2) {
+      return "před " + Math.floor(interval) + " měsíci";
+    }
+    return "před měsícem";
   }
   interval = seconds / 86400;
   if (interval > 1) {
-    return Math.floor(interval) + " dní";
+    if (interval > 2) {
+      return "před " + Math.floor(interval) + " dny";
+    }
+    return "včera";
   }
   interval = seconds / 3600;
   if (interval > 1) {
-    return Math.floor(interval) + " hodin";
+    // před hodinami
+    return "dnes";
   }
   interval = seconds / 60;
   if (interval > 1) {
-    return Math.floor(interval) + " minut";
+    // před minutami
+    return "dnes";
   }
-  return Math.floor(seconds) + " sekund";
+  return "nyní";
+}
+
+function localizedDate(date) {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  } as const;
+
+  try {
+    return new Date(date).toLocaleDateString("cs-CZ", options);
+  } catch (error) {
+    return date;
+  }
 }
 
 // Rewrite dates to ago
 // Example: Naposledy navštívil MyStat : 13.12.21
-// Return: 1 dní+
+// Return: před 2 hodinami
 export function replaceDates() {
-  // todo: rework so its more persistent?
+  // TODO: rework so its more persistent?
   // right now its not catching switch between pairs aka different lectures
 
   setTimeout(() => {
-    try {
-      const testElement = document.querySelector(
-        '[ng-if="stud.last_date_vizit != null"] span'
-      ) as HTMLElement;
+    console.time("replaceDates");
 
-      const testElementText = testElement.innerText;
-      const [day, month, year] = testElementText.split(".");
-      const date = `20${year}-${month}-${day}`;
+    // test elements
+    const testedElements = document.querySelectorAll(
+      '[ng-if="stud.last_date_vizit != null"] span'
+    );
+    // for each element
+    for (let i = 0; i < testedElements.length; i++) {
+      try {
+        const testElement = testedElements[i] as HTMLElement;
 
-      const testElementDate = Date.parse(date);
-      const testElementFinal = timeSince(testElementDate);
-      const testElementLocalizedDate = new Date(
-        testElementDate
-      ).toLocaleDateString("cs-CZ");
+        const date = detectDate(testElement);
 
-      testElement.innerText = testElementFinal;
-      testElement.title = testElementLocalizedDate + "+";
+        testElement.innerText = timeSince(date);
+        testElement.title = localizedDate(date);
+      } catch (error) {}
+    }
 
-      console.log("trying to replace dates");
-      console.log(
-        testElementText,
-        date,
-        testElementDate,
-        testElementFinal,
-        testElementLocalizedDate
-      );
-    } catch (error) {}
+    console.timeEnd("replaceDates");
   }, 1000);
 }

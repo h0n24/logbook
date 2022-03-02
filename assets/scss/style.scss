@@ -3,7 +3,9 @@
 $font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
   "Helvetica Neue", sans-serif !important;
 
-@use "../css/coverage-data.css";
+@use "../css/angular-material.min.css";
+@use "../css/main.min.css";
+// @use "../css/coverage-data.css";
 
 @use "abstracts/color";
 @use "abstracts/style";
@@ -117,6 +119,11 @@ html {
 
   .hw-md_single_teacher__comment#custom-style {
     overflow: auto;
+  }
+
+  // date picker
+  .page_picker {
+    max-width: 245px;
   }
 
   @media (min-width: 960px) {
