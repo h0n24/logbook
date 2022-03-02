@@ -5,6 +5,12 @@ $font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
 
 @use "../css/angular-material.min.css";
 @use "../css/main.min.css";
+
+@use "../css/site.css";
+@use "../css/tablesort.css";
+@use "../css/chosen.css";
+
+// TODO: test or create better from previous
 // @use "../css/coverage-data.css";
 
 @use "abstracts/color";

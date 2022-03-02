@@ -6,7 +6,7 @@ function replaceWithTreeWalker() {
     tmptxt, tmpnode, 
     // compile the RE and cache the replace string, for performance
     // cakeRE = "Naposledy v MyStatu :",
-    // replaceValue = "Naposledy v MyStatu:";
+    // replaceValue = "Naposledy v MyStatu";
     cakeRE = "№", replaceValue = "č. ";
     // iterate through all text nodes
     while (allTextNodes.nextNode()) {

@@ -2,7 +2,7 @@
 
 // more effective replacement for strings
 function replaceWithTreeWalker() {
-  var allTextNodes = document.createTreeWalker(
+  let allTextNodes = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT
     ),
@@ -11,7 +11,7 @@ function replaceWithTreeWalker() {
     tmpnode,
     // compile the RE and cache the replace string, for performance
     // cakeRE = "Naposledy v MyStatu :",
-    // replaceValue = "Naposledy v MyStatu:";
+    // replaceValue = "Naposledy v MyStatu";
 
     cakeRE = "№",
     replaceValue = "č. ";

@@ -17,9 +17,17 @@ blockUrls = [
     ],
     ["fonts.googleapis.com/css", "stylesheet"],
     ["logbook.itstep.org/css/main.css", "stylesheet"],
+    ["logbook.itstep.org/css/site.css", "stylesheet"],
+    ["logbook.itstep.org/css/media.css", "stylesheet"],
+    ["logbook.itstep.org/assets/*/tablesort.css", "stylesheet"],
+    ["logbook.itstep.org/assets/*/chosen.css", "stylesheet"],
     ["logbook.itstep.org/assets/*/bootstrap/dist/js/bootstrap.js", "script"],
     ["logbook.itstep.org/assets/*/jquery/dist/jquery.js", "script"],
     ["logbook.itstep.org/assets/*/jquery.js", "script", "/js/jquery.js"],
+    [
+        "https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.js",
+        "script",
+    ],
     [
         "logbook.itstep.org/assets/*/angular-material.min.js",
         "script",
