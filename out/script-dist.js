@@ -7,6 +7,46 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createPageTitle": function() { return /* binding */ createPageTitle; }
+/* harmony export */ });
+// change the title of the page - so it doesn't show the url
+function createPageTitle(source) {
+    // console.log("creating page title", source);
+    var url = "";
+    source === "presents" ? (url = "Prezence") : (url = url);
+    source === "schedulePage" ? (url = "Kalendář") : (url = url);
+    source === "news" ? (url = "Novinky") : (url = url);
+    source === "students.list" ? (url = "Studenti") : (url = url);
+    source === "students.comment" ? (url = "Zpráva pro studenta") : (url = url);
+    source === "students.send_mail" ? (url = "Zpráva pro skupinu") : (url = url);
+    source === "groupsPage" ? (url = "Skupinová účast") : (url = url);
+    source === "bind.materials" ? (url = "Učební pomůcky") : (url = url);
+    source === "bind.teach_materials_teach"
+        ? (url = "Moje materiály")
+        : (url = url);
+    source === "traffic" ? (url = "Potenciální ztráty") : (url = url);
+    source === "homeWork" ? (url = "Domácí úkoly") : (url = url);
+    source === "classWork" ? (url = "Práce v hodině") : (url = url);
+    source === "exams" ? (url = "Moje zkoušky") : (url = url);
+    source === "report" ? (url = "Reporty") : (url = url);
+    source === "tasks" ? (url = "Úkoly") : (url = url);
+    source === "content_author" ? (url = "Přidat obsah") : (url = url);
+    var title = document.querySelector("title");
+    if (url) {
+        title.innerText = url + " — LogBook";
+    }
+    else {
+        title.innerText = "LogBook";
+    }
+}
+
+
+/***/ }),
+/* 2 */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "onContextMenu": function() { return /* binding */ onContextMenu; },
 /* harmony export */   "addInfoForMenu": function() { return /* binding */ addInfoForMenu; }
 /* harmony export */ });
@@ -44,6 +84,65 @@ function addInfoForMenu() {
             "Levé tlačítko: Otevřít menu — Pravé tlačítko: Otevřít položku menu";
     }
     catch (error) { }
+}
+
+
+/***/ }),
+/* 3 */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "replaceDates": function() { return /* binding */ replaceDates; }
+/* harmony export */ });
+// Time since
+function timeSince(date) {
+    var now = +new Date();
+    var seconds = Math.floor((now - date) / 1000);
+    var interval = seconds / 31536000;
+    if (interval > 1) {
+        return Math.floor(interval) + " let";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+        return Math.floor(interval) + " měsíců";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+        return Math.floor(interval) + " dní";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+        return Math.floor(interval) + " hodin";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+        return Math.floor(interval) + " minut";
+    }
+    return Math.floor(seconds) + " sekund";
+}
+// Rewrite dates to ago
+// Example: Naposledy navštívil MyStat : 13.12.21
+// Return: 1 dní+
+function replaceDates() {
+    // todo: rework so its more persistent?
+    // right now its not catching switch between pairs aka different lectures
+    setTimeout(function () {
+        try {
+            var testElement = document.querySelector('[ng-if="stud.last_date_vizit != null"] span');
+            var testElementText = testElement.innerText;
+            var _a = testElementText.split("."), day = _a[0], month = _a[1], year = _a[2];
+            var date = "20" + year + "-" + month + "-" + day;
+            var testElementDate = Date.parse(date);
+            var testElementFinal = timeSince(testElementDate);
+            var testElementLocalizedDate = new Date(testElementDate).toLocaleDateString("cs-CZ");
+            testElement.innerText = testElementFinal;
+            testElement.title = testElementLocalizedDate + "+";
+            console.log("trying to replace dates");
+            console.log(testElementText, date, testElementDate, testElementFinal, testElementLocalizedDate);
+        }
+        catch (error) { }
+    }, 1000);
 }
 
 
@@ -108,113 +207,25 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 !function() {
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ts_contextMenu__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _ts_createPageTitle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _ts_contextMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _ts_replaceDates__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 // TODO: block assets that are super slow, such as outdated jquery, raven and few material js and css
 // TODO: rework assets to wasm?
 //  and then load them from the extension
 // imports ---------------------------------------------------------------------
 
+
+
 // debug
 // import { debugAngular } from "./ts/debugAngular";
 // debugAngular();
-// right click on menu -> leads to doubleclick to prevent waiting --------------
-document.body.addEventListener("contextmenu", _ts_contextMenu__WEBPACK_IMPORTED_MODULE_0__.onContextMenu);
-// not being used yet - more effective replacement for strings
-function replaceWithTreeWalker() {
-    var allTextNodes = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), 
-    // some temp references for performance
-    tmptxt, tmpnode, 
-    // compile the RE and cache the replace string, for performance
-    cakeRE = "Naposledy navštívil MyStat", replaceValue = "V MyStatu?";
-    // iterate through all text nodes
-    while (allTextNodes.nextNode()) {
-        tmpnode = allTextNodes.currentNode;
-        tmptxt = tmpnode.nodeValue;
-        tmpnode.nodeValue = tmptxt.replace(cakeRE, replaceValue);
-    }
-}
-// Time since
-function timeSince(date) {
-    var now = +new Date();
-    var seconds = Math.floor((now - date) / 1000);
-    var interval = seconds / 31536000;
-    if (interval > 1) {
-        return Math.floor(interval) + " let";
-    }
-    interval = seconds / 2592000;
-    if (interval > 1) {
-        return Math.floor(interval) + " měsíců";
-    }
-    interval = seconds / 86400;
-    if (interval > 1) {
-        return Math.floor(interval) + " dní";
-    }
-    interval = seconds / 3600;
-    if (interval > 1) {
-        return Math.floor(interval) + " hodin";
-    }
-    interval = seconds / 60;
-    if (interval > 1) {
-        return Math.floor(interval) + " minut";
-    }
-    return Math.floor(seconds) + " sekund";
-}
-// Rewrite dates to ago
-// Example: Naposledy navštívil MyStat : 13.12.21
-// Return: 1 dní+
-function replaceDates() {
-    // todo: rework so its more persistent?
-    // right now its not catching switch between pairs aka different lectures
-    setTimeout(function () {
-        try {
-            var testElement = document.querySelector('[ng-if="stud.last_date_vizit != null"] span');
-            var testElementText = testElement.innerText;
-            var _a = testElementText.split("."), day = _a[0], month = _a[1], year = _a[2];
-            var date = "20" + year + "-" + month + "-" + day;
-            var testElementDate = Date.parse(date);
-            var testElementFinal = timeSince(testElementDate);
-            var testElementLocalizedDate = new Date(testElementDate).toLocaleDateString("cs-CZ");
-            testElement.innerText = testElementFinal;
-            testElement.title = testElementLocalizedDate + "+";
-            console.log("trying to replace dates");
-            console.log(testElementText, date, testElementDate, testElementFinal, testElementLocalizedDate);
-        }
-        catch (error) { }
-    }, 1000);
-}
-// change the title of the page - so it doesn't show the url
-function createPageTitle(source) {
-    // console.log("creating page title", source);
-    var url = "";
-    source === "presents" ? (url = "Prezence") : (url = url);
-    source === "schedulePage" ? (url = "Kalendář") : (url = url);
-    source === "news" ? (url = "Novinky") : (url = url);
-    source === "students.list" ? (url = "Studenti") : (url = url);
-    source === "students.comment" ? (url = "Zpráva pro studenta") : (url = url);
-    source === "students.send_mail" ? (url = "Zpráva pro skupinu") : (url = url);
-    source === "groupsPage" ? (url = "Skupinová účast") : (url = url);
-    source === "bind.materials" ? (url = "Učební pomůcky") : (url = url);
-    source === "bind.teach_materials_teach"
-        ? (url = "Moje materiály")
-        : (url = url);
-    source === "traffic" ? (url = "Potenciální ztráty") : (url = url);
-    source === "homeWork" ? (url = "Domácí úkoly") : (url = url);
-    source === "classWork" ? (url = "Práce v hodině") : (url = url);
-    source === "exams" ? (url = "Moje zkoušky") : (url = url);
-    source === "report" ? (url = "Reporty") : (url = url);
-    source === "tasks" ? (url = "Úkoly") : (url = url);
-    source === "content_author" ? (url = "Přidat obsah") : (url = url);
-    var title = document.querySelector("title");
-    if (url) {
-        title.innerText = url + " — LogBook";
-    }
-    else {
-        title.innerText = "LogBook";
-    }
-}
-// immediatelly on start change language on site (it keeps the same, ru-RU all the time)
+// init ------------------------------------------------------------------------
+// change language on site (it keeps the same, ru-RU all the time)
 document.documentElement.setAttribute("lang", "cs-CZ");
-// debug tools - v2
+// right click on menu -> leads to doubleclick to prevent waiting
+document.body.addEventListener("contextmenu", _ts_contextMenu__WEBPACK_IMPORTED_MODULE_1__.onContextMenu);
+// after angular ---------------------------------------------------------------
 (function () {
     // @ts-ignore: Not in this file, it's on the website
     angular
@@ -223,10 +234,10 @@ document.documentElement.setAttribute("lang", "cs-CZ");
         .$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
         console.warn("hlavní", event, toState, toParams, fromState, fromParams);
         // UX QOL improvements
-        (0,_ts_contextMenu__WEBPACK_IMPORTED_MODULE_0__.addInfoForMenu)();
+        (0,_ts_contextMenu__WEBPACK_IMPORTED_MODULE_1__.addInfoForMenu)();
         // localization
-        createPageTitle(toState.name);
-        replaceDates();
+        (0,_ts_createPageTitle__WEBPACK_IMPORTED_MODULE_0__.createPageTitle)(toState.name);
+        (0,_ts_replaceDates__WEBPACK_IMPORTED_MODULE_2__.replaceDates)();
     });
 })();
 
