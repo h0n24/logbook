@@ -1,0 +1,32 @@
+@use "abstracts/style";
+
+html {
+  // dialog shadows
+  md-dialog {
+    box-shadow: style.$box-shadow;
+  }
+
+  // speed of transitions
+  md-dialog.md-transition-in,
+  md-dialog.md-transition-out {
+    transition: none;
+    animation: none;
+  }
+
+  md-dialog.md-transition-in {
+    // transition: all 0.125s ease-in;
+    animation: slide-down 0.2s ease 1;
+  }
+
+  md-dialog.md-transition-out {
+    // transition: all 0.125s ease-out;
+    display: none;
+  }
+
+  .md-dialog-container {
+    background-color: transparent;
+    position: fixed;
+    top: 0 !important;
+    height: 100vh !important;
+  }
+}

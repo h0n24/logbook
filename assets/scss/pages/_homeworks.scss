@@ -1,0 +1,304 @@
+@use "abstracts/color";
+@use "abstracts/style";
+
+html main.content .homeWorks {
+  padding: 3rem !important;
+  margin: 0 !important;
+  top: 0 !important;
+
+  .custom-height-table-wrap .table-wrapper {
+    max-height: 100%;
+  }
+
+  .table-wrapper.presents {
+    // important so the sticky works
+    overflow: unset !important;
+  }
+
+  .home_work-table {
+    min-width: auto;
+
+    thead {
+      position: sticky;
+      z-index: 2;
+      top: 3rem;
+
+      &:after {
+        display: block;
+        content: "";
+        width: 100vw;
+        height: 1px;
+        border-bottom: 1px solid #00000029;
+        position: absolute;
+        left: -3rem;
+        bottom: 0px;
+      }
+    }
+
+    .student-name {
+      font-weight: 700;
+    }
+
+    .hw_buttons.hw_checked {
+      // background-color: color.$secondary;
+      color: color.$dark;
+      background-color: transparent;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hw_buttons.hw_overdue.automark {
+      border: none;
+      background: none;
+      color: red;
+    }
+
+    .hw_buttons.hw_not-loaded {
+      background: none;
+      border: none;
+
+      &:before {
+        content: "—";
+        color: color.$text;
+      }
+
+      .hw_pencil-icon.ng-scope {
+        display: none;
+      }
+    }
+
+    .dz_teach-buttons {
+      .dz_download-cvg {
+        // opacity: 0.1;
+        // filter: grayscale(100%);
+        display: none;
+      }
+
+      [ng-click="deleteHomeworkTeach(domzad_teach.id_domzad)"] {
+        // visibility: hidden;
+        display: none;
+      }
+
+      &:hover {
+        .dz_download-cvg,
+        [ng-click="deleteHomeworkTeach(domzad_teach.id_domzad)"] {
+          // visibility: visible;
+          // opacity: 1;
+          // filter: none;
+          display: block;
+          height: 1rem;
+        }
+
+        .dz_download-wrap {
+          // margin-left: -10ch;
+        }
+
+        .dz_download-wrap:before {
+          // margin-top: -3.5rem;
+          display: none;
+        }
+
+        .dz_download-wrap:after {
+          visibility: visible;
+        }
+      }
+    }
+
+    .dz_download-wrap {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      margin-right: 0;
+
+      &:before {
+        content: attr(aria-label);
+        max-width: 10ch;
+        height: 1rem;
+        line-height: 1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+      }
+      &:after {
+        content: "|";
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
+        visibility: hidden;
+      }
+    }
+
+    // message icon - TODO: simplify icon
+    .hw_massage-svg {
+      filter: invert(1) opacity(0.6);
+      bottom: auto;
+      right: auto;
+      position: relative;
+    }
+  } // end of .home_work-table
+
+  .homework_filters {
+    gap: 2rem;
+    margin-bottom: 1rem;
+
+    md-select {
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .works {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    &:before {
+      content: "Legenda: ";
+    }
+
+    .tested-w {
+      order: 1;
+
+      &:before {
+        content: "12";
+        font-weight: bold;
+        // background-color: color.$dark;
+        // border: color.$dark;
+        background-color: transparent;
+        border: none;
+        top: 0;
+      }
+    }
+
+    .no_before {
+      order: 2;
+      .small_icon {
+        // message icon 2 - TODO: simplify icon
+        filter: invert(1) saturate(0) brightness(0.6);
+      }
+    }
+
+    .blocked-w {
+      order: 3;
+
+      &:before {
+        content: "—";
+        background-color: transparent;
+        border: none;
+        top: 0;
+      }
+    }
+
+    div {
+      order: 50;
+      margin-bottom: 0;
+      margin-right: 0;
+    }
+
+    .page_picker.hometask_nav {
+      order: 99;
+      top: 0;
+      margin-top: 0 !important;
+    }
+  }
+
+  .inputs {
+    margin-bottom: 3rem;
+  }
+} // end of homeworks
+
+html .md-dialog-container {
+  .hw-md_single_stud-work__answer-text {
+    margin-bottom: 1rem;
+  }
+
+  .hw-md_single_teacher__file-wrap {
+    box-sizing: border-box;
+    left: 2px;
+    width: 100%;
+    background-color: rgba(color.$toolbars, 0.1);
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  .hw-md_single_teacher__file-count__wrap {
+    width: 100%;
+    top: auto;
+    bottom: 2.5rem;
+    z-index: 2;
+    padding-right: 0;
+    right: 0.5rem;
+    pointer-events: none;
+  }
+
+  .hw-md__tabs_modal {
+    .tab {
+      gap: 0.5rem;
+
+      &.active {
+        &:before {
+          // background-color: color.$primary;
+          display: none;
+        }
+      }
+    }
+
+    ul a {
+      margin-bottom: 0;
+
+      &.active {
+        color: color.$primary;
+        font-weight: 600;
+      }
+    }
+
+    .hw-md_subtitle {
+      font-size: 0.8rem;
+    }
+  }
+
+  .hw-md_stud-work__wrap,
+  .hw-md_single_stud-work__outer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+  }
+
+  .hw-md_single_stud-work__download-wrap,
+  .hw-md_stud-work__download-wrap {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    margin-left: 0.2rem;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+
+    &:before {
+      content: "Stáhnout ";
+      color: color.$primary;
+      margin-right: 0.2rem;
+    }
+
+    &:hover {
+      border-radius: style.$border-radius;
+      background-color: rgba(color.$primary, 10%);
+      cursor: pointer;
+    }
+  }
+
+  .hw-md_single_stud-work__download,
+  .hw-md_single .hw-md_stud-work__download,
+  &.home_work_modal .hw-md_stud-work__download {
+    margin: 0 !important;
+    // margin-left: 0.2rem !important;
+    // margin-right: 0.2rem !important;
+    width: auto;
+    height: 0.9rem;
+    filter: saturate(0.8);
+  }
+}

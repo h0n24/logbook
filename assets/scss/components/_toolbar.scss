@@ -1,0 +1,90 @@
+@use "abstracts/color";
+
+// restyle toolbar
+html body.main main.content toolbar {
+  left: 3rem;
+  padding-left: 0;
+  height: 3rem;
+  background-color: color.$toolbars;
+  width: calc(100% - 3rem);
+
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto;
+  align-items: center;
+  justify-content: flex-end;
+
+  .changeUser {
+    margin-right: 1rem;
+  }
+
+  .changeUser button {
+    // display: block;
+    border: 0.05rem solid #bcc3ce;
+    color: color.$text;
+    font-size: 0.8rem;
+    height: 1.8rem;
+    // width: 100%;
+    width: fit-content;
+    display: inline-block;
+    min-width: 16ch;
+    line-height: 1.2rem;
+    max-width: auto;
+    outline: 0;
+    padding: 0.25rem 0.4rem;
+    transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s;
+
+    background: #fff
+      url("data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%204%205'%3E%3Cpath%20fill='%23667189'%20d='M2%200L0%202h4zm0%205L0%203h4z'/%3E%3C/svg%3E")
+      no-repeat right 0.35rem center/.4rem 0.5rem;
+    padding-right: 1.2rem;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .evaluation_star {
+    position: relative;
+    top: 0.5rem;
+    right: 0;
+    filter: invert(100%);
+    opacity: 0.7;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .material-icons {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  md-menu,
+  .pull-right {
+    line-height: 3rem;
+  }
+
+  .pull-right {
+    align-self: flex-end;
+    color: color.$text;
+    display: flex;
+    gap: 1rem;
+    margin-right: 1rem;
+
+    opacity: 0;
+    animation: fadeIn 0.2s linear 1s forwards;
+  }
+
+  & + .pull-right:first-child {
+    order: 3;
+  }
+
+  .pull-right > span {
+    min-width: auto;
+    padding-right: 0;
+
+    i {
+      color: color.$text;
+      font-size: 1.5rem;
+    }
+  }
+}

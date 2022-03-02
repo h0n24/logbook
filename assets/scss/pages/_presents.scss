@@ -1,0 +1,376 @@
+@use "abstracts/color";
+@use "abstracts/style";
+
+// TODO: colors to abstracts
+
+html main.content .presents {
+  padding: 3rem;
+  margin: 0;
+
+  .add-material {
+    float: none;
+    margin: 0;
+    width: auto;
+    // margin-top: -3rem;
+    height: 2rem;
+    display: inline-block;
+    margin-bottom: 1rem !important;
+  }
+
+  // no more uppercase
+  .add-materials-btns {
+    // margin-top: 1rem;
+    // margin-top: -2rem;
+    margin-top: 0;
+    display: inline-block;
+    width: auto;
+    height: 2rem;
+    padding: 0 !important;
+
+    a {
+      text-transform: initial;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      font-size: 1rem;
+      float: none;
+      font-weight: 300;
+      border: style.$border-radius;
+      line-height: 2rem !important;
+      height: 2rem !important;
+
+      &:first-letter {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .topPanel .interna-wrap {
+    padding: 0;
+    padding-top: 2rem;
+  }
+  .topPanel {
+    text-align: left;
+    padding: 0;
+    margin-bottom: 1rem;
+
+    .paddingLeft {
+      font-size: 1.5rem;
+      color: color.$text;
+    }
+
+    .font-for-apple {
+      font-family: inherit;
+      font-variant: initial;
+    }
+  }
+
+  .dialog-demo-content button,
+  .set-date button {
+    width: auto;
+  }
+
+  ul.pars {
+    height: 3rem;
+    margin: 0;
+    margin-bottom: 3rem !important;
+
+    // test
+    display: inline-flex;
+    vertical-align: middle;
+
+    li {
+      margin-right: 0;
+    }
+  }
+
+  .pars li,
+  .groups li {
+    padding: 0;
+    width: auto;
+    margin-right: 0.5rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .pars li a,
+  .groups li a {
+    background-color: #fff;
+    color: color.$primary !important;
+    border: 0.05rem solid color.$primary !important;
+    border-radius: style.$border-radius;
+  }
+
+  .pars li:not(:last-child) > a {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none !important;
+  }
+
+  .pars li:not(:first-child) > a {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .pars li:not(:first-child) {
+    margin-left: -1px;
+  }
+
+  .pars li.active a,
+  .groups li.active a {
+    background-color: color.$primary !important;
+    border: 0.05rem solid color.$primary !important;
+    color: #fff !important;
+  }
+
+  .group {
+    color: color.$text;
+
+    .groupName {
+      font-weight: 500;
+    }
+
+    .specName {
+      margin-left: 1rem;
+    }
+  }
+
+  .dialog-demo-content button,
+  .set-date button {
+    text-transform: initial;
+  }
+
+  .table-wrapper {
+    padding: 0 !important;
+  }
+
+  .interna-wrap {
+    padding: 0;
+  }
+
+  .teacherInit {
+    // margin-bottom: 1rem;
+    margin-bottom: 3rem;
+    margin-top: 1rem;
+    max-width: 600px;
+
+    .check-techers-wrap {
+      float: none;
+
+      .check-techers p {
+        margin: 0 !important;
+        margin-right: 1rem !important;
+
+        input {
+          margin-right: -1rem;
+        }
+
+        label {
+          padding-left: 1.5rem;
+        }
+
+        label:before {
+          border-color: color.$primary !important;
+          width: 1rem;
+          height: 1rem;
+          border-radius: 1rem;
+        }
+
+        input:checked + label:before {
+          // width: 1rem;
+          // height: 1rem;
+          // border-radius: 1rem;
+          background-color: color.$primary !important;
+        }
+
+        label:after {
+          display: none;
+        }
+      }
+    }
+    .teacherTextarea {
+      float: none;
+      width: auto;
+      // margin-top: 4rem;
+      margin-top: 3rem;
+      padding: 0;
+
+      .theme-label {
+        padding-right: 0;
+        font-size: 1rem;
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+      }
+
+      .textarea-wrap {
+        float: none;
+        width: auto;
+        margin-bottom: 0.5rem;
+      }
+
+      .button-wrap {
+        padding: 0;
+        width: auto;
+        float: none;
+        display: flex;
+        gap: 0.5rem;
+
+        .buttons {
+          padding: 0;
+          width: auto;
+          float: none;
+
+          .md-button {
+            width: fit-content;
+            font-weight: 300;
+            border-radius: style.$border-radius;
+            line-height: 2rem !important;
+            height: 2rem !important;
+            min-width: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
+
+          &:last-child {
+            .md-button {
+              background-color: #fff !important;
+              color: color.$primary !important;
+              border: 1px solid color.$primary !important;
+            }
+          }
+        }
+      }
+
+      textarea#theme {
+        height: 3rem;
+        padding: 0.25rem 0.4rem;
+        border: 0.05rem solid #bcc3ce;
+        border-radius: 0.1rem;
+        transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s;
+
+        &:focus {
+          border-color: color.$primary !important;
+          box-shadow: 0 0 0 0.1rem rgba(color.$primary, 0.2);
+          // color: color.$primary !important;
+        }
+      }
+    }
+  }
+
+  .lesson-theme {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-style: initial;
+    font-weight: 600;
+  }
+
+  .wrapper-students thead {
+    position: sticky;
+    top: 3rem;
+    z-index: 2;
+    &:after {
+      display: block;
+      content: "";
+      width: 100vw;
+      height: 1px;
+      border-bottom: 1px solid #00000029;
+      position: absolute;
+      left: -3rem;
+      bottom: 2px;
+    }
+  }
+
+  .table {
+    .comment {
+      min-width: 250px;
+      max-width: 250px;
+    }
+  }
+
+  .table tr {
+    border-bottom: 0;
+    transition: background-color 0.225s ease;
+
+    &:nth-of-type(odd) {
+      background-color: #f8f8f6;
+    }
+
+    &:hover {
+      background-color: color.$yellow-hover;
+    }
+  }
+
+  .table td,
+  .table th {
+    height: 1rem;
+    padding: 1rem !important;
+  }
+
+  .table td.name {
+    font-weight: 700;
+  }
+
+  .table > thead > tr > th {
+    background: #fff;
+    color: color.$text;
+
+    // kvůli mystatu - dlouhý název
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+
+    span {
+      text-transform: initial;
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .number__presents {
+    width: auto;
+  }
+
+  .table .number .user-photo__presents {
+    left: 3rem;
+    height: 2rem;
+    width: 2rem;
+    margin-top: -1rem;
+
+    span {
+      top: 100%;
+      left: 100%;
+    }
+  }
+  .selector_students .ng-binding {
+    display: inline-block;
+  }
+
+  // dots
+  .presents span:nth-child(2) i {
+    border-color: #fdd835; // yellow
+  }
+
+  .presents .was-late {
+    border-color: #fdd835;
+    background-color: #fdd835;
+  }
+
+  .button-wrap .buttons .md-button {
+    text-transform: lowercase;
+    font-size: 1rem;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+
+  .dialog-demo-content button,
+  .set-date button {
+    background-color: color.$primary !important;
+    color: #fff;
+  }
+} // end of presents

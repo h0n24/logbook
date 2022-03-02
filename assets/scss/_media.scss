@@ -1,0 +1,11 @@
+@media (max-width: 1300px) {
+  html main.content .presents .dialog-demo-content {
+    margin-top: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  html #report .table-wrapper.schedule {
+    max-height: fit-content;
+  }
+}

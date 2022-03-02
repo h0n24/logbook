@@ -1,0 +1,133 @@
+// TODO: rozdělit do jednotlivých souborů
+
+$font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", sans-serif !important;
+
+@use "../css/coverage-data.css";
+
+@use "abstracts/color";
+@use "abstracts/style";
+@use "abstracts/animations";
+
+@use "components/sidenav";
+@use "components/toolbar";
+@use "components/loading";
+@use "components/backdrop";
+@use "components/dialog";
+@use "components/icons";
+
+@use "pages/presents";
+@use "pages/homeworks";
+@use "pages/schedule";
+@use "pages/groups";
+
+@use "scrollbars";
+@use "media";
+
+html,
+body {
+  background-color: #fff !important;
+  color: color.$text;
+  font-family: $font-family;
+
+  height: auto;
+  min-height: auto;
+}
+
+html {
+  // speed for animations
+  md-option {
+    transition: none;
+  }
+
+  // md-select
+  .md-select-menu-container.md-active md-select-menu > * {
+    transition: none;
+  }
+
+  // disable box shadow
+  .presents .interna-wrap,
+  .schedule .internal_wrap,
+  .tabMenu .internal_wrap,
+  .internal-wrap-global:not(.not-internal-wrap) {
+    box-shadow: none;
+    border: none;
+    padding: 0 !important;
+  }
+
+  // base padding
+  body.main {
+    padding-top: 3rem;
+    padding-left: 3rem;
+
+    // přepisuje když je otevřená nabídka
+    position: relative !important;
+    width: auto !important;
+    top: unset !important;
+  }
+
+  body.main main.content {
+    padding: 0;
+  }
+
+  .table-wrapper {
+    padding: unset !important;
+    overflow: initial;
+  }
+
+  // restyle all buttons
+  .btn,
+  .btn-floating {
+    background-color: color.$primary !important;
+  }
+
+  md-menu-content:not(.md_header_menu) {
+    min-height: auto;
+    min-width: auto !important;
+  }
+
+  .tabMenu .title h1 {
+    color: color.$text;
+    text-align: left;
+  }
+
+  // md select
+  .md-select-value > span:not(.md-select-icon) {
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  md-select-menu {
+    box-shadow: style.$box-shadow-shorter;
+  }
+
+  md-select-menu:not(.md-overflow) md-content {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: style.$border-radius;
+  }
+
+  md-select-menu.md-default-theme md-optgroup md-option,
+  md-select-menu md-optgroup md-option {
+    &:hover {
+      background-color: color.$yellow-hover;
+    }
+  }
+
+  .hw-md_single_teacher__comment#custom-style {
+    overflow: auto;
+  }
+
+  @media (min-width: 960px) {
+    md-tooltip {
+      font-size: 0.8rem;
+
+      .md-content {
+        line-height: 1.2rem;
+        height: 1.2rem;
+        padding: 0.4rem 0.8rem;
+      }
+    }
+  }
+}
