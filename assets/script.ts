@@ -38,7 +38,7 @@ document.body.addEventListener("contextmenu", onContextMenu);
       .$on(
         "$stateChangeSuccess",
         function (event, toState, toParams, fromState, fromParams) {
-          console.warn(
+          console.log(
             "hlavní",
             event,
             toState,

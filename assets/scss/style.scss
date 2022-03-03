@@ -1,4 +1,6 @@
 // TODO: rozdělit do jednotlivých souborů
+// TODO: rework material-icons -> svg zdroj tady: https://icon-sets.iconify.design/ci/notification-active/
+// TODO: https://web.dev/optimize-lcp/#minify-css
 
 $font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
   "Helvetica Neue", sans-serif !important;
@@ -40,6 +42,12 @@ body {
 
   height: auto;
   min-height: auto;
+}
+
+// optimize rendering speed
+[ui-view] {
+  content-visibility: auto;
+  contain-intrinsic-size: calc(100vw - 3rem) calc(100vh - 3rem);
 }
 
 html {
