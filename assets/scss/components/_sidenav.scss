@@ -112,14 +112,14 @@ html body.main main.content md-sidenav {
         }
       }
       .orange-count {
-        background-color: #ffca28;
-        border-radius: 100%;
+        background-color: color.$orange-500;
+        border-radius: 3rem;
         line-height: 1rem;
         padding: 0.2rem 0.4rem !important;
         font-size: 0.8rem;
         font-weight: 500;
         margin: 0;
-        margin-left: 0.5rem;
+        margin-left: 0.25rem;
         color: color.$text;
       }
     }

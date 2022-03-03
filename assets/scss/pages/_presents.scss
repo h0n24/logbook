@@ -303,7 +303,7 @@ html main.content .presents {
 
   .table td,
   .table th {
-    height: 1rem;
+    min-height: 1rem;
     padding: 1rem !important;
   }
 
@@ -349,7 +349,23 @@ html main.content .presents {
     display: inline-block;
   }
 
+  .table td.presents {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+    height: inherit;
+    grid-gap: 1rem;
+    height: 3rem; // todo: can it be without?
+  }
+
   // dots
+  .presents span {
+    margin: 0 !important;
+  }
+
   .presents span:nth-child(2) i {
     border-color: #fdd835; // yellow
   }

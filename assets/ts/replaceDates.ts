@@ -93,8 +93,9 @@ export function replaceDates() {
 
     // test elements
     const testedElements = document.querySelectorAll(
-      '[ng-if="stud.last_date_vizit != null"] span'
+      '[ng-if="stud.last_date_vizit != null"] span, .presents_stud td.mystat'
     );
+
     // for each element
     for (let i = 0; i < testedElements.length; i++) {
       try {
@@ -108,5 +109,5 @@ export function replaceDates() {
     }
 
     console.timeEnd("replaceDates");
-  }, 1000);
+  }, 5000);
 }

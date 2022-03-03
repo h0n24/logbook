@@ -81,7 +81,7 @@ export function replaceDates() {
     setTimeout(function () {
         console.time("replaceDates");
         // test elements
-        var testedElements = document.querySelectorAll('[ng-if="stud.last_date_vizit != null"] span');
+        var testedElements = document.querySelectorAll('[ng-if="stud.last_date_vizit != null"] span, .presents_stud td.mystat');
         // for each element
         for (var i = 0; i < testedElements.length; i++) {
             try {
@@ -93,5 +93,5 @@ export function replaceDates() {
             catch (error) { }
         }
         console.timeEnd("replaceDates");
-    }, 1000);
+    }, 5000);
 }

@@ -85,6 +85,12 @@ html body.main main.content toolbar {
     i {
       color: color.$text;
       font-size: 1.5rem;
+
+      &.count {
+        font-weight: 700;
+        font-size: 0.8rem;
+        background-color: color.$orange-500;
+      }
     }
   }
 }

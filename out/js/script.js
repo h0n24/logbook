@@ -14,6 +14,19 @@ var app = angular.module("app", modules);
 app.run(function ($rootScope, baseHttp) {
   $rootScope.strToTime = function (date, type) {
     if (angular.isDefined(date)) {
+      // date = date.split(' ');
+      // date[0] = date[0].split('-');
+      //
+      // if (date.length === 2) {
+      //     date[1] = date[1].split(':');
+      //     date = date[0].concat(date[1]);
+      // }
+      // Старая реализация
+      /*if (typeof date === 'string'){
+                    if (date.split('-').length === 3) {
+                        date = date.split(' ')[0].replace(/-/g, '/')
+                    }
+                }*/
       if (!type) {
         if (typeof date === "string") {
           if (date.split("-").length === 3) {
@@ -22,6 +35,7 @@ app.run(function ($rootScope, baseHttp) {
         }
       }
       return new Date(date);
+      // return new Date(date.replace(/-/g, '/'));
     }
   };
 

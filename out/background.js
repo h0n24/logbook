@@ -29,11 +29,6 @@ blockUrls = [
         "script",
     ],
     [
-        "logbook.itstep.org/assets/*/angular-material.min.js",
-        "script",
-        "/js/angular-material.min.js",
-    ],
-    [
         "logbook.itstep.org/assets/*/angular.min.js",
         "script",
         "/js/angular.min.js",
