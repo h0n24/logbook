@@ -1,5 +1,5 @@
 // remove all previous rules
-for (let index = 0; index < 150; index++) {
+for (let index = 0; index < 200; index++) {
   // @ts-ignore: Not in this file, it's the chrome
   chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [index],
@@ -547,6 +547,11 @@ blockUrls = [
   ],
   ["logbook.itstep.org/img/avatarka.svg", "image", "/resources/avatarka.svg"],
   ["logbook.itstep.org/favicon.ico", "image", "/resources/favicon.ico"],
+  [
+    "logbook.itstep.org/auth/get-marks-selects",
+    "xmlhttprequest",
+    "/resources/get-marks-selects.json",
+  ],
 ];
 
 let rulesArray = [];

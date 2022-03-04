@@ -138,7 +138,8 @@
         "resources/present.svg",
         "resources/students.svg",
         "resources/avatarka.svg",
-        "resources/favicon.ico"
+        "resources/favicon.ico",
+        "resources/get-marks-selects.json"
       ],
       "matches": ["https://logbook.itstep.org/*"]
     }
