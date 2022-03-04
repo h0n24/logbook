@@ -308,6 +308,7 @@ html .md-dialog-container {
   }
 
   .hw-md_theme__item .bold,
+  .hw-md_single_theme__item .bold,
   .hw-md_stud-work__title.bold,
   .hw-md_stud-work__date-title.bold,
   .hw-md_single_stud-work__title.bold,
@@ -337,7 +338,8 @@ html .md-dialog-container {
     margin: 0 !important;
     margin-left: 1ex !important;
   }
-  .hw-md_theme__item .hw-md_theme {
+  .hw-md_theme__item .hw-md_theme,
+  .hw-md_single_theme__item .hw-md_single_theme {
     color: color.$text;
     margin: 0 !important;
     margin-left: 1ex !important;
