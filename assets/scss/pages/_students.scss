@@ -3,6 +3,8 @@
 
 html {
   .students {
+    padding: 1rem;
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
@@ -118,6 +120,10 @@ html {
           padding: 0;
         }
       }
+    }
+
+    .allGroup-select {
+      padding-top: 1rem;
     }
   }
 }

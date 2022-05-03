@@ -147,4 +147,27 @@ html main.content .report {
       }
     }
   }
+
+  #report .sub-tabs .tab a {
+    color: color.$text;
+    text-transform: unset;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+
+    &.active {
+      color: color.$text;
+      text-transform: unset;
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
+
+      &::before {
+        background-color: color.$primary;
+        border-color: color.$primary;
+      }
+    }
+  }
 }

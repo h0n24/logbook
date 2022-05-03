@@ -5,8 +5,17 @@
 html .tasks.groups {
   & > .inputs {
     position: sticky;
-    top: 0;
+    // top: 0;
+    top: 3rem;
     z-index: 99;
+    background-color: #fff;
+    margin-bottom: 1rem;
+
+    md-select {
+      margin-top: 0.4rem;
+      margin-bottom: 0.4rem;
+      margin-right: 1rem;
+    }
   }
 
   .visits_wrap {

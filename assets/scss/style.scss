@@ -89,6 +89,11 @@ html {
     padding: 0;
   }
 
+  .global-margin {
+    margin: 1rem 2rem !important;
+    top: 0 !important;
+  }
+
   .table-wrapper {
     padding: unset !important;
     overflow: initial;
@@ -134,6 +139,33 @@ html {
     }
   }
 
+  .md-select-value .md-select-icon {
+    width: 1.5rem;
+    margin: 0;
+    transform: none;
+    &::after {
+      content: "";
+      transform: none;
+      background: transparent
+        url("data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%204%205'%3E%3Cpath%20fill='%23667189'%20d='M2%200L0%202h4zm0%205L0%203h4z'/%3E%3C/svg%3E")
+        no-repeat right 0.35rem center/.4rem 0.5rem;
+      padding-right: 0;
+      height: 1.2rem;
+      right: 0;
+      top: 0;
+      width: auto;
+    }
+  }
+
+  .internal-wrap-global md-select {
+    // max-width: unset;
+    max-width: 40ex;
+  }
+
+  .internal-wrap-global .md-select-value {
+    color: color.$text;
+  }
+
   .hw-md_single_teacher__comment#custom-style {
     overflow: auto;
   }
@@ -141,6 +173,69 @@ html {
   // date picker
   .page_picker {
     max-width: 245px;
+  }
+
+  // tabs
+  .tabs-global.tabs {
+    top: 3rem !important;
+    z-index: 100;
+    background-color: #fff;
+    position: sticky !important;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+
+    .tab {
+      width: fit-content;
+      // margin-right: 0.6rem;
+      padding: 0 !important;
+    }
+  }
+  .tabs-global ul li a,
+  .tabs-global.tabs ul li.tab a {
+    background-color: #fff !important;
+    color: color.$primary !important;
+    border-color: color.$primary !important;
+    border-radius: style.$border-radius !important;
+    text-transform: unset !important;
+    box-shadow: none !important;
+    width: auto !important;
+    min-width: auto !important;
+    // height: 2.4rem !important;
+    height: auto !important;
+    line-height: 1 !important;
+    vertical-align: middle;
+    padding: 0.65rem 0.8rem !important;
+    margin-right: 0.6rem !important;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+
+    &::after {
+      display: none !important;
+    }
+
+    &.active {
+      background-color: color.$primary !important;
+      color: #fff !important;
+    }
+
+    &:not(.active):hover {
+      box-shadow: none !important;
+      background-color: rgba(color.$primary, 0.2) !important;
+    }
+  }
+
+  // page picker
+  .page_picker i {
+    background-color: color.$primary !important;
+    color: #fff !important;
+    width: 2rem;
+    font-size: 1.8rem;
+
+    &:hover {
+      background-color: rgba(color.$primary, 0.6) !important;
+    }
   }
 
   @media (min-width: 960px) {
