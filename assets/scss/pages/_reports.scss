@@ -1,0 +1,149 @@
+@use "abstracts/color";
+@use "abstracts/style";
+
+// TODO: colors to abstracts
+
+html main.content .report {
+  #report .table {
+    min-width: auto;
+    width: max-content;
+    display: table;
+
+    thead {
+      position: sticky;
+      z-index: 100;
+      top: 3rem;
+
+      &:after {
+        display: block;
+        content: "";
+        width: 100vw;
+        height: 1px;
+        position: absolute;
+        left: -3rem;
+        bottom: 0px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+      }
+    }
+
+    .sumReport-tr td {
+      height: auto;
+    }
+  }
+
+  #report .table-wrapper.schedule tr > :first-child {
+    padding-top: 0 !important;
+    padding: 0 !important;
+  }
+
+  .table > tbody > tr > td {
+    border-top: none;
+  }
+
+  #report .table-wrapper.schedule thead tr {
+    background-color: #fff;
+  }
+
+  // #report th:first-child .blue_bg {
+  #report th .blue_bg {
+    // background-color: rgba(color.$primary, 10%) !important;
+    background-color: transparent !important;
+    padding: 0;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    color: color.$text;
+    text-align: left;
+    font-weight: normal;
+
+    // height: 3rem;
+    // vertical-align: middle;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  #report .table-wrapper.schedule tbody tr {
+    td div::before {
+      background-color: transparent;
+    }
+
+    &:nth-child(even) {
+      background-color: #f8f8f6;
+    }
+    &:nth-child(odd) {
+      background-color: #fff;
+    }
+
+    &:hover {
+      background-color: color.$yellow-hover;
+    }
+
+    .reportDay-inner {
+      display: flex;
+      justify-content: space-around;
+
+      p {
+        width: 50%;
+        padding-left: 1rem;
+      }
+    }
+
+    .not_empty {
+      color: color.$text;
+
+      // div::before {
+      //   left: 1px;
+      //   right: 1px;
+      //   background: rgba(0, 106, 208, 0.05);
+      // }
+
+      p.ng-binding:last-child {
+        font-weight: 500;
+      }
+    }
+
+    td div:not(.reportDay-inner) {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    td .auditory {
+      color: color.$text;
+    }
+
+    td .subject {
+      min-height: auto;
+    }
+
+    td .group {
+      display: none;
+    }
+  }
+
+  #groupsReport {
+    .table {
+      min-width: auto;
+      width: max-content;
+
+      thead {
+        position: sticky;
+        z-index: 100;
+        top: 3rem;
+
+        &:after {
+          display: block;
+          content: "";
+          width: 100vw;
+          height: 1px;
+          position: absolute;
+          left: -3rem;
+          bottom: 0px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+        }
+      }
+    }
+  }
+}
