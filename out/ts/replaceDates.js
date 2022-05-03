@@ -1,17 +1,17 @@
 // using forced czech date format:
 // dateFormat = "d. M. yyyy"
 function detectDate(element) {
-    var elementText = element.innerText;
-    var testElementText = elementText.replace(/\s/g, "");
-    var _a = testElementText.split("."), day = _a[0], month = _a[1], year = _a[2];
+    const elementText = element.innerText;
+    const testElementText = elementText.replace(/\s/g, "");
+    let [day, month, year] = testElementText.split(".");
     if (day.length === 1) {
         day = "0" + day;
     }
     if (month.length === 1) {
         month = "0" + month;
     }
-    var date = year + "-" + month + "-" + day;
-    var parsedDate = Date.parse(date);
+    const date = `${year}-${month}-${day}`;
+    const parsedDate = Date.parse(date);
     if (isNaN(parsedDate)) {
         return elementText;
     }
@@ -19,9 +19,9 @@ function detectDate(element) {
 }
 // time since
 function timeSince(date) {
-    var now = +new Date();
-    var seconds = Math.floor((now - date) / 1000);
-    var interval = seconds / 31536000;
+    const now = +new Date();
+    const seconds = Math.floor((now - date) / 1000);
+    let interval = seconds / 31536000;
     // if not recognized, return original
     if (typeof interval !== "number") {
         return date;
@@ -59,11 +59,11 @@ function timeSince(date) {
     return "nyní";
 }
 function localizedDate(date) {
-    var options = {
+    const options = {
         weekday: "long",
         year: "numeric",
         month: "long",
-        day: "numeric"
+        day: "numeric",
     };
     try {
         return new Date(date).toLocaleDateString("cs-CZ", options);
@@ -78,15 +78,15 @@ function localizedDate(date) {
 export function replaceDates() {
     // TODO: rework so its more persistent?
     // right now its not catching switch between pairs aka different lectures
-    setTimeout(function () {
+    setTimeout(() => {
         console.time("replaceDates");
         // test elements
-        var testedElements = document.querySelectorAll('[ng-if="stud.last_date_vizit != null"] span, .presents_stud td.mystat');
+        const testedElements = document.querySelectorAll('[ng-if="stud.last_date_vizit != null"] span, .presents_stud td.mystat');
         // for each element
-        for (var i = 0; i < testedElements.length; i++) {
+        for (let i = 0; i < testedElements.length; i++) {
             try {
-                var testElement = testedElements[i];
-                var date = detectDate(testElement);
+                const testElement = testedElements[i];
+                const date = detectDate(testElement);
                 testElement.innerText = timeSince(date);
                 testElement.title = localizedDate(date);
             }

@@ -29,7 +29,7 @@ blockUrls = [
         "script",
     ],
     [
-        "logbook.itstep.org/assets/34aefaae/angular-material/angular-material.min.js",
+        "logbook.itstep.org/assets/8c292aca/angular-material/angular-material.min.js",
         "script",
         "/js/angular-material.min.js",
     ],
@@ -418,17 +418,17 @@ blockUrls = [
         "/js/addLabWorkCtrl.js",
     ],
     [
-        "logbook.itstep.org/assets/e0b74fbf/home/controllers/homeCtrl.js",
+        "logbook.itstep.org/assets/f3e7b2d0/home/controllers/homeCtrl.js",
         "script",
         "/js/homeCtrl.js",
     ],
     [
-        "logbook.itstep.org/assets/e0b74fbf/home/home-factory.js",
+        "logbook.itstep.org/assets/f3e7b2d0/home/home-factory.js",
         "script",
         "/js/home-factory.js",
     ],
     [
-        "logbook.itstep.org/assets/e0b74fbf/dateService.js",
+        "logbook.itstep.org/assets/f3e7b2d0/dateService.js",
         "script",
         "/js/dateService.js",
     ],

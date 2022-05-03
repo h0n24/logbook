@@ -1,7 +1,7 @@
 // change the title of the page - so it doesn't show the url
 export function createPageTitle(source) {
     // console.log("creating page title", source);
-    var url = "";
+    let url = "";
     source === "presents" ? (url = "Prezence") : (url = url);
     source === "schedulePage" ? (url = "Kalendář") : (url = url);
     source === "news" ? (url = "Novinky") : (url = url);
@@ -20,7 +20,7 @@ export function createPageTitle(source) {
     source === "report" ? (url = "Reporty") : (url = url);
     source === "tasks" ? (url = "Úkoly") : (url = url);
     source === "content_author" ? (url = "Přidat obsah") : (url = url);
-    var title = document.querySelector("title");
+    const title = document.querySelector("title");
     if (url) {
         title.innerText = url + " — LogBook";
     }
