@@ -126,4 +126,14 @@ html {
       padding-top: 1rem;
     }
   }
+
+  .reviewStudent-right .button-wrap .attention-info {
+    font-size: 0.8rem;
+    width: auto;
+    height: auto;
+    min-height: auto;
+    border: none;
+    color: color.$text;
+    padding: 0;
+  }
 }

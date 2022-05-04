@@ -170,6 +170,35 @@ html {
     overflow: auto;
   }
 
+  .md-text {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .md-select-value > span:not(.md-select-icon) {
+    padding-left: 0.6rem;
+  }
+
+  .internal-wrap-global .md-select-value .md-text {
+    // padding-left: 0.2rem;
+    padding-left: 0;
+  }
+
+  .internal-wrap-global md-input-container .md-placeholder,
+  .internal-wrap-global
+    md-input-container
+    label:not(.md-no-float):not(.md-container-ignore) {
+    font-weight: 400;
+    color: color.$text;
+    padding-left: 0.6rem;
+    top: -18px;
+  }
+
+  md-input-container textarea.md-input {
+    padding: 0.6rem !important;
+    font-weight: 400;
+  }
+
   // date picker
   .page_picker {
     max-width: 245px;
