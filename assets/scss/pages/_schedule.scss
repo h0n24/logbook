@@ -92,6 +92,42 @@ html {
     .fixed_height div {
       display: none;
     }
+
+    .schedule_top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+
+      .cur_date {
+        text-transform: lowercase;
+        &::before {
+          text-transform: none;
+          content: "Dnes je ";
+        }
+      }
+
+      .page_picker {
+        display: inline-flex;
+        margin-top: 0 !important;
+        clear: unset;
+        height: auto;
+        float: none;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .beetwen_nav {
+        top: 0;
+      }
+
+      .nav_week {
+        display: inline-flex;
+        width: auto;
+        height: auto;
+        margin-top: 0;
+      }
+    }
   }
 
   // TODO: find why it's not working?

@@ -31,6 +31,7 @@ function ping(url, multiplier) {
         var response = function () {
             var delta = new Date().getTime() - start;
             delta *= multiplier || 1;
+            delta = Math.round(delta);
             resolve(delta);
         };
         request_image(url).then(response).catch(response);
@@ -49,7 +50,7 @@ export function checkPing() {
     body.appendChild(pulseElement);
     // repeat every 5 seconds
     setInterval(function () {
-        ping("https://logbook.itstep.org/", 1)
+        ping("https://logbook.itstep.org/", 0.4)
             .then(function (delta) {
             const pulseElement = document.getElementById("pulse");
             if (pulseElement) {

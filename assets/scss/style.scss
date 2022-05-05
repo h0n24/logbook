@@ -27,7 +27,9 @@ $font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
 @use "components/icons";
 
 @use "pages/presents";
+@use "pages/news";
 @use "pages/students";
+@use "pages/materials";
 @use "pages/homeworks";
 @use "pages/schedule";
 @use "pages/groups";
@@ -74,6 +76,10 @@ html {
     padding: 0 !important;
   }
 
+  button {
+    user-select: none;
+  }
+
   // base padding
   body.main {
     padding-top: 3rem;
@@ -103,6 +109,7 @@ html {
   .btn,
   .btn-floating {
     background-color: color.$primary !important;
+    user-select: none;
   }
 
   md-menu-content:not(.md_header_menu) {
@@ -199,9 +206,81 @@ html {
     font-weight: 400;
   }
 
+  .internal-wrap-global md-select.ng-not-empty * {
+    color: color.$text;
+  }
+
   // date picker
   .page_picker {
-    max-width: 245px;
+    // max-width: 245px;
+    max-width: unset;
+  }
+
+  md-datepicker .md-datepicker-triangle-button {
+    display: none;
+  }
+
+  md-datepicker .md-datepicker-input {
+    color: color.$text;
+    font-size: 1rem;
+  }
+
+  button.md-datepicker-button.md-icon-button {
+    margin-top: -2px;
+  }
+
+  // calendar popup
+  .main md-calendar thead {
+    background-color: color.$toolbars;
+  }
+
+  .main md-calendar .md-calendar-day-header th {
+    // background-color: color.$primary;
+    background-color: color.$toolbars;
+    color: color.$text;
+  }
+
+  .main md-calendar .md-calendar-day-header {
+    border-radius: 0;
+    border-top-left-radius: style.$border-radius;
+    border-top-right-radius: style.$border-radius;
+    overflow: hidden;
+  }
+
+  .main md-calendar .md-calendar-scroll-mask {
+    // border-color: color.$primary;
+    // border-color: color.$toolbars;
+    border-color: transparent;
+    border-radius: 0;
+  }
+
+  .md-pane-open .md-datepicker-calendar {
+    box-shadow: style.$box-shadow;
+    border-radius: style.$border-radius;
+    border-color: color.$toolbars;
+  }
+
+  .md-default-theme
+    .md-calendar-date.md-calendar-selected-date
+    .md-calendar-date-selection-indicator,
+  .md-calendar-date.md-calendar-selected-date
+    .md-calendar-date-selection-indicator,
+  .md-default-theme
+    .md-calendar-date.md-focus.md-calendar-selected-date
+    .md-calendar-date-selection-indicator,
+  .md-calendar-date.md-focus.md-calendar-selected-date
+    .md-calendar-date-selection-indicator {
+    background-color: color.$primary;
+  }
+
+  .md-calendar-date-selection-indicator {
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+  }
+
+  .md-calendar-scroll-container {
+    box-shadow: none;
   }
 
   // tabs
@@ -256,14 +335,31 @@ html {
   }
 
   // page picker
-  .page_picker i {
+  .page_picker button i,
+  .page_picker button[aria-hidden="false"] i {
     background-color: color.$primary !important;
     color: #fff !important;
     width: 2rem;
     font-size: 1.8rem;
+    cursor: pointer;
 
     &:hover {
       background-color: rgba(color.$primary, 0.6) !important;
+    }
+  }
+
+  .page_picker button[disabled="disabled"] i {
+    // background-color: desaturate(color.$primary, 100%) !important;
+    // opacity: 0.5;
+    background-color: rgb(237, 236, 232) !important;
+    // color: #fff !important;
+    color: color.$text;
+    width: 2rem;
+    font-size: 1.8rem;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent !important;
     }
   }
 
