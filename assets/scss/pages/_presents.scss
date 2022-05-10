@@ -306,8 +306,72 @@ html main.content .presents {
       background-color: #f8f8f6;
     }
 
+    // hide parts when not hovering
+    md-select {
+      border-color: transparent;
+      transition: border-color 0.225s ease;
+
+      .md-select-icon {
+        opacity: 0;
+      }
+    }
+
+    .awarded span {
+      opacity: 1;
+      background-image: none;
+    }
+
+    .awarded span:last-child i:first-child {
+      opacity: 0;
+    }
+
+    .comment {
+      opacity: 0;
+    }
+
     &:hover {
       background-color: color.$yellow-hover;
+
+      md-select .md-select-icon {
+        opacity: 1;
+      }
+
+      .presentr-controlWork {
+        md-select[data-md-container-class="selectdemoSelectHeader violet"] {
+          border-color: rgba(176, 154, 218, 0.2);
+        }
+
+        &:hover {
+          md-select[data-md-container-class="selectdemoSelectHeader violet"] {
+            border-color: rgba(176, 154, 218, 1);
+          }
+        }
+      }
+
+      .presentr-classWork {
+        md-select[data-md-container-class="selectdemoSelectHeader green"] {
+          border-color: rgba(185, 216, 129, 0.2);
+        }
+
+        &:hover {
+          md-select[data-md-container-class="selectdemoSelectHeader green"] {
+            border-color: rgba(185, 216, 129, 1);
+          }
+        }
+      }
+
+      .awarded span:not(:last-child) {
+        opacity: 1;
+        background-image: url("https://logbook.itstep.org/img/kristall_grey.svg");
+      }
+
+      .awarded span:last-child i:first-child {
+        opacity: 1;
+      }
+
+      .comment {
+        opacity: 1;
+      }
     }
   }
 

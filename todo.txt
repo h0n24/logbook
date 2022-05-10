@@ -1,1 +1,11 @@
 https://logbook.itstep.org/auth/get-marks-selects se pro českou pobočku dost opakují -> zjistit jeslti je to tak i u ostatních + nahradit request
+
+udělat offline verzi, která napíše "jste offline", zkuste restartovat VPN + online checker
+
+zakomponovat responder a zjednodušit práci
+
+udělat automatické přihlašování?
+
+right click na body u prezence -> vyplní automaticky 12
+
+menší verze u prezence

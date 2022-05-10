@@ -8,6 +8,7 @@ import { onContextMenu, addInfoForMenu } from "./ts/contextMenu";
 import { replaceDates } from "./ts/replaceDates";
 import { replaceStrings } from "./ts/replaceStrings";
 import { checkPing } from "./ts/checkPing";
+import { addRightClickPresence } from "./ts/contextMenuPresence";
 
 // debug
 // import { debugAngular } from "./ts/debugAngular";
@@ -61,6 +62,8 @@ document.body.addEventListener("contextmenu", onContextMenu);
           replaceDates();
 
           replaceStrings();
+
+          addRightClickPresence();
         }
       );
 
