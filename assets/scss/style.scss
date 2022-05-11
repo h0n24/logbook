@@ -363,6 +363,20 @@ html {
     }
   }
 
+  // tooltip
+
+  md-toast,
+  md-toast .md-toast-content {
+    transform: none !important;
+    opacity: 1;
+  }
+
+  md-toast.ng-leave.ng-leave-active.md-top .md-toast-content {
+    // transition: none !important;
+    opacity: 0 !important;
+    transform: translate3d(0, -200%, 0);
+  }
+
   @media (min-width: 960px) {
     md-tooltip {
       font-size: 0.8rem;

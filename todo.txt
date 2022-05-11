@@ -6,6 +6,6 @@ zakomponovat responder a zjednodušit práci
 
 udělat automatické přihlašování?
 
-right click na body u prezence -> vyplní automaticky 12
+prohodit ikonky ve vrchním tabu -> ať je odhlášení poslední a oddělené vizuálně čárou -> nejde přes css
 
-menší verze u prezence
+zjistit, jak checkovat v angularu, kdy se načte "podstránka"

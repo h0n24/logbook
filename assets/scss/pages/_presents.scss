@@ -279,15 +279,52 @@ html main.content .presents {
     position: sticky;
     top: 3rem;
     z-index: 2;
+
     &:after {
       display: block;
       content: "";
       width: 100vw;
-      height: 1px;
-      border-bottom: 1px solid #00000029;
+      height: 5rem;
+      background-color: #fff;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.16);
       position: absolute;
       left: -3rem;
       bottom: 2px;
+      z-index: -1;
+    }
+
+    // hide th after 8 items (cuz its sometimes buggy)
+    th:nth-of-type(1n + 8) {
+      display: none;
+    }
+
+    .table tr[data-ng-animate] td {
+      display: none;
+    }
+
+    tr {
+      opacity: 0;
+      animation: 0.2s linear 0.2s 1 normal forwards running fadeIn;
+    }
+
+    .selector_students,
+    .diamonds,
+    .diamond {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .diamond {
+      font-size: 1rem;
+
+      &:after {
+        width: 1.5rem;
+        height: 1.5rem;
+        top: 0;
+        left: 0;
+        margin-left: 1rem;
+      }
     }
   }
 
@@ -299,6 +336,15 @@ html main.content .presents {
   }
 
   .table tr {
+    border-bottom: 0;
+  }
+
+  .table tr.ng-animate,
+  .table tr[data-ng-animate] {
+    display: none;
+  }
+
+  .table tbody tr {
     border-bottom: 0;
     transition: background-color 0.225s ease;
 
@@ -313,6 +359,11 @@ html main.content .presents {
 
       .md-select-icon {
         opacity: 0;
+      }
+
+      .md-select-value {
+        user-select: none;
+        pointer-events: none;
       }
     }
 
@@ -365,8 +416,12 @@ html main.content .presents {
         background-image: url("https://logbook.itstep.org/img/kristall_grey.svg");
       }
 
-      .awarded span:last-child i:first-child {
+      .awarded:hover span:last-child i:first-child {
         opacity: 1;
+      }
+
+      .awarded span:last-child i:first-child {
+        opacity: 0.2;
       }
 
       .comment {
@@ -379,6 +434,8 @@ html main.content .presents {
   .table th {
     min-height: 1rem;
     padding: 1rem !important;
+    opacity: 0;
+    animation: 0.2s linear 0s 1 normal forwards running fadeIn;
   }
 
   .table td.name {
@@ -386,7 +443,8 @@ html main.content .presents {
   }
 
   .table > thead > tr > th {
-    background: #fff;
+    // background: #fff; -> řeší se přes ::after
+    background-color: transparent;
     color: color.$text;
 
     // kvůli mystatu - dlouhý název
@@ -467,5 +525,204 @@ html main.content .presents {
   .set-date button {
     background-color: color.$primary !important;
     color: #fff;
+  }
+
+  @media (max-width: 1300px) {
+    // top side
+    .teacherInit {
+      margin-bottom: 1rem;
+    }
+
+    .teacherInit .check-techers-wrap {
+      margin-bottom: 1rem;
+    }
+
+    .teacherInit .teacherTextarea {
+      margin-top: 0;
+    }
+
+    .check-techers {
+      margin-top: 0;
+    }
+
+    .lesson-theme {
+      margin-top: 0;
+    }
+
+    .selector_students,
+    .diamonds,
+    .diamond {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1rem;
+      height: 1.5rem;
+    }
+
+    .diamond {
+      font-size: 1rem;
+
+      &:after {
+        width: 1.4rem;
+        height: 1.4rem;
+        top: 0;
+        left: 0;
+        margin-left: 0.8rem;
+      }
+    }
+
+    .wrapper-students thead {
+      background-color: #fff;
+    }
+
+    // bottom side
+    .wrapper-students table.table thead tr {
+      display: flex;
+    }
+
+    .wrapper-students table.table tbody tr {
+      display: grid;
+      grid-template-columns: 2rem 1fr 1fr 2rem;
+      grid-template-rows: repeat(5, auto);
+      grid-template-areas:
+        "icon name name name"
+        "mystat mystat mystat mystat"
+        "presence presence presence presence"
+        "tests tests tests tests"
+        "score score score score"
+        "diamonds diamonds diamonds diamonds"
+        "comment comment comment comment";
+      padding: 1rem;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+
+      td {
+        height: auto;
+        min-width: auto;
+        max-width: none;
+
+        min-height: auto;
+        max-height: none;
+
+        float: none;
+        padding: 0 !important;
+        margin: 0;
+      }
+    }
+
+    .wrapper-students table.table tr.presents_stud {
+      border: none;
+
+      &:nth-of-type(2n + 1):not(:hover) {
+        background-color: #fff;
+      }
+
+      .number {
+        grid-area: icon;
+        min-width: auto !important;
+      }
+
+      .number .user-photo span {
+        margin-top: 0;
+      }
+
+      .number .user-photo span img {
+        width: 2rem;
+        height: 2rem;
+      }
+
+      .number .user-photo__presents {
+        margin: 0;
+      }
+
+      .name {
+        grid-area: name;
+        grid-column: 2 / 6;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-left: 1rem !important;
+      }
+
+      .mystat {
+        grid-area: mystat;
+        grid-column: 1 / 6;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+
+        &.critical_deptor {
+          color: inherit;
+        }
+      }
+
+      .presents {
+        grid-area: presence;
+        grid-column: 1 / 6;
+
+        justify-content: flex-start;
+
+        margin-bottom: 1rem;
+      }
+
+      .presentr-controlWork {
+        grid-area: tests;
+        grid-column: 1 / 6;
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+
+        div {
+          display: inline;
+        }
+      }
+
+      .presentr-classWork {
+        grid-area: score;
+        grid-column: 1 / 6;
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+
+        div {
+          display: inline;
+        }
+      }
+
+      .awarded {
+        grid-area: diamonds;
+        grid-column: 1 / 6;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .comment {
+        grid-area: comment;
+        grid-column: 1 / 6;
+      }
+    }
+  }
+
+  @media (max-width: 880px) {
+    .select_pair .md-ink-ripple {
+      background-color: color.$primary;
+      margin: 0;
+    }
+
+    md-menu {
+      line-height: inherit;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+  }
+
+  @media (max-width: 650px) {
+    .wrapper-students table.table tbody {
+      justify-content: flex-start;
+    }
   }
 } // end of presents

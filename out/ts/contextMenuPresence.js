@@ -14,8 +14,10 @@ function addContextMenu(event) {
     event.preventDefault();
     customClick(event.clientX, event.clientY);
     const popupID = event.target.getAttribute("aria-owns");
+    const isEnabled = event.target.getAttribute("aria-disabled") === "false";
+    console.log(event, popupID, isEnabled);
     const popup = document.getElementById(popupID);
-    if (popup) {
+    if (popup && isEnabled) {
         // hide popup before clicking
         popup.style.visibility = "hidden";
         setTimeout(() => {
@@ -33,9 +35,11 @@ function addContextMenu(event) {
 }
 function addContextMenuForEachSelect() {
     try {
-        const selects = document.querySelectorAll(".presentr-classWork md-select[aria-disabled='false']");
+        const selects = document.querySelectorAll(".presentr-classWork md-select");
         selects.forEach((select) => {
             select.addEventListener("contextmenu", addContextMenu);
+            select.title =
+                "Levé tlačítko: Otevřít — Pravé tlačítko: Dát maximální známku";
         });
     }
     catch (error) { }

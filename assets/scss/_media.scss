@@ -15,3 +15,10 @@
     filter: brightness(0);
   }
 }
+
+@media (max-width: 767px) {
+  body.main main.content toolbar .pull-right span i.menu_btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
