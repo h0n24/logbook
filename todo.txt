@@ -10,4 +10,6 @@ prohodit ikonky ve vrchním tabu -> ať je odhlášení poslední a oddělené v
 
 zjistit, jak checkovat v angularu, kdy se načte "podstránka"
 
+donutit prohlížeč přemazat cache -> jinak poprvé vypadá mystat trochu divně
+
 při kliknutí na md-select, autofocus input, pokud existuje
