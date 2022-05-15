@@ -474,12 +474,16 @@ html main.content .presents {
     justify-content: space-between;
     height: 4rem;
     gap: 1rem;
-    z-index: 90;
+    z-index: 1;
 
     span {
       left: 0;
       font-size: 1rem !important;
     }
+  }
+
+  .table td i.user-photo {
+    cursor: default;
   }
 
   .table td i.user-photo[style="background-image: url('https://logbook.itstep.org/img/avatarka.svg')"]:hover span
