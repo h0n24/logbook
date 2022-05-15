@@ -464,17 +464,50 @@ html main.content .presents {
 
   .number__presents {
     width: auto;
+
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    // justify-content: center;
+    justify-content: space-between;
+    height: 4rem;
+    gap: 1rem;
+    z-index: 90;
+
+    span {
+      left: 0;
+      font-size: 1rem !important;
+    }
+  }
+
+  .table td i.user-photo[style="background-image: url('https://logbook.itstep.org/img/avatarka.svg')"]:hover span
+  {
+    // display: inline-block;
+    display: none !important;
   }
 
   .table .number .user-photo__presents {
-    left: 3rem;
+    // left: 3rem;
     height: 2rem;
     width: 2rem;
-    margin-top: -1rem;
+    // margin-top: -1rem;
+
+    // rework
+    position: relative;
+    left: 0;
+    margin-top: 0;
+    top: 0;
 
     span {
       top: 100%;
       left: 100%;
+
+      img {
+        left: 0;
+        z-index: 90;
+      }
     }
   }
   .selector_students .ng-binding {
@@ -490,7 +523,7 @@ html main.content .presents {
     justify-content: center;
     height: inherit;
     grid-gap: 1rem;
-    height: 3rem; // todo: can it be without?
+    height: 4rem; // todo: can it be without?
   }
 
   // dots
@@ -704,6 +737,12 @@ html main.content .presents {
         grid-area: comment;
         grid-column: 1 / 6;
       }
+    }
+  }
+
+  @media (min-width: 920px) {
+    html md-tooltip .md-content {
+      height: 2rem;
     }
   }
 

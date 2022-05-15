@@ -210,6 +210,10 @@ html {
     color: color.$text;
   }
 
+  .has_header md-content md-select-header input {
+    background-color: rgba(color.$toolbars, 0.4);
+  }
+
   // date picker
   .page_picker {
     // max-width: 245px;

@@ -9,3 +9,5 @@ udělat automatické přihlašování?
 prohodit ikonky ve vrchním tabu -> ať je odhlášení poslední a oddělené vizuálně čárou -> nejde přes css
 
 zjistit, jak checkovat v angularu, kdy se načte "podstránka"
+
+při kliknutí na md-select, autofocus input, pokud existuje
