@@ -112,6 +112,10 @@ html {
     user-select: none;
   }
 
+  .md-button {
+    text-transform: unset;
+  }
+
   md-menu-content:not(.md_header_menu) {
     min-height: auto;
     min-width: auto !important;
