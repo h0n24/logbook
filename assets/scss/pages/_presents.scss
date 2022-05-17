@@ -30,14 +30,14 @@ html main.content .presents {
 
     a {
       text-transform: initial;
-      padding-left: 1rem;
-      padding-right: 1rem;
+      padding: style.$button-padding;
       font-size: 1rem;
       float: none;
-      font-weight: 300;
+      font-weight: style.$button-weight;
       border-radius: style.$border-radius;
-      line-height: 2rem !important;
-      height: 2rem !important;
+      line-height: style.$button-lheight !important;
+      height: style.$button-height !important;
+      border: style.$button-border;
 
       &:first-letter {
         text-transform: capitalize;
@@ -45,6 +45,7 @@ html main.content .presents {
     }
   }
 
+  // vrchní panel
   .topPanel .interna-wrap {
     padding: 0;
     padding-top: 2rem;
@@ -53,6 +54,11 @@ html main.content .presents {
     text-align: left;
     padding: 0;
     margin-bottom: 1rem;
+
+    display: grid;
+    justify-content: end;
+    grid-template-columns: auto 1fr auto;
+    grid-gap: 1rem;
 
     .paddingLeft {
       font-size: 1.5rem;
@@ -65,11 +71,34 @@ html main.content .presents {
     }
   }
 
+  // tlačítka na vrchním panelu
+  .dialog-demo-content,
+  .set-date {
+    position: relative;
+  }
+
+  .dialog-demo-content {
+    order: 2;
+  }
+
+  .set-date {
+    top: 0;
+    order: 1;
+  }
+
   .dialog-demo-content button,
   .set-date button {
     width: auto;
+    text-transform: initial;
+    font-weight: style.$button-weight;
+    padding: style.$button-padding;
+    height: style.$button-height;
+    background-color: color.$primary !important;
+    border: style.$button-border;
+    color: #fff;
   }
 
+  // výběr jednotlivých hodin
   ul.pars {
     height: 3rem;
     margin: 0;
@@ -145,13 +174,6 @@ html main.content .presents {
     }
   }
 
-  .dialog-demo-content button,
-  .set-date button {
-    text-transform: initial;
-    font-weight: 400;
-    padding: 0.4rem 0.6rem;
-  }
-
   .table-wrapper {
     padding: 0 !important;
   }
@@ -165,6 +187,7 @@ html main.content .presents {
     margin-bottom: 1rem;
     margin-top: 1rem;
     max-width: 600px;
+    overflow: visible;
 
     // rework
     display: flex;
@@ -175,7 +198,7 @@ html main.content .presents {
       float: none;
       width: auto;
       padding: 0;
-      order: 1;
+      order: 2;
 
       .check-techers {
         margin-top: 0;
@@ -271,20 +294,20 @@ html main.content .presents {
 
           .md-button {
             width: fit-content;
-            font-weight: 300;
+            font-weight: style.$button-weight;
             border-radius: style.$border-radius;
-            line-height: 2rem !important;
-            height: 2rem !important;
+            line-height: style.$button-lheight !important;
+            height: style.$button-height !important;
             min-width: auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            padding: style.$button-padding;
+            border: style.$button-border;
           }
 
           &:last-child {
             .md-button {
               background-color: #fff !important;
               color: color.$primary !important;
-              border: 1px solid color.$primary !important;
+              border: style.$button-border !important;
             }
           }
         }
@@ -311,10 +334,24 @@ html main.content .presents {
       float: none;
       clear: none;
       margin-bottom: 0;
-      order: 2;
+      order: 1;
 
       a {
         margin-left: 0;
+
+        text-transform: initial;
+        font-size: 1rem;
+        float: none;
+        font-weight: style.$button-weight;
+        border-radius: style.$border-radius;
+        padding: style.$button-padding;
+        height: style.$button-height;
+        box-sizing: border-box;
+        display: inline-flex;
+        text-decoration: none;
+        background-color: #fff !important;
+        border: style.$button-border;
+        color: color.$primary;
       }
     }
   }
@@ -359,9 +396,8 @@ html main.content .presents {
       animation: 0.2s linear 0.2s 1 normal forwards running fadeIn;
     }
 
-    .selector_students,
-    .diamonds,
-    .diamond {
+    .selector_students .selector_students,
+    .diamonds .diamond {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -650,12 +686,6 @@ html main.content .presents {
     &::first-letter {
       text-transform: capitalize;
     }
-  }
-
-  .dialog-demo-content button,
-  .set-date button {
-    background-color: color.$primary !important;
-    color: #fff;
   }
 
   @media (max-width: 1300px) {

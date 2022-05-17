@@ -47,15 +47,40 @@ function addContextMenuForEachSelect() {
     }
     catch (error) { }
 }
-function setTimeoutBeforeAddingContextMenu() {
+function countPresentStudents() {
+    const students = document.querySelectorAll(".wrapper-students tbody tr .presents");
+    let total = Object.keys(students).length;
+    let totalStudents = total ? total : 0;
+    let totalPresent = 0;
+    students.forEach((student) => {
+        const dots = student.querySelectorAll("span");
+        let wasPresent = 0;
+        dots.forEach((dot) => {
+            const selection = dot.querySelector("i:last-child");
+            if (selection.classList.contains("ng-hide")) {
+                return;
+            }
+            if (selection.classList.contains("was-not")) {
+                return;
+            }
+            wasPresent++;
+        });
+        totalPresent += wasPresent;
+    });
+    const thTotal = document.querySelector(".wrapper-students thead .number");
+    thTotal.innerHTML = `${totalPresent}/${totalStudents}`;
+    thTotal.title = "Celkový počet přítomných / celkový počet studentů";
+}
+function setTimeoutBeforePresenceEnhancements() {
     // we need to wait until angular part is ready
     // todo: potential rework, but dunno how yet
     setTimeout(function () {
         addContextMenuForEachSelect();
+        countPresentStudents();
     }, 5000);
 }
 // add right click to menu
-export function addRightClickPresence() {
+export function presenceEnhancements() {
     // we need to wait until angular part is ready
     // todo: potential rework, but dunno how yet
     // could be done with local storage
@@ -63,13 +88,14 @@ export function addRightClickPresence() {
         // add it to currently visible
         try {
             addContextMenuForEachSelect();
+            countPresentStudents();
         }
         catch (error) { }
         // ad it to future ones
         try {
             const changePairLinks = document.querySelectorAll('[ng-click="click_lenta($index)"]');
             changePairLinks.forEach((link) => {
-                link.addEventListener("click", setTimeoutBeforeAddingContextMenu);
+                link.addEventListener("click", setTimeoutBeforePresenceEnhancements);
             });
         }
         catch (error) { }

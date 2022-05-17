@@ -9,7 +9,7 @@ import { onContextMenu, addInfoForMenu } from "./ts/contextMenu";
 import { replaceDates } from "./ts/replaceDates";
 import { replaceStrings } from "./ts/replaceStrings";
 import { checkPing } from "./ts/checkPing";
-import { addRightClickPresence } from "./ts/contextMenuPresence";
+import { presenceEnhancements } from "./ts/presence";
 import { addRightClickStar } from "./ts/contextMenuStar";
 
 // debug
@@ -68,7 +68,7 @@ document.body.addEventListener("contextmenu", onContextMenu);
 
           replaceStrings();
 
-          addRightClickPresence();
+          presenceEnhancements();
         }
       );
 

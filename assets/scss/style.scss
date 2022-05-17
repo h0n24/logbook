@@ -114,10 +114,16 @@ html {
   .btn-floating {
     background-color: color.$primary !important;
     user-select: none;
+    border-radius: style.$border-radius;
+    padding: style.$button-padding;
+    font-weight: style.$button-weight;
   }
 
   .md-button {
     text-transform: unset;
+    border-radius: style.$border-radius;
+    padding: style.$button-padding;
+    font-weight: style.$button-weight;
   }
 
   md-menu-content:not(.md_header_menu) {
