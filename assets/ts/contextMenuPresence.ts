@@ -67,6 +67,9 @@ function setTimeoutBeforeAddingContextMenu() {
 export function addRightClickPresence() {
   // we need to wait until angular part is ready
   // todo: potential rework, but dunno how yet
+
+  // could be done with local storage
+
   setTimeout(function () {
     // add it to currently visible
     try {

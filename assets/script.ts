@@ -3,12 +3,14 @@
 //  and then load them from the extension
 
 // imports ---------------------------------------------------------------------
+import { autoLogin } from "./ts/autoLogin";
 import { createPageTitle } from "./ts/createPageTitle";
 import { onContextMenu, addInfoForMenu } from "./ts/contextMenu";
 import { replaceDates } from "./ts/replaceDates";
 import { replaceStrings } from "./ts/replaceStrings";
 import { checkPing } from "./ts/checkPing";
 import { addRightClickPresence } from "./ts/contextMenuPresence";
+import { addRightClickStar } from "./ts/contextMenuStar";
 
 // debug
 // import { debugAngular } from "./ts/debugAngular";
@@ -20,7 +22,6 @@ import { addRightClickPresence } from "./ts/contextMenuPresence";
 document.documentElement.setAttribute("lang", "cs-CZ");
 
 // check ping regularly
-console.log("test");
 checkPing();
 
 // right click on menu -> leads to doubleclick to prevent waiting
@@ -53,8 +54,12 @@ document.body.addEventListener("contextmenu", onContextMenu);
             fromParams
           );
 
+          // auto login
+          autoLogin(toState.name);
+
           // UX QOL improvements
           addInfoForMenu();
+          addRightClickStar();
 
           // localization
           createPageTitle(toState.name);

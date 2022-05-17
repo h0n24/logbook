@@ -76,6 +76,11 @@ html {
     padding: 0 !important;
   }
 
+  .md-whiteframe-4dp,
+  .md-whiteframe-z2 {
+    box-shadow: none;
+  }
+
   button {
     user-select: none;
   }
