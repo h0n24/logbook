@@ -29,84 +29,70 @@ document.body.addEventListener("contextmenu", onContextMenu);
 
 // after angular ---------------------------------------------------------------
 (function () {
-  // @ts-ignore: Not in this file, it's on the website
-  // console.log(angular);
   try {
     // save angular scope
-    // let scope =  angular.element(document).scope()
+    // @ts-ignore: Not in this file, it's on the website
+    let scope = angular.element(document).scope();
 
     // replace dates to better format
-    // @ts-ignore: Not in this file, it's on the website
-    angular.element(document).scope().dateFormat = "d. M. yyyy";
-    // @ts-ignore: Not in this file, it's on the website
-    angular.element(document).scope().dateFormatShort = "d. M.";
+    scope.dateFormat = "d. M. yyyy";
+    scope.dateFormatShort = "d. M.";
 
-    // @ts-ignore: Not in this file, it's on the website
-    angular
-      .element(document)
-      .scope()
-      .$on(
-        "$stateChangeSuccess",
-        function (event, toState, toParams, fromState, fromParams) {
-          console.log(
-            "hlavní",
-            event,
-            toState,
-            toParams,
-            fromState,
-            fromParams
-          );
+    scope.$on(
+      "$stateChangeSuccess",
+      function (event, toState, toParams, fromState, fromParams) {
+        console.log("hlavní", event, toState, toParams, fromState, fromParams);
 
-          const state = toState.name;
+        const state = toState.name;
 
-          // auto login
-          autoLogin(state);
+        // auto login
+        autoLogin(state);
 
-          // UX QOL improvements
-          addInfoForMenu();
-          addRightClickStar();
+        // UX QOL improvements
+        addInfoForMenu();
+        addRightClickStar();
 
-          // localization
-          createPageTitle(state);
+        // localization
+        createPageTitle(state);
 
-          function runAfterObserve() {
-            // console.log("Debounced");
+        function runAfterObserve() {
+          // console.log("Debounced");
 
-            // general stuff
-            replaceDates();
-            replaceStrings();
+          // general stuff
+          replaceDates();
+          replaceStrings();
 
-            // specific stuff
-            presenceEnhancements(state);
-          }
+          // specific stuff
+          presenceEnhancements(state);
+        }
 
-          // mutation observer with debounce, it checks if loading ended
-          function debounce(func, timeout = 300) {
-            let timer;
-            return (...args) => {
-              clearTimeout(timer);
-              timer = setTimeout(() => {
-                func.apply(this, args);
-              }, timeout);
-            };
-          }
+        // mutation observer with debounce, it checks if loading ended
+        function debounce(func, timeout = 300) {
+          let timer;
+          return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              func.apply(this, args);
+            }, timeout);
+          };
+        }
 
-          const debounceObserver = debounce(() => runAfterObserve());
+        const debounceObserver = debounce(() => runAfterObserve());
 
-          const targetNode = document.querySelector("loading .loader");
-          const config = { attributes: true };
-          const observer = new MutationObserver(function (mutations) {
-            for (let mutation of mutations) {
-              if (mutation.type === "attributes") {
-                if (mutation.attributeName === "data-ng-animate") {
-                  debounceObserver();
-                }
+        const targetNode = document.querySelector("loading .loader");
+        const config = { attributes: true };
+        const observer = new MutationObserver(function (mutations) {
+          for (let mutation of mutations) {
+            if (mutation.type === "attributes") {
+              if (mutation.attributeName === "data-ng-animate") {
+                debounceObserver();
               }
             }
-          });
+          }
+        });
 
-          observer.observe(targetNode, config);
-        }
-      );
+        observer.observe(targetNode, config);
+      }
+    );
   } catch (error) {}
 })();

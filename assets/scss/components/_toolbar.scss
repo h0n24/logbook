@@ -1,12 +1,14 @@
 @use "abstracts/color";
 
+$toolbar-height: 3rem;
+
 // restyle toolbar
 html body.main main.content toolbar {
   left: 3rem;
   padding-left: 0;
-  height: 3rem;
+  height: $toolbar-height;
   background-color: color.$toolbars;
-  width: calc(100% - 3rem);
+  width: calc(100% - $toolbar-height);
 
   display: grid;
   grid-template-columns: 1fr auto auto auto auto;
@@ -60,7 +62,7 @@ html body.main main.content toolbar {
 
   md-menu,
   .pull-right {
-    line-height: 3rem;
+    line-height: $toolbar-height;
   }
 
   .pull-right {
@@ -71,11 +73,8 @@ html body.main main.content toolbar {
     margin-right: 1rem;
 
     opacity: 0;
+    transition: opacity 0.2s;
     animation: fadeIn 0.2s linear 1s forwards;
-  }
-
-  & + .pull-right:first-child {
-    order: 3;
   }
 
   .pull-right > span {
@@ -90,6 +89,67 @@ html body.main main.content toolbar {
         font-weight: 700;
         font-size: 0.8rem;
         background-color: color.$orange-500;
+      }
+    }
+  }
+
+  // icons with help
+  > div:nth-child(3) {
+    order: 2;
+
+    transition: opacity 0.2s;
+    span {
+      opacity: 0.3;
+    }
+    &:hover {
+      span {
+        opacity: 1;
+      }
+    }
+  }
+
+  // icons with news, rating, settings, logout
+  > div:nth-child(2) {
+    order: 3;
+
+    // style logout
+    > span:last-child {
+      position: relative;
+      padding-left: 0.5rem;
+
+      a {
+        margin-left: 1rem;
+      }
+
+      &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: $toolbar-height;
+        top: 0;
+        border-left: 1px solid darken(color.$toolbars, 10%);
+      }
+    }
+  }
+
+  // latest news + notification number
+  span.latest_news {
+    display: none; // hide for now
+
+    span span {
+      position: relative;
+
+      .count {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1.6rem;
+        height: 1.6rem;
+        margin-left: 0;
+        padding: 0;
+        text-align: center;
+        line-height: 1.6rem;
       }
     }
   }
