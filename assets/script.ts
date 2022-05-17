@@ -32,6 +32,9 @@ document.body.addEventListener("contextmenu", onContextMenu);
   // @ts-ignore: Not in this file, it's on the website
   // console.log(angular);
   try {
+    // save angular scope
+    // let scope =  angular.element(document).scope()
+
     // replace dates to better format
     // @ts-ignore: Not in this file, it's on the website
     angular.element(document).scope().dateFormat = "d. M. yyyy";
@@ -54,30 +57,56 @@ document.body.addEventListener("contextmenu", onContextMenu);
             fromParams
           );
 
+          const state = toState.name;
+
           // auto login
-          autoLogin(toState.name);
+          autoLogin(state);
 
           // UX QOL improvements
           addInfoForMenu();
           addRightClickStar();
 
           // localization
-          createPageTitle(toState.name);
+          createPageTitle(state);
 
-          replaceDates();
+          function runAfterObserve() {
+            // console.log("Debounced");
 
-          replaceStrings();
+            // general stuff
+            replaceDates();
+            replaceStrings();
 
-          presenceEnhancements();
+            // specific stuff
+            presenceEnhancements(state);
+          }
+
+          // mutation observer with debounce, it checks if loading ended
+          function debounce(func, timeout = 300) {
+            let timer;
+            return (...args) => {
+              clearTimeout(timer);
+              timer = setTimeout(() => {
+                func.apply(this, args);
+              }, timeout);
+            };
+          }
+
+          const debounceObserver = debounce(() => runAfterObserve());
+
+          const targetNode = document.querySelector("loading .loader");
+          const config = { attributes: true };
+          const observer = new MutationObserver(function (mutations) {
+            for (let mutation of mutations) {
+              if (mutation.type === "attributes") {
+                if (mutation.attributeName === "data-ng-animate") {
+                  debounceObserver();
+                }
+              }
+            }
+          });
+
+          observer.observe(targetNode, config);
         }
       );
-
-    // @ts-ignore: Not in this file, it's on the website
-    angular
-      .element(document)
-      .scope()
-      .$broadcast("dataFetchComplete", function () {
-        alert("dataFetchComplete");
-      });
   } catch (error) {}
 })();

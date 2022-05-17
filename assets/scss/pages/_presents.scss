@@ -440,6 +440,8 @@ html main.content .presents {
 
           .btn {
             margin: 0;
+            line-height: style.$button-lheight !important;
+            height: style.$button-height !important;
 
             // tlačítko zrušit
             &[ng-click="obj.edit_c=0;stud.comments = stud.old_comments"] {

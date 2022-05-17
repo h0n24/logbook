@@ -25,11 +25,11 @@ function replaceWithTreeWalker() {
 }
 
 export function replaceStrings() {
-  setTimeout(() => {
-    try {
-      console.time("replaceStrings");
-      replaceWithTreeWalker();
-      console.timeEnd("replaceStrings");
-    } catch (error) {}
-  }, 6000);
+  const debug = true;
+
+  try {
+    debug ? console.time("replaceStrings") : null;
+    replaceWithTreeWalker();
+    debug ? console.timeEnd("replaceStrings") : null;
+  } catch (error) {}
 }

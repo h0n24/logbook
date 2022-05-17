@@ -76,22 +76,19 @@ function localizedDate(date) {
 // Example: Naposledy navštívil MyStat : 13.12.21
 // Return: před 2 hodinami
 export function replaceDates() {
-    // TODO: rework so its more persistent?
-    // right now its not catching switch between pairs aka different lectures
-    setTimeout(() => {
-        console.time("replaceDates");
-        // test elements
-        const testedElements = document.querySelectorAll('[ng-if="stud.last_date_vizit != null"] span, .presents_stud td.mystat');
-        // for each element
-        for (let i = 0; i < testedElements.length; i++) {
-            try {
-                const testElement = testedElements[i];
-                const date = detectDate(testElement);
-                testElement.innerText = timeSince(date);
-                testElement.title = localizedDate(date);
-            }
-            catch (error) { }
+    const debug = false;
+    debug ? console.time("replaceDates") : null;
+    // test elements
+    const testedElements = document.querySelectorAll('[ng-if="stud.last_date_vizit != null"] span, .presents_stud td.mystat');
+    // for each element
+    for (let i = 0; i < testedElements.length; i++) {
+        try {
+            const testElement = testedElements[i];
+            const date = detectDate(testElement);
+            testElement.innerText = timeSince(date);
+            testElement.title = localizedDate(date);
         }
-        console.timeEnd("replaceDates");
-    }, 5000);
+        catch (error) { }
+    }
+    debug ? console.timeEnd("replaceDates") : null;
 }

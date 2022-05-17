@@ -44,17 +44,8 @@ function ping(url, multiplier) {
   });
 }
 
-// check ping regularly
-export function checkPing() {
-  const body = document.body as HTMLElement;
-
-  const pulseElement = document.createElement("div");
-  pulseElement.id = "pulse";
-  pulseElement.title = "Zkouším navázat spojení...";
-  body.appendChild(pulseElement);
-
-  // repeat every 5 seconds
-  setInterval(function () {
+function testPing() {
+  try {
     ping("https://logbook.itstep.org/", 0.4)
       .then(function (delta) {
         const pulseElement = document.getElementById("pulse");
@@ -76,5 +67,24 @@ export function checkPing() {
           pulseElement.title = "Server není dostupný. Je VPN zapnutá?";
         }
       });
+  } catch (error) {}
+}
+
+// check ping regularly
+export function checkPing() {
+  const body = document.body as HTMLElement;
+
+  // init
+  const pulseElement = document.createElement("div");
+  pulseElement.id = "pulse";
+  pulseElement.title = "Zkouším navázat spojení...";
+  body.appendChild(pulseElement);
+
+  // first run
+  testPing();
+
+  // repeat every 5 seconds
+  setInterval(function () {
+    testPing();
   }, 5000);
 }

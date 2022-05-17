@@ -98,38 +98,17 @@ function countPresentStudents() {
   thTotal.title = "Celkový počet přítomných / celkový počet studentů";
 }
 
-function setTimeoutBeforePresenceEnhancements() {
-  // we need to wait until angular part is ready
-  // todo: potential rework, but dunno how yet
-  setTimeout(function () {
-    addContextMenuForEachSelect();
-    countPresentStudents();
-  }, 5000);
-}
-
 // add right click to menu
-export function presenceEnhancements() {
-  // we need to wait until angular part is ready
-  // todo: potential rework, but dunno how yet
+export function presenceEnhancements(state) {
+  if (state !== "presents") return;
 
-  // could be done with local storage
-
+  // needs small timeout because angular firstly
+  // adds and after that removes previous rows
+  // so it would count previous rows as present
   setTimeout(function () {
-    // add it to currently visible
     try {
       addContextMenuForEachSelect();
       countPresentStudents();
     } catch (error) {}
-
-    // ad it to future ones
-    try {
-      const changePairLinks = document.querySelectorAll(
-        '[ng-click="click_lenta($index)"]'
-      );
-
-      changePairLinks.forEach((link) => {
-        link.addEventListener("click", setTimeoutBeforePresenceEnhancements);
-      });
-    } catch (error) {}
-  }, 5000);
+  }, 100);
 }
