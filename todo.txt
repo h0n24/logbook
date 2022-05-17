@@ -10,6 +10,4 @@ zjistit, jak checkovat v angularu, kdy se načte "podstránka" -> udělat přes 
 
 při kliknutí na md-select, autofocus input, pokud existuje
 
----
-
-donutit prohlížeč přemazat cache -> jinak poprvé vypadá mystat trochu divně -> podivná chyba, děje se jen někdy
+zkontrolovat bílé pozadí u sticky 
