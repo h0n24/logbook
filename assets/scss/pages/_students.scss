@@ -91,6 +91,11 @@ html {
       .material-icons {
         display: none;
       }
+
+      // hide age because student rarely use the real one
+      .age {
+        display: none;
+      }
     }
 
     .card-info {
@@ -124,6 +129,27 @@ html {
 
     .allGroup-select {
       padding-top: 1rem;
+    }
+
+    .reveal-content {
+      p[ng-if="stud.last_date_vizit != null"].critical_deptor {
+        color: color.$text;
+
+        span {
+          &:after {
+            content: "!";
+            margin-left: 0.5rem;
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            border-radius: 100%;
+            background-color: rgba(color.$toolbars, 0.35);
+            color: color.$notMystat;
+            text-align: center;
+          }
+        }
+      }
     }
   }
 

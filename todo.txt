@@ -4,8 +4,14 @@ udělat offline verzi, která napíše "jste offline", zkuste restartovat VPN + 
 
 zakomponovat responder a zjednodušit práci
 
-prohodit ikonky ve vrchním tabu -> ať je odhlášení poslední a oddělené vizuálně čárou -> nejde přes css
-
 při kliknutí na md-select, autofocus input, pokud existuje
 
-zkontrolovat bílé pozadí u sticky 
+zkontrolovat bílé pozadí u sticky
+
+měnit počet aktuálních studentů se zmáčknutím na barevné tečky u prezence
+
+předělat stud_profile controller (po kliknutí na studenta v seznamu)
+
+sjednotit barvy u legendy apod
+
+homeWork controller nezobrazuje fotky studentů

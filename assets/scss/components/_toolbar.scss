@@ -45,16 +45,6 @@ html body.main main.content toolbar {
     }
   }
 
-  .evaluation_star {
-    position: relative;
-    top: 0.5rem;
-    right: 0;
-    filter: invert(100%);
-    opacity: 0.7;
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
   .material-icons {
     width: 1.5rem;
     height: 1.5rem;
@@ -152,5 +142,16 @@ html body.main main.content toolbar {
         line-height: 1.6rem;
       }
     }
+  }
+
+  // evaluation star
+  .evaluation_star {
+    position: relative;
+    top: 0.5rem;
+    right: 0;
+    filter: invert(100%);
+    opacity: 0.7;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 }

@@ -4,6 +4,7 @@ replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]);
 replacements.push(["№", "č. "]);
 replacements.push(["ч", " hod"]);
 replacements.push(["V skupine  není studentů", "Ve skupině nejsou studenti"]);
+replacements.push(["лет", "let"]);
 // more effective replacement for strings
 function replaceWithTreeWalker() {
     let allTextNodes = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), 

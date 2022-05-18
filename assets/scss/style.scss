@@ -117,6 +117,7 @@ html {
     border-radius: style.$border-radius;
     padding: style.$button-padding;
     font-weight: style.$button-weight;
+    font-size: style.$button-font-size;
   }
 
   .md-button {
@@ -124,11 +125,36 @@ html {
     border-radius: style.$border-radius;
     padding: style.$button-padding;
     font-weight: style.$button-weight;
+    list-style: style.$button-lheight;
+    font-size: style.$button-font-size;
+    line-height: style.$button-lheight;
+  }
+
+  button.md-button.md-ink-ripple:hover {
+    background-color: color.$primary;
+  }
+
+  //change user and others menu container
+  md-menu-content {
+    padding: 0;
+    gap: 0.25rem;
   }
 
   md-menu-content:not(.md_header_menu) {
     min-height: auto;
     min-width: auto !important;
+  }
+
+  md-menu-item {
+    height: auto;
+    min-height: auto;
+  }
+
+  md-menu-item > .md-button {
+    min-height: auto;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    border-radius: 0;
   }
 
   .tabMenu .title h1 {
@@ -403,6 +429,7 @@ html {
         line-height: 1.2rem;
         height: 1.2rem;
         padding: 0.4rem 0.8rem;
+        box-sizing: content-box;
       }
     }
   }

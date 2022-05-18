@@ -1,3 +1,5 @@
+@use "abstracts/color";
+
 html body.main .cssload-thecube {
   .cssload-cube {
     display: none;
@@ -6,7 +8,7 @@ html body.main .cssload-thecube {
   &:after {
     animation: loading 0.5s infinite linear;
     background: 0 0;
-    border: 0.1rem solid #5755d9;
+    border: 0.1rem solid color.$primary;
     border-radius: 50%;
     border-right-color: transparent;
     border-top-color: transparent;
