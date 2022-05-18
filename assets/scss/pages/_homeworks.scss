@@ -1,5 +1,6 @@
 @use "abstracts/color";
 @use "abstracts/style";
+@use "abstracts/include";
 
 html main.content .homeWorks {
   padding: 3rem !important;
@@ -27,16 +28,17 @@ html main.content .homeWorks {
       z-index: 2;
       top: 3rem;
 
-      &:after {
-        display: block;
-        content: "";
-        width: 100vw;
-        height: 1px;
-        border-bottom: 1px solid #00000029;
-        position: absolute;
-        left: -3rem;
-        bottom: 0px;
-      }
+      // &:after {
+      //   display: block;
+      //   content: "";
+      //   width: 100vw;
+      //   height: 1px;
+      //   border-bottom: 1px solid #00000029;
+      //   position: absolute;
+      //   left: -3rem;
+      //   bottom: 0px;
+      // }
+      @include include.thead-after;
     }
 
     .student-name {
@@ -210,6 +212,13 @@ html main.content .homeWorks {
   .inputs {
     margin-bottom: 3rem;
   }
+
+  button[ng-click="getGroups()"] {
+    text-transform: none;
+    background-color: color.$secondary !important;
+    font-size: 1rem;
+    color: color.$text;
+  }
 } // end of homeworks
 
 html .md-dialog-container {
@@ -347,5 +356,48 @@ html .md-dialog-container {
     color: color.$text;
     margin: 0 !important;
     margin-left: 1ex !important;
+  }
+}
+
+body {
+  .hw-md_single__btn-wrap .hw-md_single__btn span {
+    padding: 0;
+    font-size: 1rem;
+  }
+  .hw-md_single .btn span {
+    background-color: color.$primary;
+  }
+
+  .hw-md_single__btn-wrap md-dialog .btn {
+    background-color: color.$primary !important;
+  }
+
+  .hw-md_single__select-mark .md-button {
+    margin: 0;
+    padding: 0;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 0;
+  }
+
+  .hw-md_single__select-mark .md-checked .md-button {
+    background-color: color.$primary;
+    border-color: color.$primary;
+  }
+
+  .hw-md_single__select-mark md-radio-button .md-button {
+    border: 1px solid color.$secondary;
+    border-right: none;
+  }
+
+  .hw-md_single__select-mark md-radio-button:first-child .md-button {
+    border-top-left-radius: style.$border-radius;
+    border-bottom-left-radius: style.$border-radius;
+  }
+
+  .hw-md_single__select-mark md-radio-button:last-child .md-button {
+    border-top-right-radius: style.$border-radius;
+    border-bottom-right-radius: style.$border-radius;
+    border-right: 1px solid color.$secondary;
   }
 }

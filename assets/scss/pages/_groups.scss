@@ -12,9 +12,16 @@ html .tasks.groups {
     margin-bottom: 1rem;
 
     md-select {
+      max-width: max-content;
       margin-top: 0.4rem;
       margin-bottom: 0.4rem;
       margin-right: 1rem;
+
+      &[aria-label="Vyberte skupinu"]:not(:first-child) {
+        opacity: 0.4;
+        pointer-events: none;
+        user-select: none;
+      }
     }
   }
 

@@ -33,9 +33,51 @@ html .binding_materials {
     }
   }
 
-  .binding-materials-table pre {
-    color: color.$text;
-    background-color: transparent;
+  .binding-materials-table {
+    .number {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .cutted_wrap {
+      border: 1px solid color.$primary;
+      background-color: color.$primary;
+      width: auto;
+      padding: 0.4rem 1.2rem;
+      height: auto !important;
+      line-height: normal !important;
+      display: inline-flex;
+
+      span {
+        font-size: 1rem;
+        line-height: 1;
+        overflow: visible;
+      }
+
+      &:hover {
+        background-color: color.$primary-hover;
+      }
+    }
+
+    // only for teachers
+    .cutted_wrap.only-teach {
+      border: 1px solid color.$primary;
+      background-color: transparent;
+      color: color.$primary;
+
+      &:hover {
+        background-color: color.$primary-hover;
+        color: #fff;
+      }
+    }
+
+    pre {
+      color: color.$text;
+      background-color: transparent;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
   }
 
   .bind-mat-table thead .material-th {
@@ -57,10 +99,6 @@ html .binding_materials {
     .binding-materials-table pre {
       background-color: #fff;
     }
-  }
-
-  .bind-mat-table tbody tr td div:empty {
-    background-color: red;
   }
 
   #realScroll {

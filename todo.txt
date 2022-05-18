@@ -6,12 +6,12 @@ zakomponovat responder a zjednodušit práci
 
 při kliknutí na md-select, autofocus input, pokud existuje
 
-zkontrolovat bílé pozadí u sticky
-
-měnit počet aktuálních studentů se zmáčknutím na barevné tečky u prezence
-
 předělat stud_profile controller (po kliknutí na studenta v seznamu)
 
 sjednotit barvy u legendy apod
 
 homeWork controller nezobrazuje fotky studentů
+
+groupsPage když není vybraná skupina -> legenda má opacity
+
+zakomponovat: https://gui-challenges.web.app/buttons/dist/? ???

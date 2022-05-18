@@ -17,6 +17,7 @@ $font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
 
 @use "abstracts/color";
 @use "abstracts/style";
+@use "abstracts/include";
 @use "abstracts/animations";
 
 @use "components/sidenav";
@@ -34,6 +35,7 @@ $font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
 @use "pages/schedule";
 @use "pages/groups";
 @use "pages/reports";
+@use "pages/traffic";
 
 @use "scrollbars";
 @use "pulse";
@@ -127,11 +129,37 @@ html {
     font-weight: style.$button-weight;
     list-style: style.$button-lheight;
     font-size: style.$button-font-size;
-    line-height: style.$button-lheight;
+    line-height: style.$button-lheight !important;
   }
 
   button.md-button.md-ink-ripple:hover {
     background-color: color.$primary;
+  }
+
+  md-dialog .btn {
+    background-color: color.$primary;
+  }
+
+  // inputs
+  input:not([type]),
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="datetime"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="text"],
+  input[type="time"],
+  input[type="url"],
+  textarea.materialize-textarea {
+    border: 1px solid color.$inputs;
+    border-radius: style.$border-radius;
+  }
+
+  md-input-container textarea.md-input {
+    border-color: color.$inputs !important;
   }
 
   //change user and others menu container
@@ -359,8 +387,11 @@ html {
     padding: 0.65rem 0.8rem !important;
     margin-right: 0.6rem !important;
 
+    user-select: none;
+
     &::first-letter {
       text-transform: uppercase;
+      user-select: none;
     }
 
     &::after {
@@ -419,6 +450,10 @@ html {
     // transition: none !important;
     opacity: 0 !important;
     transform: translate3d(0, -200%, 0);
+  }
+
+  // internal menu
+  .internal_menu {
   }
 
   @media (min-width: 960px) {

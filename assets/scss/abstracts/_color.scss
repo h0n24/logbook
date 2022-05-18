@@ -1,5 +1,6 @@
 $primary: #006ad0;
-$secondary: lighten(desaturate(#006ad0, 100%), 40%);
+$primary-hover: lighten(desaturate($primary, 10%), 10%);
+$secondary: lighten(desaturate($primary, 100%), 50%);
 
 $text: #3b4351 !important;
 $dark: #3b4351;

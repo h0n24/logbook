@@ -96,6 +96,17 @@ html {
       .age {
         display: none;
       }
+
+      // ad some explanation before
+      .email:before {
+        content: "E-mail: ";
+      }
+      .tel:before {
+        content: "Telefon: ";
+      }
+      .stud-login:before {
+        content: "Login: ";
+      }
     }
 
     .card-info {

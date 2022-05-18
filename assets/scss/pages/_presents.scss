@@ -1,5 +1,6 @@
 @use "abstracts/color";
 @use "abstracts/style";
+@use "abstracts/include";
 
 // TODO: colors to abstracts
 
@@ -15,6 +16,7 @@ html main.content .presents {
     // height: 2rem;
     display: inline-block;
     margin-bottom: 1rem !important;
+    transition: all 0.3s ease-in;
   }
 
   // no more uppercase
@@ -368,19 +370,20 @@ html main.content .presents {
     top: 3rem;
     z-index: 2;
 
-    &:after {
-      display: block;
-      content: "";
-      width: 100vw;
-      // height: 5rem;
-      height: 100%;
-      background-color: #fff;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.16);
-      position: absolute;
-      left: -3rem;
-      bottom: 2px;
-      z-index: -1;
-    }
+    @include include.thead-after;
+
+    // &:after {
+    //   display: block;
+    //   content: "";
+    //   width: 100vw;
+    //   height: 100%;
+    //   background-color: #fff;
+    //   border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+    //   position: absolute;
+    //   left: -3rem;
+    //   bottom: 2px;
+    //   z-index: -1;
+    // }
 
     // hide th after 8 items (cuz its sometimes buggy)
     th:nth-of-type(1n + 8) {

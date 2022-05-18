@@ -98,6 +98,48 @@ function countPresentStudents() {
   thTotal.title = "Celkový počet přítomných / celkový počet studentů";
 }
 
+function whenPresenceChanged() {
+  const presenceButtons = document.querySelectorAll(".presents > span");
+
+  presenceButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      setTimeout(() => countPresentStudents(), 250);
+    });
+  });
+}
+
+function hideMaterialsWhenNoTeacher(isTeacher) {
+  const addMaterial: HTMLDivElement = document.querySelector(".add-material");
+
+  if (isTeacher) {
+    // addMaterial.style.display = "inline-block";
+    addMaterial.style.transitionDuration = "0.3s";
+    addMaterial.style.opacity = "1";
+    addMaterial.style.zIndex = "auto";
+  } else {
+    // addMaterial.style.display = "none";
+    addMaterial.style.transitionDuration = "0s";
+    addMaterial.style.zIndex = "-1";
+    addMaterial.style.opacity = "0";
+  }
+}
+
+function whenTeacherRoleChanged() {
+  const teacherRole = document.querySelectorAll(
+    ".teacherInit .check-techers input"
+  );
+
+  let selected = false;
+  teacherRole.forEach((input) => {
+    console.log(input);
+    if ((input as HTMLInputElement).checked) {
+      selected = true;
+    }
+  });
+
+  hideMaterialsWhenNoTeacher(selected);
+}
+
 // add right click to menu
 export function presenceEnhancements(state) {
   if (state !== "presents") return;
@@ -109,6 +151,8 @@ export function presenceEnhancements(state) {
     try {
       addContextMenuForEachSelect();
       countPresentStudents();
+      whenPresenceChanged();
+      whenTeacherRoleChanged();
     } catch (error) {}
   }, 100);
 }

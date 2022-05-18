@@ -4,7 +4,17 @@
 // TODO: colors to abstracts
 
 html main.content .report {
+  .tabs-global.tabs {
+    position: relative !important;
+    top: 0 !important;
+  }
   #report .table {
+    min-width: auto;
+    width: max-content;
+    display: table;
+  }
+
+  #report .schedule .table {
     min-width: auto;
     width: max-content;
     display: table;
@@ -41,6 +51,7 @@ html main.content .report {
     border-top: none;
   }
 
+  .lab_work-table thead tr,
   #report .table-wrapper.schedule thead tr {
     background-color: #fff;
   }
@@ -169,5 +180,9 @@ html main.content .report {
         border-color: color.$primary;
       }
     }
+  }
+
+  .form-report button {
+    text-transform: initial;
   }
 }
