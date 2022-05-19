@@ -131,7 +131,6 @@ function whenTeacherRoleChanged() {
 
   let selected = false;
   teacherRole.forEach((input) => {
-    console.log(input);
     if ((input as HTMLInputElement).checked) {
       selected = true;
     }

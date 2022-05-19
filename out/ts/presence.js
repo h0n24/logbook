@@ -98,7 +98,6 @@ function whenTeacherRoleChanged() {
     const teacherRole = document.querySelectorAll(".teacherInit .check-techers input");
     let selected = false;
     teacherRole.forEach((input) => {
-        console.log(input);
         if (input.checked) {
             selected = true;
         }
