@@ -26,6 +26,8 @@ function addContextMenu(event): void {
     // hide popup before clicking
     popup.style.visibility = "hidden";
 
+    document.body.style.cursor = "wait";
+
     // make click for us
     const maxMark = popup.querySelector("md-option[value='12']") as HTMLElement;
     maxMark.click();
@@ -35,13 +37,15 @@ function addContextMenu(event): void {
 
     // click outside
     setTimeout(() => {
-      customClick(50, 0);
+      customClick(event.clientX - 50, event.clientY);
+      document.body.style.cursor = "default";
     }, 500);
 
     setTimeout(() => {
       // show popup after custom click
       popup.style.visibility = "visible";
-      popup.style.zIndex = "auto";
+      popup.style.zIndex = "";
+      document.body.style.cursor = "default";
     }, 1000);
   }
 }
