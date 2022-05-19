@@ -454,6 +454,15 @@ html {
 
   // internal menu
   .internal_menu {
+    opacity: 0.2;
+    transition: style.$transition;
+
+    &:hover {
+      opacity: 1;
+    }
+    i.material-icons {
+      color: color.$text;
+    }
   }
 
   @media (min-width: 960px) {
