@@ -12,6 +12,33 @@ function customClick(x, y) {
   el.dispatchEvent(ev);
 }
 
+function set12Mark(event, popup) {
+  // hide popup before clicking
+  popup.style.visibility = "hidden";
+
+  document.body.style.cursor = "wait";
+
+  // make click for us
+  const maxMark = popup.querySelector("md-option[value='12']") as HTMLElement;
+  maxMark.click();
+
+  // change z-index to don't block scroll
+  popup.style.zIndex = "-1";
+
+  // click outside
+  setTimeout(() => {
+    customClick(event.clientX - 50, event.clientY);
+    document.body.style.cursor = "default";
+  }, 500);
+
+  setTimeout(() => {
+    // show popup after custom click
+    popup.style.visibility = "visible";
+    popup.style.zIndex = "";
+    document.body.style.cursor = "default";
+  }, 1000);
+}
+
 function addContextMenu(event): void {
   event.preventDefault();
   customClick(event.clientX, event.clientY);
@@ -23,31 +50,45 @@ function addContextMenu(event): void {
   const popup = document.getElementById(popupID);
 
   if (popup && isEnabled) {
-    // hide popup before clicking
-    popup.style.visibility = "hidden";
-
-    document.body.style.cursor = "wait";
-
-    // make click for us
-    const maxMark = popup.querySelector("md-option[value='12']") as HTMLElement;
-    maxMark.click();
-
-    // change z-index to don't block scroll
-    popup.style.zIndex = "-1";
-
-    // click outside
-    setTimeout(() => {
-      customClick(event.clientX - 50, event.clientY);
-      document.body.style.cursor = "default";
-    }, 500);
-
-    setTimeout(() => {
-      // show popup after custom click
-      popup.style.visibility = "visible";
-      popup.style.zIndex = "";
-      document.body.style.cursor = "default";
-    }, 1000);
+    set12Mark(event, popup);
   }
+}
+
+function whenClickedOnPresenceTh() {
+  const workInClass: HTMLElement = document.querySelector(
+    ".wrapper-students thead tr th:nth-child(6)"
+  );
+
+  workInClass.title =
+    "Pravé tlačítko: Dát maximální známku všem studeentům. Pozor: trvá +1 sekundu za každého žáka.";
+
+  workInClass.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+
+    const classWorkSelects = document.querySelectorAll(
+      '.presentr-classWork md-select[aria-disabled="false"]'
+    );
+
+    console.log("todo this");
+    console.log(classWorkSelects);
+
+    let iteration = 0;
+
+    classWorkSelects.forEach((select) => {
+      // (select as HTMLElement).click();
+
+      const popupID = select.getAttribute("aria-owns");
+      const popup = document.getElementById(popupID);
+
+      setTimeout(() => {
+        // todo - unfinished
+        // set12Mark(event, popup); // uncomment this and test it !!
+        console.log(event, popup);
+      }, iteration * 1000 + 1);
+
+      iteration++;
+    });
+  });
 }
 
 function addContextMenuForEachSelect() {
@@ -156,6 +197,7 @@ export function presenceEnhancements(state) {
       countPresentStudents();
       whenPresenceChanged();
       whenTeacherRoleChanged();
+      whenClickedOnPresenceTh();
     } catch (error) {}
   }, 100);
 }
