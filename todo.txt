@@ -1,6 +1,4 @@
-https://logbook.itstep.org/auth/get-marks-selects se pro českou pobočku dost opakují -> zjistit jeslti je to tak i u ostatních + nahradit request
-
-udělat offline verzi, která napíše "jste offline", zkuste restartovat VPN + online checker
+TODO possible:
 
 zakomponovat responder a zjednodušit práci
 
@@ -14,4 +12,11 @@ homeWork controller nezobrazuje fotky studentů
 
 groupsPage když není vybraná skupina -> legenda má opacity
 
+TODO lot of work:
+
 zakomponovat: https://gui-challenges.web.app/buttons/dist/? ???
+
+
+TODO probably impossible yet:
+
+udělat offline verzi, která napíše "jste offline", zkuste restartovat VPN + online checker
