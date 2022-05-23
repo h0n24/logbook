@@ -219,6 +219,58 @@ html main.content .homeWorks {
     font-size: 1rem;
     color: color.$text;
   }
+
+  .number {
+    position: relative;
+  }
+
+  .presents .table td i.user-photo {
+    span {
+      display: block;
+      width: 30px;
+      height: 30px;
+      max-width: 30px;
+      max-height: 30px;
+      left: 0;
+      border-radius: 100%;
+      padding: 0;
+      top: 0;
+      margin-top: 0;
+
+      img {
+        width: 30px;
+        left: 0;
+      }
+    }
+
+    &:hover {
+      span {
+        top: -100%;
+        margin-top: 0.25rem;
+        left: -100%;
+        max-width: 5rem;
+        max-height: 5rem;
+        padding: 0;
+        margin-left: 0.5rem;
+        width: 5rem;
+        height: 5rem;
+
+        img {
+          width: -webkit-fill-available;
+          height: -webkit-fill-available;
+          max-height: -webkit-fill-available;
+          object-fit: cover;
+          left: 0;
+          top: 0;
+          bottom: auto;
+        }
+        [src="https://logbook.itstep.org/img/avatarka.svg"]
+        {
+          display: none;
+        }
+      }
+    }
+  }
 } // end of homeworks
 
 html .md-dialog-container {

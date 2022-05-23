@@ -135,6 +135,15 @@ html {
           min-height: auto;
           padding: 0;
         }
+
+        &.percent_vizit {
+          span {
+            &:after {
+              content: "%";
+              font-weight: 400;
+            }
+          }
+        }
       }
     }
 

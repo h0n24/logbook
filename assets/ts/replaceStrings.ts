@@ -1,11 +1,18 @@
 // TODO: between dates -> in .beetwen_nav there is - instead of –⁠ (pomlčka)
 
 const replacements = [];
-replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]);
+
+// nenalezeno v lokalizačním systému
 replacements.push(["№", "č. "]);
 replacements.push(["ч", " hod"]);
-replacements.push(["V skupine  není studentů", "Ve skupině nejsou studenti"]);
 replacements.push(["лет", "let"]);
+
+// může být změněno v lokalizačním systému:
+replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]);
+replacements.push(["V skupine  není studentů", "Ve skupině nejsou studenti"]);
+
+// nemůže být změněno v lokalizačním systému
+replacements.push(["Docházka, %", "Docházka"]); // proč? chyběli by % (css)
 
 // more effective replacement for strings
 function replaceWithTreeWalker() {
@@ -30,7 +37,7 @@ function replaceWithTreeWalker() {
 }
 
 export function replaceStrings() {
-  const debug = true;
+  const debug = false;
 
   try {
     debug ? console.time("replaceStrings") : null;
