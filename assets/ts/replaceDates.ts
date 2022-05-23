@@ -98,7 +98,6 @@ export function replaceDates() {
   for (let i = 0; i < testedElements.length; i++) {
     try {
       const testElement = testedElements[i] as HTMLElement;
-
       const date = detectDate(testElement);
 
       testElement.innerText = timeSince(date);

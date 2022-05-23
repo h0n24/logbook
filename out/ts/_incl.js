@@ -30,12 +30,12 @@ export function hideLoader() {
 export function runLoadingObserver(func) {
     const targetNode = document.querySelector("loading .loader");
     const config = { attributes: true };
+    const debounceObserver = debounce(() => func());
     const observer = new MutationObserver(function (mutations) {
         for (let mutation of mutations) {
             if (mutation.type === "attributes") {
                 if (mutation.attributeName === "data-ng-animate") {
-                    // func();
-                    debounce(() => func());
+                    debounceObserver();
                 }
             }
         }

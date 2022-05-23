@@ -66,7 +66,7 @@ document.body.addEventListener("contextmenu", onContextMenu);
         }
 
         // mutation observer with debounce, it checks if loading ended
-        incl.runLoadingObserver(runAfterObserve());
+        incl.runLoadingObserver(runAfterObserve);
       }
     );
   } catch (error) {}

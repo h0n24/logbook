@@ -1,5 +1,5 @@
 // simple debounce
-export function debounce(func, timeout = 300) {
+export function debounce(func: Function, timeout: number = 300) {
   let timer;
   return (...args) => {
     clearTimeout(timer);
@@ -9,7 +9,7 @@ export function debounce(func, timeout = 300) {
   };
 }
 
-export function clickOnPosition(x, y) {
+export function clickOnPosition(x: number, y: number) {
   const ev = new MouseEvent("click", {
     view: window,
     bubbles: true,
@@ -32,15 +32,17 @@ export function hideLoader() {
   loader.classList.add("ng-hide");
 }
 
-export function runLoadingObserver(func) {
+export function runLoadingObserver(func: Function) {
   const targetNode = document.querySelector("loading .loader");
   const config = { attributes: true };
+
+  const debounceObserver = debounce(() => func());
+
   const observer = new MutationObserver(function (mutations) {
     for (let mutation of mutations) {
       if (mutation.type === "attributes") {
         if (mutation.attributeName === "data-ng-animate") {
-          // func();
-          debounce(() => func());
+          debounceObserver();
         }
       }
     }
