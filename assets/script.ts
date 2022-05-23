@@ -3,6 +3,7 @@
 //  and then load them from the extension
 
 // imports ---------------------------------------------------------------------
+import * as incl from "./ts/_incl";
 import { autoLogin } from "./ts/autoLogin";
 import { createPageTitle } from "./ts/createPageTitle";
 import { onContextMenu, addInfoForMenu } from "./ts/contextMenu";
@@ -56,8 +57,6 @@ document.body.addEventListener("contextmenu", onContextMenu);
         createPageTitle(state);
 
         function runAfterObserve() {
-          // console.log("Debounced");
-
           // general stuff
           replaceDates();
           replaceStrings();
@@ -67,31 +66,7 @@ document.body.addEventListener("contextmenu", onContextMenu);
         }
 
         // mutation observer with debounce, it checks if loading ended
-        function debounce(func, timeout = 300) {
-          let timer;
-          return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-              func.apply(this, args);
-            }, timeout);
-          };
-        }
-
-        const debounceObserver = debounce(() => runAfterObserve());
-
-        const targetNode = document.querySelector("loading .loader");
-        const config = { attributes: true };
-        const observer = new MutationObserver(function (mutations) {
-          for (let mutation of mutations) {
-            if (mutation.type === "attributes") {
-              if (mutation.attributeName === "data-ng-animate") {
-                debounceObserver();
-              }
-            }
-          }
-        });
-
-        observer.observe(targetNode, config);
+        incl.runLoadingObserver(runAfterObserve());
       }
     );
   } catch (error) {}

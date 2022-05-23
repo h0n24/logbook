@@ -340,32 +340,32 @@ blockUrls = [
     [
         "logbook.itstep.org/assets/3930875e/controllers/logs/materialsLogsCtrl.js",
         "script",
-        "/js/logs/materialsLogsCtrl.js",
+        "/js/materialsLogsCtrl.js",
     ],
     [
         "logbook.itstep.org/assets/3930875e/controllers/logs/methodPackageLogsCtrl.js",
         "script",
-        "/js/logs/methodPackageLogsCtrl.js",
+        "/js/methodPackageLogsCtrl.js",
     ],
     [
         "logbook.itstep.org/assets/3930875e/controllers/logs/mainLogsCtrl.js",
         "script",
-        "/js/logs/mainLogsCtrl.js",
+        "/js/mainLogsCtrl.js",
     ],
     [
         "logbook.itstep.org/assets/3930875e/controllers/logs/methodLinkingLogsCtrl.js",
         "script",
-        "/js/logs/methodLinkingLogsCtrl.js",
+        "/js/methodLinkingLogsCtrl.js",
     ],
     [
         "logbook.itstep.org/assets/3930875e/controllers/logs/methodBindLogsCtrl.js",
         "script",
-        "/js/logs/methodBindLogsCtrl.js",
+        "/js/methodBindLogsCtrl.js",
     ],
     [
         "logbook.itstep.org/assets/3930875e/controllers/logs/methodPublicSpecLogsCtrl.js",
         "script",
-        "/js/logs/methodPublicSpecLogsCtrl.js",
+        "/js/methodPublicSpecLogsCtrl.js",
     ],
     [
         "logbook.itstep.org/assets/3930875e/logs_factory.js",

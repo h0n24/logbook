@@ -1,15 +1,5 @@
 // right click on menu -> leads to doubleclick to prevent waiting --------------
-function click(x, y) {
-    const ev = new MouseEvent("click", {
-        view: window,
-        bubbles: true,
-        cancelable: true,
-        screenX: x,
-        screenY: y,
-    });
-    const el = document.elementFromPoint(x, y);
-    el.dispatchEvent(ev);
-}
+import * as incl from "./_incl";
 // TODO: maybe detect what is under the cursor and then clik on it directly?
 // because waiting for the menu to open is extremely slow
 export function onContextMenu(event) {
@@ -18,10 +8,10 @@ export function onContextMenu(event) {
         // alert("yes");
         event.preventDefault();
         // @ts-ignore: Not in this file, it's on the website
-        click(event.clientX, event.clientY);
+        incl.clickOnPosition(event.clientX, event.clientY);
         setTimeout(() => {
             // @ts-ignore: Not in this file, it's on the website
-            click(event.clientX, event.clientY);
+            incl.clickOnPosition(event.clientX, event.clientY);
         }, 250);
     }
 }

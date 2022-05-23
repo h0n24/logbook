@@ -1,16 +1,4 @@
-// todo import click from somewhere !!
-function customClick(x, y) {
-  const ev = new MouseEvent("click", {
-    view: window,
-    bubbles: true,
-    cancelable: true,
-    screenX: x,
-    screenY: y,
-  });
-
-  const el = document.elementFromPoint(x, y);
-  el.dispatchEvent(ev);
-}
+import * as incl from "./_incl";
 
 function set12Mark(event, popup) {
   // hide popup before clicking
@@ -27,7 +15,7 @@ function set12Mark(event, popup) {
 
   // click outside
   setTimeout(() => {
-    customClick(event.clientX - 50, event.clientY);
+    incl.clickOnPosition(event.clientX - 50, event.clientY);
     document.body.style.cursor = "default";
   }, 500);
 
@@ -41,12 +29,10 @@ function set12Mark(event, popup) {
 
 function addContextMenu(event): void {
   event.preventDefault();
-  customClick(event.clientX, event.clientY);
+  incl.clickOnPosition(event.clientX, event.clientY);
 
   const popupID = event.target.getAttribute("aria-owns");
   const isEnabled = event.target.getAttribute("aria-disabled") === "false";
-
-  // console.log(event, popupID, isEnabled);
   const popup = document.getElementById(popupID);
 
   if (popup && isEnabled) {
@@ -60,34 +46,38 @@ function whenClickedOnPresenceTh() {
   );
 
   workInClass.title =
-    "Pravé tlačítko: Dát maximální známku všem studeentům. Pozor: trvá +1 sekundu za každého žáka.";
+    "Pravé tlačítko: Dát maximální známku všem studentům. Pozor: trvá +1 sekundu za každého žáka.";
 
   workInClass.addEventListener("contextmenu", (event) => {
     event.preventDefault();
+
+    incl.showLoader();
 
     const classWorkSelects = document.querySelectorAll(
       '.presentr-classWork md-select[aria-disabled="false"]'
     );
 
-    console.log("todo this");
-    console.log(classWorkSelects);
-
     let iteration = 0;
 
     classWorkSelects.forEach((select) => {
-      // (select as HTMLElement).click();
-
       const popupID = select.getAttribute("aria-owns");
       const popup = document.getElementById(popupID);
 
+      // skip if already selected
+      const isAlreadySelected = select.querySelector(
+        ".md-select-value .md-text"
+      ) as HTMLElement;
+      if (isAlreadySelected.innerHTML === "12") return;
+
+      // click on select on our behalf
       setTimeout(() => {
-        // todo - unfinished
-        // set12Mark(event, popup); // uncomment this and test it !!
-        console.log(event, popup);
+        set12Mark(event, popup);
       }, iteration * 1000 + 1);
 
       iteration++;
     });
+
+    setTimeout(() => incl.hideLoader(), iteration * 1000 + 2);
   });
 }
 
@@ -121,13 +111,8 @@ function countPresentStudents() {
     dots.forEach((dot) => {
       const selection = dot.querySelector("i:last-child") as HTMLElement;
 
-      if (selection.classList.contains("ng-hide")) {
-        return;
-      }
-
-      if (selection.classList.contains("was-not")) {
-        return;
-      }
+      if (selection.classList.contains("ng-hide")) return;
+      if (selection.classList.contains("was-not")) return;
 
       wasPresent++;
     });
