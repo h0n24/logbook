@@ -143,7 +143,7 @@ function correctBugTabsActiveWhenBreak() {
     if (!breakElement.innerHTML.includes(targetBreakText))
         return;
     // check if its currently visible on screen
-    var observer = new IntersectionObserver(function (entries) {
+    const observer = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting === true) {
             // console.log("Element is fully visible in screen");
             removeActiveTabs();
@@ -165,8 +165,15 @@ export function presenceEnhancements(state) {
             whenPresenceChanged();
             whenTeacherRoleChanged();
             whenClickedOnPresenceTh();
-            correctBugTabsActiveWhenBreak();
         }
         catch (error) { }
     }, 100);
+    // longer timeout
+    setTimeout(function () {
+        try {
+            correctBugTabsActiveWhenBreak();
+            console.log("Presence enhancements loaded");
+        }
+        catch (error) { }
+    }, 200);
 }
