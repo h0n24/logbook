@@ -6,7 +6,11 @@ replacements.push(["ч", " hod"]);
 replacements.push(["лет", "let"]);
 // může být změněno v lokalizačním systému:
 replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]);
-replacements.push(["V skupine  není studentů", "Ve skupině nejsou studenti"]);
+// replacements.push(["V skupine  není studentů", "Ve skupině nejsou studenti"]);
+replacements.push([
+    "V skupine  není studentů",
+    "Dnes na této pobočce neučíte žádné studenty.",
+]);
 // nemůže být změněno v lokalizačním systému
 replacements.push(["Docházka, %", "Docházka"]); // proč? chyběli by % (css)
 // more effective replacement for strings

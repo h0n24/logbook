@@ -41,24 +41,6 @@ function ping(url, multiplier) {
         }, 5000);
     });
 }
-function testPing() {
-    try {
-        ping("https://logbook.itstep.org/", 0.4)
-            .then(function (delta) {
-            // console.error("Your ping is: ", delta);
-            const pulseElement = document.getElementById("pulse");
-            if (pulseElement)
-                messageYourVPNisOnline(pulseElement, delta);
-        })
-            .catch(function (err) {
-            // console.error("Could not ping remote URL", err);
-            const pulseElement = document.getElementById("pulse");
-            if (pulseElement)
-                messageYourVPNisOffline(pulseElement);
-        });
-    }
-    catch (error) { }
-}
 function messageYourVPNisOnline(pulseElement, delta) {
     pulseElement.classList.remove("disconnected");
     pulseElement.classList.add("connected");
@@ -74,6 +56,28 @@ function messageYoureOffline(pulseElement) {
     pulseElement.classList.add("disconnected");
     pulseElement.title = "Váš počítač je offline.";
 }
+function hasPing(delta) {
+    // console.error("Your ping is: ", delta);
+    const pulseElement = document.getElementById("pulse");
+    if (pulseElement)
+        messageYourVPNisOnline(pulseElement, delta);
+}
+function hasNoPing(err) {
+    // console.error("Could not ping remote URL", err);
+    const pulseElement = document.getElementById("pulse");
+    if (pulseElement)
+        messageYourVPNisOffline(pulseElement);
+}
+function testPing() {
+    try {
+        ping("https://logbook.itstep.org/", 0.4)
+            .then((delta) => hasPing(delta))
+            .catch((err) => hasNoPing(err));
+    }
+    catch (error) {
+        hasNoPing(error);
+    }
+}
 // check ping regularly
 export function checkPing() {
     const body = document.body;
@@ -85,17 +89,17 @@ export function checkPing() {
     // first run
     testPing();
     // repeat every 5 seconds
-    let repeatWhenOnline = setTimeout(() => testPing(), 5000);
+    let repeatWhenOnline = setInterval(() => testPing(), 5000);
     // addEventListener version
-    window.addEventListener("offline", (event) => {
+    window.addEventListener("offline", () => {
         // console.log("The network connection has been lost.");
         clearInterval(repeatWhenOnline);
         messageYoureOffline(pulseElement);
         setTimeout(() => messageYoureOffline(pulseElement), 5000);
     });
-    window.addEventListener("online", (event) => {
+    window.addEventListener("online", () => {
         // console.log("The network connection has been restored.");
         testPing();
-        repeatWhenOnline = setTimeout(() => testPing(), 5000);
+        repeatWhenOnline = setInterval(() => testPing(), 5000);
     });
 }
