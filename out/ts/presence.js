@@ -43,9 +43,12 @@ function whenClickedOnPresenceTh() {
             const popupID = select.getAttribute("aria-owns");
             const popup = document.getElementById(popupID);
             // skip if already selected
-            const isAlreadySelected = select.querySelector(".md-select-value .md-text");
-            if (isAlreadySelected.innerHTML === "12")
-                return;
+            try {
+                const isAlreadySelected = select.querySelector(".md-select-value .md-text");
+                if (isAlreadySelected.innerHTML === "12")
+                    return;
+            }
+            catch (error) { }
             // click on select on our behalf
             setTimeout(() => {
                 set12Mark(event, popup);

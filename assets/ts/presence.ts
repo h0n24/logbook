@@ -64,10 +64,12 @@ function whenClickedOnPresenceTh() {
       const popup = document.getElementById(popupID);
 
       // skip if already selected
-      const isAlreadySelected = select.querySelector(
-        ".md-select-value .md-text"
-      ) as HTMLElement;
-      if (isAlreadySelected.innerHTML === "12") return;
+      try {
+        const isAlreadySelected = select.querySelector(
+          ".md-select-value .md-text"
+        ) as HTMLElement;
+        if (isAlreadySelected.innerHTML === "12") return;
+      } catch (error) {}
 
       // click on select on our behalf
       setTimeout(() => {
