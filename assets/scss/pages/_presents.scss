@@ -105,6 +105,7 @@ html main.content .presents {
     height: 3rem;
     margin: 0;
     margin-bottom: 3rem !important;
+    user-select: none;
 
     // test
     display: inline-flex;
@@ -120,6 +121,7 @@ html main.content .presents {
     padding: 0;
     width: auto;
     margin-right: 0.5rem;
+    user-select: none;
 
     &:last-child {
       margin-right: 0;
@@ -132,6 +134,7 @@ html main.content .presents {
     color: color.$primary !important;
     border: 0.05rem solid color.$primary !important;
     border-radius: style.$border-radius;
+    user-select: none;
   }
 
   .pars li:not(:last-child) > a {
@@ -154,14 +157,7 @@ html main.content .presents {
     background-color: color.$primary !important;
     border: 0.05rem solid color.$primary !important;
     color: #fff !important;
-  }
-
-  // opravuje chybu, kdy se "zaškrtne" i když není studentů
-  .pars li[class="tab                                          active"] a {
-    background-color: #fff !important;
-    color: color.$primary !important;
-    border: 0.05rem solid color.$primary !important;
-    border-right-width: 0 !important;
+    pointer-events: none;
   }
 
   .group {

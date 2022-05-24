@@ -171,6 +171,41 @@ function whenTeacherRoleChanged() {
   hideMaterialsWhenNoTeacher(selected);
 }
 
+function removeActiveTabs() {
+  const tabs = document.querySelectorAll(".presents ul.pars li");
+
+  tabs.forEach((tab) => {
+    if (tab.classList.contains("active")) {
+      tab.classList.remove("active");
+    }
+  });
+}
+
+// opravuje chybu, kdy se "zaškrtne" i když není studentů
+function correctBugTabsActiveWhenBreak() {
+  // find if there is a break
+  const breakSelector =
+    "body > main > div:nth-child(4) > div > div.interna-wrap > div:nth-child(2) > h3";
+  const targetBreakText = "Máte přestávku nebo momentálně neprobíhá hodina";
+
+  const breakElement = document.querySelector(breakSelector);
+  if (!breakElement) return;
+  if (!breakElement.innerHTML.includes(targetBreakText)) return;
+
+  // check if its currently visible on screen
+  var observer = new IntersectionObserver(
+    function (entries) {
+      if (entries[0].isIntersecting === true) {
+        // console.log("Element is fully visible in screen");
+        removeActiveTabs();
+      }
+    },
+    { threshold: [1] }
+  );
+
+  observer.observe(breakElement);
+}
+
 // add right click to menu
 export function presenceEnhancements(state) {
   if (state !== "presents") return;
@@ -185,6 +220,7 @@ export function presenceEnhancements(state) {
       whenPresenceChanged();
       whenTeacherRoleChanged();
       whenClickedOnPresenceTh();
+      correctBugTabsActiveWhenBreak();
     } catch (error) {}
   }, 100);
 }
