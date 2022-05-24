@@ -9,6 +9,8 @@ export function debounce(func: Function, timeout: number = 300) {
   };
 }
 
+// clicks on target mouse position
+// i.e. used when clicking outside custom selects when automating stuff
 export function clickOnPosition(x: number, y: number) {
   const ev = new MouseEvent("click", {
     view: window,
@@ -22,6 +24,7 @@ export function clickOnPosition(x: number, y: number) {
   el.dispatchEvent(ev);
 }
 
+// show and hide loader programatically
 export function showLoader() {
   const loader = document.querySelector("loading .loader");
   loader.classList.remove("ng-hide");
@@ -32,6 +35,8 @@ export function hideLoader() {
   loader.classList.add("ng-hide");
 }
 
+// loading observer with debounce,
+// solving issue with catching angular loading times
 export function runLoadingObserver(func: Function) {
   const targetNode = document.querySelector("loading .loader");
   const config = { attributes: true };
