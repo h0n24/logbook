@@ -64,7 +64,7 @@ html main.content .report {
     padding-left: 1rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    color: color.$text;
+    color: color.$dark !important;
     text-align: left;
     font-weight: normal;
 
@@ -103,7 +103,7 @@ html main.content .report {
     }
 
     .not_empty {
-      color: color.$text;
+      color: color.$dark !important;
 
       // div::before {
       //   left: 1px;
@@ -123,7 +123,7 @@ html main.content .report {
     }
 
     td .auditory {
-      color: color.$text;
+      color: color.$dark !important;
     }
 
     td .subject {
@@ -160,7 +160,7 @@ html main.content .report {
   }
 
   #report .sub-tabs .tab a {
-    color: color.$text;
+    color: color.$dark !important;
     text-transform: unset;
 
     &::first-letter {
@@ -168,7 +168,7 @@ html main.content .report {
     }
 
     &.active {
-      color: color.$text;
+      color: color.$dark !important;
       text-transform: unset;
 
       &::first-letter {

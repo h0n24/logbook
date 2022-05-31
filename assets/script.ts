@@ -11,6 +11,7 @@ import { replaceDates } from "./ts/replaceDates";
 import { replaceStrings } from "./ts/replaceStrings";
 import { checkPing } from "./ts/checkPing";
 import { presenceEnhancements } from "./ts/presence";
+import { homeworkEnhancements } from "./ts/presenceAddHomework";
 import { addRightClickStar } from "./ts/contextMenuStar";
 
 // debug
@@ -63,6 +64,8 @@ document.body.addEventListener("contextmenu", onContextMenu);
 
           // specific stuff
           presenceEnhancements(state);
+
+          homeworkEnhancements(state);
         }
 
         // mutation observer with debounce, it checks if loading ended

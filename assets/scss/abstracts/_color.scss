@@ -2,8 +2,7 @@ $primary: #006ad0;
 $primary-hover: lighten(desaturate($primary, 10%), 10%);
 $secondary: lighten(desaturate($primary, 100%), 50%);
 
-$text: #3b4351 !important;
-$dark: #3b4351;
+$dark: #3b4351; // používá se pro text
 
 $toolbars: #edece8;
 $inputs: #bcc3ce;

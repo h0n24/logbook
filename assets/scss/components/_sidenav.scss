@@ -14,7 +14,7 @@ html body.main main.content .open-menu-block {
 // restyle sidenavbar
 html body.main main.content md-sidenav {
   background-color: color.$toolbars;
-  color: color.$text;
+  color: color.$dark !important;
   padding-bottom: 0;
   width: auto;
 
@@ -213,7 +213,7 @@ html body.main main.content md-sidenav {
         font-weight: 500;
         margin: 0;
         margin-left: 0.25rem;
-        color: color.$text;
+        color: color.$dark !important;
       }
     }
 
@@ -265,7 +265,7 @@ html body.main main.content md-sidenav {
       font-size: 0.8rem;
       line-height: 2rem;
       height: 2rem;
-      color: color.$text;
+      color: color.$dark !important;
       background: transparent;
       box-shadow: none;
       border: 1px solid rgba(color.$dark, 0.1);
@@ -278,7 +278,7 @@ html body.main main.content md-sidenav {
   }
 
   ul.main-info a {
-    color: color.$text;
+    color: color.$dark !important;
 
     &:hover {
       text-decoration: none;

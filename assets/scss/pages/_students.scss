@@ -122,12 +122,12 @@ html {
         font-size: 1rem;
         line-height: 1rem;
         margin-bottom: 0.5rem;
-        color: color.$text;
+        color: color.$dark !important;
         font-size: 0.8rem;
 
         span {
           background: transparent !important;
-          color: color.$text;
+          color: color.$dark !important;
           font-size: 1rem;
           font-weight: 700;
           width: auto;
@@ -153,7 +153,7 @@ html {
 
     .reveal-content {
       p[ng-if="stud.last_date_vizit != null"].critical_deptor {
-        color: color.$text;
+        color: color.$dark !important;
 
         span {
           &:after {
@@ -179,7 +179,7 @@ html {
     height: auto;
     min-height: auto;
     border: none;
-    color: color.$text;
+    color: color.$dark !important;
     padding: 0;
   }
 }

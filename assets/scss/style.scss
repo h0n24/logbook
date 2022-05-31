@@ -44,7 +44,7 @@ $font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
 html,
 body {
   background-color: #fff !important;
-  color: color.$text;
+  color: color.$dark !important;
   font-family: $font-family;
 
   height: auto;
@@ -186,7 +186,7 @@ html {
   }
 
   .tabMenu .title h1 {
-    color: color.$text;
+    color: color.$dark !important;
     text-align: left;
   }
 
@@ -238,7 +238,7 @@ html {
   }
 
   .internal-wrap-global .md-select-value {
-    color: color.$text;
+    color: color.$dark !important;
   }
 
   .hw-md_single_teacher__comment#custom-style {
@@ -264,7 +264,7 @@ html {
     md-input-container
     label:not(.md-no-float):not(.md-container-ignore) {
     font-weight: 400;
-    color: color.$text;
+    color: color.$dark !important;
     padding-left: 0.6rem;
     top: -18px;
   }
@@ -275,7 +275,7 @@ html {
   }
 
   .internal-wrap-global md-select.ng-not-empty * {
-    color: color.$text;
+    color: color.$dark !important;
   }
 
   .has_header md-content md-select-header input {
@@ -293,7 +293,7 @@ html {
   }
 
   md-datepicker .md-datepicker-input {
-    color: color.$text;
+    color: color.$dark !important;
     font-size: 1rem;
   }
 
@@ -309,7 +309,7 @@ html {
   .main md-calendar .md-calendar-day-header th {
     // background-color: color.$primary;
     background-color: color.$toolbars;
-    color: color.$text;
+    color: color.$dark !important;
   }
 
   .main md-calendar .md-calendar-day-header {
@@ -356,6 +356,7 @@ html {
   }
 
   // tabs
+  .tabs-global,
   .tabs-global.tabs {
     top: 3rem !important;
     z-index: 100;
@@ -377,6 +378,7 @@ html {
     border-color: color.$primary !important;
     border-radius: style.$border-radius !important;
     text-transform: unset !important;
+    text-decoration: none !important;
     box-shadow: none !important;
     width: auto !important;
     min-width: auto !important;
@@ -409,6 +411,13 @@ html {
     }
   }
 
+  // because in the case of presence/adding homework
+  // someone crossed active between a and li :(
+  .tabs-global ul.addMatHomeLabTabs li.tab.active a {
+    background-color: color.$primary !important;
+    color: #fff !important;
+  }
+
   // page picker
   .page_picker button i,
   .page_picker button[aria-hidden="false"] i {
@@ -428,7 +437,7 @@ html {
     // opacity: 0.5;
     background-color: rgb(237, 236, 232) !important;
     // color: #fff !important;
-    color: color.$text;
+    color: color.$dark !important;
     width: 2rem;
     font-size: 1.8rem;
     cursor: not-allowed;
@@ -461,7 +470,7 @@ html {
       opacity: 1;
     }
     i.material-icons {
-      color: color.$text;
+      color: color.$dark !important;
     }
   }
 

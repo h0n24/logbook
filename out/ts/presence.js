@@ -1,13 +1,5 @@
 import * as incl from "./_incl";
-function set12Mark(event, popup) {
-    // hide popup before clicking
-    popup.style.visibility = "hidden";
-    document.body.style.cursor = "wait";
-    // make click for us
-    const maxMark = popup.querySelector("md-option[value='12']");
-    maxMark.click();
-    // change z-index to don't block scroll
-    popup.style.zIndex = "-1";
+function hideMarkPopup(event, popup) {
     // click outside
     setTimeout(() => {
         incl.clickOnPosition(event.clientX - 50, event.clientY);
@@ -19,6 +11,17 @@ function set12Mark(event, popup) {
         popup.style.zIndex = "";
         document.body.style.cursor = "default";
     }, 1000);
+}
+function set12Mark(event, popup) {
+    // hide popup before clicking
+    popup.style.visibility = "hidden";
+    document.body.style.cursor = "wait";
+    // make click for us
+    const maxMark = popup.querySelector("md-option[value='12']");
+    maxMark.click();
+    // change z-index to don't block scroll
+    popup.style.zIndex = "-1";
+    hideMarkPopup(event, popup);
 }
 function addContextMenu(event) {
     event.preventDefault();
@@ -39,7 +42,7 @@ function whenClickedOnPresenceTh() {
         incl.showLoader();
         const classWorkSelects = document.querySelectorAll('.presentr-classWork md-select[aria-disabled="false"]');
         let iteration = 0;
-        classWorkSelects.forEach((select) => {
+        classWorkSelects.forEach((select, key, parent) => {
             const popupID = select.getAttribute("aria-owns");
             const popup = document.getElementById(popupID);
             // skip if already selected
@@ -52,8 +55,14 @@ function whenClickedOnPresenceTh() {
             // click on select on our behalf
             setTimeout(() => {
                 set12Mark(event, popup);
-            }, iteration * 1000 + 1);
-            iteration++;
+            }, key * 1000 + 1);
+            // last iteration
+            if (key === parent.length - 1) {
+                setTimeout(() => {
+                    hideMarkPopup(event, popup);
+                }, (key + 1) * 1000 + 500);
+            }
+            iteration = key + 1;
         });
         setTimeout(() => incl.hideLoader(), iteration * 1000 + 2);
     });
@@ -172,7 +181,6 @@ export function presenceEnhancements(state) {
     setTimeout(function () {
         try {
             correctBugTabsActiveWhenBreak();
-            console.log("Presence enhancements loaded");
         }
         catch (error) { }
     }, 200);

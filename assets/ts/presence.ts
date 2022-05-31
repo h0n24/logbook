@@ -1,5 +1,20 @@
 import * as incl from "./_incl";
 
+function hideMarkPopup(event, popup) {
+  // click outside
+  setTimeout(() => {
+    incl.clickOnPosition(event.clientX - 50, event.clientY);
+    document.body.style.cursor = "default";
+  }, 500);
+
+  setTimeout(() => {
+    // show popup after custom click
+    popup.style.visibility = "visible";
+    popup.style.zIndex = "";
+    document.body.style.cursor = "default";
+  }, 1000);
+}
+
 function set12Mark(event, popup) {
   // hide popup before clicking
   popup.style.visibility = "hidden";
@@ -13,18 +28,7 @@ function set12Mark(event, popup) {
   // change z-index to don't block scroll
   popup.style.zIndex = "-1";
 
-  // click outside
-  setTimeout(() => {
-    incl.clickOnPosition(event.clientX - 50, event.clientY);
-    document.body.style.cursor = "default";
-  }, 500);
-
-  setTimeout(() => {
-    // show popup after custom click
-    popup.style.visibility = "visible";
-    popup.style.zIndex = "";
-    document.body.style.cursor = "default";
-  }, 1000);
+  hideMarkPopup(event, popup);
 }
 
 function addContextMenu(event): void {
@@ -59,7 +63,7 @@ function whenClickedOnPresenceTh() {
 
     let iteration = 0;
 
-    classWorkSelects.forEach((select) => {
+    classWorkSelects.forEach((select, key, parent) => {
       const popupID = select.getAttribute("aria-owns");
       const popup = document.getElementById(popupID);
 
@@ -74,9 +78,16 @@ function whenClickedOnPresenceTh() {
       // click on select on our behalf
       setTimeout(() => {
         set12Mark(event, popup);
-      }, iteration * 1000 + 1);
+      }, key * 1000 + 1);
 
-      iteration++;
+      // last iteration
+      if (key === parent.length - 1) {
+        setTimeout(() => {
+          hideMarkPopup(event, popup);
+        }, (key + 1) * 1000 + 500);
+      }
+
+      iteration = key + 1;
     });
 
     setTimeout(() => incl.hideLoader(), iteration * 1000 + 2);
@@ -227,7 +238,6 @@ export function presenceEnhancements(state) {
   setTimeout(function () {
     try {
       correctBugTabsActiveWhenBreak();
-      console.log("Presence enhancements loaded");
     } catch (error) {}
   }, 200);
 }

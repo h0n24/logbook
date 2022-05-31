@@ -67,7 +67,7 @@ html main.content .homeWorks {
 
       &:before {
         content: "—";
-        color: color.$text;
+        color: color.$dark !important;
       }
 
       .hw_pencil-icon.ng-scope {
@@ -217,7 +217,7 @@ html main.content .homeWorks {
     text-transform: none;
     background-color: color.$secondary !important;
     font-size: 1rem;
-    color: color.$text;
+    color: color.$dark !important;
   }
 
   .number {
@@ -390,22 +390,22 @@ html .md-dialog-container {
 
   .hw-md_stud__group {
     margin-top: 0 !important;
-    color: color.$text;
+    color: color.$dark !important;
   }
 
   .hw-md_stud-work__date {
-    color: color.$text;
+    color: color.$dark !important;
     margin: 0 !important;
     margin-left: 1ex !important;
   }
   .hw-md_single_stud-work__date-download .color-grey {
-    color: color.$text;
+    color: color.$dark !important;
     margin: 0 !important;
     margin-left: 1ex !important;
   }
   .hw-md_theme__item .hw-md_theme,
   .hw-md_single_theme__item .hw-md_single_theme {
-    color: color.$text;
+    color: color.$dark !important;
     margin: 0 !important;
     margin-left: 1ex !important;
   }

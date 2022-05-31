@@ -22,7 +22,7 @@ html body.main main.content toolbar {
   .changeUser button {
     // display: block;
     border: 0.05rem solid color.$inputs;
-    color: color.$text;
+    color: color.$dark !important;
     font-size: 0.8rem;
     height: 1.8rem;
     // width: 100%;
@@ -57,7 +57,7 @@ html body.main main.content toolbar {
 
   .pull-right {
     align-self: flex-end;
-    color: color.$text;
+    color: color.$dark !important;
     display: flex;
     gap: 1rem;
     margin-right: 1rem;
@@ -72,7 +72,7 @@ html body.main main.content toolbar {
     padding-right: 0;
 
     i {
-      color: color.$text;
+      color: color.$dark !important;
       font-size: 1.5rem;
 
       &.count {

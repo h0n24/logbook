@@ -5,14 +5,21 @@ replacements.push(["№", "č. "]);
 replacements.push(["ч", " hod"]);
 replacements.push(["лет", "let"]);
 // může být změněno v lokalizačním systému:
-replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]);
+replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]); // není jisté, zda půjde
 // replacements.push(["V skupine  není studentů", "Ve skupině nejsou studenti"]);
 replacements.push([
     "V skupine  není studentů",
     "Dnes na této pobočce neučíte žádné studenty.",
 ]);
+replacements.push([
+    "cover_img_rules",
+    "Velikost souboru musí být maximálně 100 MB.",
+]);
+replacements.push(["upload_cover", "Nahrát titulní obrázek"]);
+replacements.push(["Složka", "Vybrat soubor"]);
 // nemůže být změněno v lokalizačním systému
 replacements.push(["Docházka, %", "Docházka"]); // proč? chyběli by % (css)
+replacements.push(["přidat materiál", "přidat DÚ, materiál"]); // proč? není jasné jestli se používá jen v presence
 // more effective replacement for strings
 function replaceWithTreeWalker() {
     let allTextNodes = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), 
