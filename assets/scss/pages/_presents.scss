@@ -920,6 +920,7 @@ html main.content .presents {
       a.btn {
         width: auto;
         text-transform: capitalize;
+        font-size: 1rem;
       }
 
       button {
@@ -946,6 +947,10 @@ html main.content .presents {
 
     md-calendar > div {
       margin: 0;
+    }
+
+    .materialize-textarea {
+      white-space: pre-wrap;
     }
 
     .form-field.file-field {

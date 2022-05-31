@@ -23,11 +23,7 @@ export function homeworkEnhancements(state) {
       }
 
       // preset basic message
-      const message = `Milí studenti, 
-
-čeká nás další úkol. V přiloženém souboru najdete veškeré informace. Jistě si s tím hravě poradíte. Na úkol je klasicky týden. Těším se na Vaše práce. 
-
-S pozdravem`;
+      const message = `Milí studenti, \r\n čeká nás další úkol. V přiloženém souboru najdete veškeré informace. Jistě si s tím hravě poradíte. Na úkol je klasicky týden. Těším se na Vaše práce. \r\n S pozdravem`;
 
       const homeworkMessage = document.querySelector(
         'textarea[ng-model="form.descr"]'
