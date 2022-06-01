@@ -276,6 +276,10 @@ html main.content .homeWorks {
 html .md-dialog-container {
   .hw-md_single_stud-work__answer-text {
     margin-bottom: 1rem;
+
+    &:empty {
+      display: none;
+    }
   }
 
   .hw-md_single_teacher__file-wrap {
@@ -321,6 +325,10 @@ html .md-dialog-container {
     .hw-md_subtitle {
       font-size: 0.8rem;
     }
+  }
+
+  .hw-md_single_stud-work__outer {
+    margin-bottom: 1rem;
   }
 
   .hw-md_stud-work__wrap,
@@ -409,6 +417,27 @@ html .md-dialog-container {
     margin: 0 !important;
     margin-left: 1ex !important;
   }
+
+  .hw-md_single__back {
+    cursor: pointer;
+  }
+
+  &#myDialog.home_work_modal {
+    md-dialog .btn span {
+      background-color: transparent;
+    }
+
+    .hw-md__tabs_modal ul a {
+      font-size: 1rem;
+    }
+    .hw-md__tabs_modal ul a.active {
+      color: color.$primary;
+
+      &:before {
+        background-color: color.$primary;
+      }
+    }
+  }
 }
 
 body {
@@ -451,5 +480,20 @@ body {
     border-top-right-radius: style.$border-radius;
     border-bottom-right-radius: style.$border-radius;
     border-right: 1px solid color.$secondary;
+  }
+
+  .hw-md_single_teacher__file-wrap label.flex-center {
+    filter: grayscale(100%);
+
+    &:hover {
+      filter: grayscale(0%);
+    }
+  }
+}
+
+body md-dialog.hw-md_single,
+body md-dialog.hw-md {
+  .btn {
+    background-color: color.$primary !important;
   }
 }

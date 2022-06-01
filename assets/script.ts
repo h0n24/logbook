@@ -12,6 +12,7 @@ import { replaceStrings } from "./ts/replaceStrings";
 import { checkPing } from "./ts/checkPing";
 import { presenceEnhancements } from "./ts/presence";
 import { homeworkEnhancements } from "./ts/presenceAddHomework";
+import { homeworkAutomation } from "./ts/homework";
 import { addRightClickStar } from "./ts/contextMenuStar";
 
 // debug
@@ -47,6 +48,12 @@ document.body.addEventListener("contextmenu", onContextMenu);
 
         const state = toState.name;
 
+        // update language based on users selection
+        let selectedLanguage = scope.current_lang;
+        if (selectedLanguage !== undefined && selectedLanguage !== "cs") {
+          document.documentElement.setAttribute("lang", selectedLanguage);
+        }
+
         // auto login
         autoLogin(state);
 
@@ -66,6 +73,7 @@ document.body.addEventListener("contextmenu", onContextMenu);
           presenceEnhancements(state);
 
           homeworkEnhancements(state);
+          homeworkAutomation(state);
         }
 
         // mutation observer with debounce, it checks if loading ended

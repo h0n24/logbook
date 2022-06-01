@@ -20,6 +20,7 @@ replacements.push([
 ]);
 replacements.push(["upload_cover", "Nahrát titulní obrázek"]);
 replacements.push(["Složka", "Vybrat soubor"]);
+replacements.push(["Udělte známku:", "Udělte známku"]);
 
 // nemůže být změněno v lokalizačním systému
 replacements.push(["Docházka, %", "Docházka"]); // proč? chyběli by % (css)
