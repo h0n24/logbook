@@ -22,15 +22,47 @@ export function homeworkEnhancements(state) {
         inputCover.value = max100mb;
       }
 
-      // preset basic message
-      const message = `Milí studenti, \r\n čeká nás další úkol. V přiloženém souboru najdete veškeré informace. Jistě si s tím hravě poradíte. Na úkol je klasicky týden. Těším se na Vaše práce. \r\n S pozdravem`;
+      // homeworkMessages ------------------------------------------------------
 
-      const homeworkMessage = document.querySelector(
+      const homeworkMessagesEl = document.querySelector(
         'textarea[ng-model="form.descr"]'
       ) as HTMLTextAreaElement;
-      if (homeworkMessage.innerText === "") {
-        homeworkMessage.innerText = message;
+
+      if (!homeworkMessagesEl) return;
+
+      // preset basic message
+      let duePartialMessage = "Na úkol je klasicky týden.";
+      const message = `Milí studenti, čeká nás další úkol. V přiloženém souboru najdete veškeré informace. Jistě si s tím hravě poradíte. ${duePartialMessage} Těším se na Vaše práce. S pozdravem`;
+
+      if (homeworkMessagesEl.innerText === "") {
+        homeworkMessagesEl.innerText = message;
       }
+
+      // Prevent automatic message being send as empty
+
+      // simulate input event
+      homeworkMessagesEl.dispatchEvent(new Event("input"));
+
+      // trick Angular -> test if necessary (maybe event input is enough)
+      // remove few angular classes
+      homeworkMessagesEl.classList.remove("ng-empty");
+      homeworkMessagesEl.classList.remove("ng-pristine");
+      homeworkMessagesEl.classList.remove("ng-untouched");
+
+      // add angular classes
+      homeworkMessagesEl.classList.add("ng-not-empty");
+      homeworkMessagesEl.classList.add("ng-dirty");
+      homeworkMessagesEl.classList.add("ng-touched");
+      homeworkMessagesEl.classList.add("ng-valid-parse");
+
+      // add .md-input-has-value to md-input-container
+      const inputContainer = homeworkMessagesEl.closest("md-input-container");
+      if (inputContainer) {
+        inputContainer.classList.add("md-input-has-value");
+      }
+
+      // TODO:
+      // check if the date is selected then change duePartialMessage
     } catch (error) {}
   }, 100);
 }
