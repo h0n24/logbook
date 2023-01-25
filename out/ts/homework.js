@@ -2,9 +2,9 @@ import { vocative } from "./vocative";
 function selectRandomFromArray(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
-function findAllUnfinishedHomeworksFromModal() {
+function findAllUnfinishedHomeworksFromModal(homeworksWrap) {
     try {
-        const homeworks = document.querySelectorAll("md-dialog .hw-md_content .hw-md_item");
+        const homeworks = homeworksWrap.querySelectorAll("md-dialog .hw-md_content .hw-md_item");
         for (let i = 0; i < homeworks.length; i++) {
             const homework = homeworks[i];
             enhanceHomeworkAssessment(homework);
@@ -92,10 +92,29 @@ function automateMessagesForStudents(homework, firstName, selectedMark) {
         messageCount.style.display = "unset";
     });
 }
+function makeURLinTextClickable(homework) {
+    // if you find class .hw-md_single_stud-work__answer-text make any text inside that is a link clickable
+    const studentsComments = homework.querySelector(".hw-md_single_stud-work__answer-text");
+    // detect if text contains url
+    const text = studentsComments.innerText;
+    const url = text.match(/(https?:\/\/[^\s]+)/g);
+    if (url) {
+        // make the url in the text clickable
+        studentsComments.innerHTML = text.replace(url[0], `<a href="${url[0]}" target="_blank">${url[0]}</a>`);
+    }
+}
 function enhanceHomeworkAssessment(homework, single) {
-    let firstName = findStudentsFirstName(homework, single);
-    let selectedMark = getSelectedMark(homework);
-    automateMessagesForStudents(homework, firstName, selectedMark);
+    // prevent doing this multiple times by adding a data-attribute alreadyEnhanced
+    if (homework.getAttribute("alreadyEnhanced") === "true") {
+        return;
+    }
+    else {
+        let firstName = findStudentsFirstName(homework, single);
+        let selectedMark = getSelectedMark(homework);
+        automateMessagesForStudents(homework, firstName, selectedMark);
+        makeURLinTextClickable(homework);
+        homework.setAttribute("alreadyEnhanced", "true");
+    }
 }
 // original menu has a bug -> it doesn't update homework count
 // -> observe if number of homework changes
@@ -123,6 +142,24 @@ function observeHomeworkCountAndUpdateMenu() {
     }
     catch (error) { }
 }
+function observeIfNewHomeworksAdded(homeworksWrap) {
+    // if  .hw-md_item in .md-dialog in .hw-md_content is added
+    // then enhance it
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.type === "childList") {
+                findAllUnfinishedHomeworksFromModal(homeworksWrap);
+            }
+        });
+    });
+    const config = {
+        characterData: false,
+        attributes: false,
+        childList: true,
+        subtree: true,
+    };
+    observer.observe(homeworksWrap, config);
+}
 export function homeworkAutomation(state) {
     if (state !== "homeWork")
         return;
@@ -132,9 +169,11 @@ export function homeworkAutomation(state) {
     setTimeout(function () {
         try {
             // console.log("homeworkAutomation");
-            findAllUnfinishedHomeworksFromModal();
+            const homeworksWrap = document.querySelector(".hw-md_content");
+            findAllUnfinishedHomeworksFromModal(homeworksWrap);
             enhanceSingleHomeworkFromModalAfterEvent();
             observeHomeworkCountAndUpdateMenu();
+            observeIfNewHomeworksAdded(homeworksWrap);
         }
         catch (error) { }
     }, 100);

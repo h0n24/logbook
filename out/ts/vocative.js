@@ -7,6 +7,10 @@ export function vocative(jmeno) {
     var replacepair;
     var c;
     ljmeno = " " + jmeno.toLowerCase();
+    // vlastní přepisování -> pro jména kde to moc nefunguje
+    if (ljmeno == " čeněk")
+        return "Čeňku";
+    // automatické přepisování
     switch (ljmeno.charAt(ljmeno.length - 1)) {
         case "a":
             replacepair =
