@@ -1,6 +1,6 @@
 var app = angular.module('app');
-app.controller('groupsCtrl', ['$scope', 'groupsHttp', groupsCtrl]);
-function groupsCtrl($scope, groupsHttp) {
+app.controller('groupsCtrl', ['$scope', '$sce', 'groupsHttp', groupsCtrl]);
+function groupsCtrl($scope, $sce, groupsHttp) {
 
 
     $scope.filter = {};
@@ -48,13 +48,15 @@ function groupsCtrl($scope, groupsHttp) {
 
     $scope.setDefaultSpec = function(){
         var max = 0;
-        angular.forEach($scope.filter_data[$scope.filter.group].data, function(value, key){
-            if(max < value.order){
-                max = value.order;
-                $scope.filter.spec = value.id_spec;
-            }
-        });
-    }
+        if ($scope.filter_data.length > 0) {
+            angular.forEach($scope.filter_data[$scope.filter.group].data, function(value, key){
+                if(+max < +value.order){
+                    max = value.order;
+                    $scope.filter.spec = value.id_spec;
+                }
+            });
+        }
+    };
 
     $scope.setDefaultGroup = function(){
         var max = 0;
@@ -107,6 +109,16 @@ function groupsCtrl($scope, groupsHttp) {
         $scope.data_header = $scope.data_header_full.slice($scope.offset, $scope.offset + $scope.limit);
         $scope.startPosition =  $scope.data_header_full.length - $scope.offset;
     }
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
+    };
+
     $scope.getStartData();
 
-};
+}

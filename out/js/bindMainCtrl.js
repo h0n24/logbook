@@ -21,6 +21,10 @@ function bindMainCtrl($scope, $state, bindHttp, baseHttp, $timeout, $rootScope, 
     $scope.bindActive = localStorageService.get('pm_bindActive');
     $scope.defaultLangForSelect = 'ru'; // выбранный язык по умолчанию
     $scope.defaultLangId = null; // id языка по умолчанию
+    $scope.typeHomework = 1; // id тип Домашние задания
+    $scope.typeLessonsk = 2; // id тип Уроки
+    $scope.typeLaboratory = 3; // id тип Практические задания (Лабораторные)
+
 
     // задаем id для выбора языка по умолчанию
     angular.forEach($rootScope.langList, function (val) {

@@ -3,9 +3,9 @@
  */
 var app_module = angular.module('app');
 
-var controller = app_module.controller('scheduleCtrl', ['$scope', 'scheduleHttp', ScheduleController]);
+var controller = app_module.controller('scheduleCtrl', ['$scope', '$sce', 'scheduleHttp', ScheduleController]);
 
-function ScheduleController($scope, scheduleHttp){
+function ScheduleController($scope, $sce, scheduleHttp){
     $scope.week = 0;
     $scope.thisDay = 0;
     $scope.r = 0;
@@ -86,5 +86,12 @@ function ScheduleController($scope, scheduleHttp){
         update_schedule_day();
     };
 
-
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
+    };
 }

@@ -4,6 +4,7 @@
 var app = angular.module('app');
 app.controller('bindMaterialsCtrl', [
     '$scope',
+    '$sce',
     'bindHttp',
     '$timeout',
     'localStorageService',
@@ -17,10 +18,19 @@ app.controller('bindMaterialsCtrl', [
     bindMaterialsCtrl
 ]);
 
-function bindMaterialsCtrl($scope, bindHttp, $timeout, localStorageService, $rootScope, $mdDialog, $filter, baseHttp, $mdToast, MATERIAL_TYPE, DIRECTORY_TYPE) {
+function bindMaterialsCtrl($scope, $sce, bindHttp, $timeout, localStorageService, $rootScope, $mdDialog, $filter, baseHttp, $mdToast, MATERIAL_TYPE, DIRECTORY_TYPE) {
 
     $scope.getPublicForm();
     $scope.getCity();
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызов дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
+    };
 
     document.getElementById('psevdoscroll').addEventListener('scroll', function (e) {
         e.target.nextElementSibling.scrollLeft = e.target.scrollLeft;
@@ -39,7 +49,7 @@ function bindMaterialsCtrl($scope, bindHttp, $timeout, localStorageService, $roo
     $scope.showLinkToFile = false;
     $scope.modalTitle = '';
     $scope.unreadLog = {};
-    $scope.form = {type: null, week: null, old_week: null, public_week: null, url: null};
+    $scope.form = {type: null, week: null, old_week: null, public_week: null, url: null, html: null, html_link: null};
     $scope.actualesMaterialButton = true; //параметр актуализации материала
     $scope.actualesMaterialData = null; //дата при актуализации материала
     $scope.form_cover = {type: null, filename: null, file_url: null, file: null, id_spec: null};
@@ -47,7 +57,16 @@ function bindMaterialsCtrl($scope, bindHttp, $timeout, localStorageService, $roo
     $scope.fileTypes = ["application/pdf"];
 
     $scope.openModal = function (type, data, week, theme, title) {
-        $scope.form = {type: type, week: parseInt(week), old_week: parseInt(week), public_week: parseInt(week), url: ''};
+        //html html_link
+        $scope.form = {
+            type: type,
+            week: parseInt(week),
+            old_week: parseInt(week),
+            public_week: parseInt(week),
+            url: '',
+            html: data ? data.html : null,
+            html_link: data ? data.html_link : null
+        };
         $scope.showFrame = false;
         $scope.showFrameImgBook = false;
         $scope.showLinkToFile = false;
@@ -146,6 +165,11 @@ function bindMaterialsCtrl($scope, bindHttp, $timeout, localStorageService, $roo
                 ) &&
                 form.file_url
             );
+
+            if (form.html && form.html.length > 0) {
+                $scope.showImage = false;
+                $scope.showFrame = true;
+            }
         }
     };
 
@@ -171,7 +195,25 @@ function bindMaterialsCtrl($scope, bindHttp, $timeout, localStorageService, $roo
                         baseHttp.uploadFile(credentials, $scope.form.file, DIRECTORY_TYPE.MATERIAL).success(function (rU) {
                             if (angular.isDefined(rU[0].link)) {
                                 data.append(fileType, rU[0].link);
-                                $scope.baseEditMaterials(data);
+                                if (angular.isDefined($scope.form.file_html) && formType !== MATERIAL_TYPE.BOOK) {
+                                    fileType = 'filename_html';
+                                    baseHttp.uploadFile(credentials, $scope.form.file_html, DIRECTORY_TYPE.MATERIAL).success(function (rU) {
+                                        if (angular.isDefined(rU[0].link)) {
+                                            data.append(fileType, rU[0].link);
+                                            $scope.baseEditMaterials(data);
+                                        } else {
+                                            $mdToast.show({
+                                                hideDelay: 4000,
+                                                position: 'top right',
+                                                template : '<md-toast class="md-toast red">' + $filter('translate')('file_upload_error') + '</md-toast>'
+                                            });
+                                        }
+                                    });
+                                }
+                                else {
+                                    $scope.baseEditMaterials(data);
+                                }
+
                             } else {
                                 $mdToast.show({
                                     hideDelay: 4000,
@@ -229,6 +271,7 @@ function bindMaterialsCtrl($scope, bindHttp, $timeout, localStorageService, $roo
                     $scope.form.file_url = r.file_url;
                     $scope.form.file_img_book = r.file_img_book;
                     $scope.form.shared = r.shared;
+                    $scope.form.html_link = r.html_link;
                     var public_week = $scope.form.public_week
                         ? $scope.form.public_week
                         : ($scope.form.week ? $scope.form.week : r.week);

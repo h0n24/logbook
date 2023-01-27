@@ -2,9 +2,9 @@
  * Created by vovk on 07.09.2016.
  */
 var app = angular.module('app');
-app.controller('linkingSpecCtrl', ['$scope','bindHttp', '$mdDialog', '$filter', '$mdToast', linkingSpecCtrl]);
+app.controller('linkingSpecCtrl', ['$scope', '$sce', 'bindHttp', '$mdDialog', '$filter', '$mdToast', linkingSpecCtrl]);
 
-function linkingSpecCtrl($scope, bindHttp, $mdDialog, $filter, $mdToast){
+function linkingSpecCtrl($scope, $sce, bindHttp, $mdDialog, $filter, $mdToast){
 
     $scope.filterS = {};
 
@@ -132,6 +132,15 @@ function linkingSpecCtrl($scope, bindHttp, $mdDialog, $filter, $mdToast){
                 }
             });
         });
+    };
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
     };
 
     $scope.getCityForm();

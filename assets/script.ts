@@ -19,6 +19,10 @@ import { addRightClickStar } from "./ts/contextMenuStar";
 // import { debugAngular } from "./ts/debugAngular";
 // debugAngular();
 
+// grab links to assets and download them
+// import { findScripts } from "./ts/automate/find-js-files";
+// findScripts();
+
 // init ------------------------------------------------------------------------
 
 // change language on site (it keeps the same, ru-RU all the time)

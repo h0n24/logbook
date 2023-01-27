@@ -45,5 +45,41 @@ app_module.factory('studentsHttp', ['$http', function($http){
         setCommentList : function(data){
             return $http.post('/students/set-comment-list', data);
         },
+
+        /**
+         * Получить список отзывов для модалки
+         * @param data
+         * @returns {*}
+         */
+        getCommentsList : function(data){
+            return $http.post('/teachComment/comments/search', data);
+        },
+
+        /**
+         * получить доступные формы для фильтра в модальном окне
+         * @param data
+         * @returns {*}
+         */
+        getCommentsListForms : function(data){
+            return $http.post('/teachComment/comments/study-forms', data);
+        },
+
+        /**
+         * Получить доступные группы для фильтра в модальном окне
+         * @param data - id формы обучения, по которой нужны группы
+         * @returns {*}
+         */
+        getCommentsListGroups : function(data){
+            return $http.post('/teachComment/comments/groups', data);
+        },
+
+        /**
+         * Сохранение отзыва о студенте в модальном окне
+         * @param data
+         * @returns {*}
+         */
+        saveComment : function(data){
+            return $http.post('/teachComment/comments/save', data);
+        },
     };
 }])

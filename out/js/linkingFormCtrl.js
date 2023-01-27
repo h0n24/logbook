@@ -2,9 +2,9 @@
  * Created by vovk on 03.01.2017.
  */
 var app = angular.module('app');
-app.controller('linkingFormCtrl', ['$scope', 'bindHttp', '$mdDialog', '$filter', '$mdToast', linkingFormCtrl]);
+app.controller('linkingFormCtrl', ['$scope', 'bindHttp', '$mdDialog', '$filter', '$mdToast', '$sce', linkingFormCtrl]);
 
-function linkingFormCtrl($scope, bindHttp, $mdDialog, $filter, $mdToast){
+function linkingFormCtrl($scope, bindHttp, $mdDialog, $filter, $mdToast, $sce){
 
     $scope.form = {};
 
@@ -73,6 +73,10 @@ function linkingFormCtrl($scope, bindHttp, $mdDialog, $filter, $mdToast){
                 }
             });
         });
+    };
+
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
     };
 
     $scope.getCityForm();

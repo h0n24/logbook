@@ -5,6 +5,7 @@ app_module.controller('presentsCtrl', ['$scope', 'presentsHttp', '$rootScope', '
 function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageService, $q, $filter, $mdToast, $mdDialog, WAS_TRUE, WAS_FALSE, $http) {
 
     $rootScope.getApprovedRequest();
+
     $scope.cur_group = localStorageService.get('cur_group_pr');
     $scope.cur_lenta = localStorageService.get('cur_lenta_pr');
     $scope.cur_date = localStorageService.get('cur_date_pr');
@@ -236,7 +237,7 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
     $scope.setWasSingle = function (data) {
         $scope.startWas = true;
         presentsHttp.setWas(data).success(function (r) {
-            if (r.error) {
+            if (r?.error) {
                 $mdToast.show({
                     hideDelay: 4000,
                     position: 'top right',
@@ -261,7 +262,7 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
             angular.forEach(data.visits, function(value, key) {
                 delete dataWas[key];
             });
-            if(r.new_id_vizit) {
+            if(r?.new_id_vizit) {
                 $scope.students = $scope.students.map(function (val) {
                     if(r.new_id_vizit[val['id_stud']]){
                         val['id_vizit'] = r.new_id_vizit[val['id_stud']].id_vizit;
@@ -364,7 +365,7 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
                 delete dataMark[key];
             });
 
-            if (r.error) {
+            if (r?.error) {
                 $mdToast.show({
                     hideDelay: 4000,
                     position: 'top right',
@@ -470,11 +471,11 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
             spec: $scope.cur_spec.id_spec,
             date: $scope.cur_date,
             schedule: $scope.cur_schedule
-        }).success(function(r){
-            if(r.error){
+        }).success(function (r) {
+            if (r?.error) {
                 $mdToast.show({
-                    hideDelay   : 3000,
-                    position    : 'top right',
+                    hideDelay: 3000,
+                    position: 'top right',
                     template: '<md-toast class="md-toast red">' + r.message + '</md-toast>'
                 });
 
@@ -489,8 +490,8 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
         })
             .error(function (error) {
                 $mdToast.show({
-                    hideDelay   : 3000,
-                    position    : 'top right',
+                    hideDelay: 3000,
+                    position: 'top right',
                     template: '<md-toast class="md-toast red">' + error.message + '</md-toast>'
                 });
             });
@@ -567,6 +568,17 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
         group: $scope.cur_group,
         date: $scope.cur_date
     }, null);
+
+    // вызывается при клике на боком меню, раздел Присутствующие,
+    // если находимся на этой же странице.
+    // Иначе баг - обнуляется локалсторедж, а контроллер не обновляется. После чего нельзя добавить домашку
+    $rootScope.getPresentsRootScope = function() {
+        $scope.getPresents({
+            lenta: $scope.cur_lenta,
+            group: $scope.cur_group,
+            date: $scope.cur_date
+        }, null);
+    };
 
     $scope.stopPair = function(idSchedule){
         presentsHttp.stopPair({idSchedule : idSchedule}).success(function(r){

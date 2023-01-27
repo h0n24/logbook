@@ -1,8 +1,8 @@
 var app_module = angular.module('app');
 
-app_module.controller('classWorkCtrl', ['$scope', 'classworkHttp', '$rootScope',  '$mdToast', 'reportHttp', classWorkCtrl])
+app_module.controller('classWorkCtrl', ['$scope', '$sce', 'classworkHttp', '$rootScope',  '$mdToast', 'reportHttp', classWorkCtrl])
 
-function classWorkCtrl($scope, classworkHttp, $rootScope, $mdToast, reportHttp){
+function classWorkCtrl($scope, $sce, classworkHttp, $rootScope, $mdToast, reportHttp){
 
     let d = new Date();
 
@@ -89,13 +89,15 @@ function classWorkCtrl($scope, classworkHttp, $rootScope, $mdToast, reportHttp){
 
     $scope.setDefaultSpec = function(){
         var max = 0;
-        angular.forEach($scope.filter_data[$scope.filter.group].data, function(value, key){
-            if(max < value.order){
-                max = value.order;
-                $scope.filter.spec = value.id_spec;
-            }
-        });
-    }
+        if ($scope.filter_data.length > 0) {
+            angular.forEach($scope.filter_data[$scope.filter.group].data, function(value, key){
+                if(+max < +value.order){
+                    max = value.order;
+                    $scope.filter.spec = value.id_spec;
+                }
+            });
+        }
+    };
 
     $scope.setDefaultGroup = function(){
         var max = 0;
@@ -157,6 +159,15 @@ function classWorkCtrl($scope, classworkHttp, $rootScope, $mdToast, reportHttp){
                 return;
             }
         });
+    };
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
     };
 
     $scope.getStartData();

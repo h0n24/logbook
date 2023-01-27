@@ -3,9 +3,9 @@
  */
 var app_module = angular.module('app');
 
-app_module.controller('studentProfileCtrl', ['$scope', 'studentsHttp', '$stateParams', 'localStorageService', studentProfileCtrl]);
+app_module.controller('studentProfileCtrl', ['$scope', '$sce', 'studentsHttp', '$stateParams', 'localStorageService', studentProfileCtrl]);
 
-function studentProfileCtrl($scope, studentsHttp, $stateParams, localStorageService) {
+function studentProfileCtrl($scope, $sce, studentsHttp, $stateParams, localStorageService) {
 
     $scope.stud_info = localStorageService.get('stud_object');
     $scope.stud_id = ($scope.stud_info) ? $scope.stud_info.id_stud : false;
@@ -51,6 +51,15 @@ function studentProfileCtrl($scope, studentsHttp, $stateParams, localStorageServ
     function goBack() {
         window.location.href = 'https://logbook.itstep.org/#/students/list';
     }
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
+    };
 
     $scope.getVizitInfo($scope.stud_id);
     $scope.getDetailsStud($scope.stud_id);

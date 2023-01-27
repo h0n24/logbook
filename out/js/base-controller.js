@@ -3,9 +3,9 @@
  */
 var app = angular.module('app');
 
-app.controller('baseCtrl', ['$scope', '$rootScope', 'baseHttp', 'localStorageService', '$state', '$mdSidenav', '$mdMenu', '$mdDialog', '$window', '$sce', '$mdToast', baseCtrl]);
+app.controller('baseCtrl', ['$scope', '$translate', '$rootScope', 'baseHttp', 'localStorageService', '$state', '$mdSidenav', '$mdMenu', '$mdDialog', '$window', '$sce', '$mdToast', baseCtrl]);
 
-function baseCtrl($scope, $rootScope, baseHttp, localStorageService, $state, $mdSidenav, $mdMenu, $mdDialog, $window, $sce, $mdToast) {
+function baseCtrl($scope, $translate, $rootScope, baseHttp, localStorageService, $state, $mdSidenav, $mdMenu, $mdDialog, $window, $sce, $mdToast) {
 
     $scope.toggleLeft = buildToggler('left');
     $scope.toggleRight = buildToggler('right');
@@ -73,6 +73,13 @@ function baseCtrl($scope, $rootScope, baseHttp, localStorageService, $state, $md
     };
 
     $scope.changeCity = function (id) {
+        let activeNav = localStorageService.get('activeNav');
+        // обнуляю локалсторедж , т.к если препод меняет город - пары не отображаются
+        // и 500я на сервере
+        if (activeNav == 'presents') {
+            $rootScope.clearLocalStorage();
+            localStorageService.set('activeNav', 'presents');
+        }
          location.replace('/auth/change-city?city=' + id);
     };
 
@@ -91,6 +98,16 @@ function baseCtrl($scope, $rootScope, baseHttp, localStorageService, $state, $md
                         item['short_name'] !== 'kz';
             });
             $scope.current_lang = r.current_lang;
+            console.log($scope.current_lang);
+            if (r.current_lang) {
+                if ($scope.current_lang == 'ua') {
+                    $translate.use('uk');
+                } else {
+                    $translate.use($scope.current_lang);
+                }
+            } else {
+                $translate.use('en');
+            }
             $rootScope.dateFormat = r.dateFormat;
             $rootScope.dateFormatShort = r.dateFormatShort;
             $rootScope.timezoneUTC = 'UTC';
@@ -212,9 +229,17 @@ function baseCtrl($scope, $rootScope, baseHttp, localStorageService, $state, $md
                 $scope.closeSidebar();
             })
         } else $scope.closeSidebar();
-        $scope.activeNav = id;
-        $rootScope.clearLocalStorage();
-        localStorageService.set('activeNav', id);
+        
+        let activeNavLocalStorage = localStorageService.get('activeNav');
+
+        // не обнуляем локалсторедж если находясь на странице Пристуствующие нажимаем на боковое меню Присутствующие
+        if (activeNavLocalStorage == "presents" && id == "presents") {
+            $rootScope.getPresentsRootScope();
+        } else {
+            $scope.activeNav = id;
+            $rootScope.clearLocalStorage();
+            localStorageService.set('activeNav', id);
+        }
     };
 
     $scope.setActiveNowBinding = function (id) {
@@ -415,6 +440,16 @@ function baseCtrl($scope, $rootScope, baseHttp, localStorageService, $state, $md
                     item['short_name'] !== 'kz';
             });
             $scope.current_lang = r.current_lang;
+
+            if (r.current_lang) {
+                if ($scope.current_lang == 'ua') {
+                    $translate.use('uk');
+                } else {
+                    $translate.use($scope.current_lang);
+                }
+            } else {
+                $translate.use('en');
+            }
             $rootScope.dateFormat = r.dateFormat;
             $rootScope.dateFormatShort = r.dateFormatShort;
             $rootScope.timezoneUTC = 'UTC';
@@ -510,6 +545,14 @@ function baseCtrl($scope, $rootScope, baseHttp, localStorageService, $state, $md
         $scope.losselIndicatorMargin = `0 0 7px calc(${100 - losses.workedPercent}% - 20px);`;
     };
 
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
+    };
 
     $scope.getDataMenu();
     $scope.notDoneTaskInfo();

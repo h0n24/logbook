@@ -2,9 +2,9 @@
  * Created by vovk on 06.09.2016.
  */
 var app = angular.module('app');
-app.controller('linkingMainCtrl', ['$scope','$state','bindHttp','$timeout', '$mdDialog', '$filter', '$mdToast', linkingMainCtrl]);
+app.controller('linkingMainCtrl', ['$scope', '$sce', '$state','bindHttp','$timeout', '$mdDialog', '$filter', '$mdToast', linkingMainCtrl]);
 
-function linkingMainCtrl($scope, $state, bindHttp, $timeout, $mdDialog, $filter, $mdToast){
+function linkingMainCtrl($scope, $sce, $state, bindHttp, $timeout, $mdDialog, $filter, $mdToast){
     $scope.redirect = function(url){
         $state.go(url);
         $state.linkingActive = url;
@@ -12,6 +12,15 @@ function linkingMainCtrl($scope, $state, bindHttp, $timeout, $mdDialog, $filter,
     };
     $scope.filter = {};
     $scope.linking_data = {};
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
+    };
 
     $scope.getCityForm = function(){
         bindHttp.getCityForm().success(function(r){

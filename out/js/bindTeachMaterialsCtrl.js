@@ -2,9 +2,9 @@
  * Created by vovk on 06.09.2016.
  */
 var app = angular.module('app');
-app.controller('bindTeachMaterialsCtrl', ['$scope', 'bindHttp', 'localStorageService', '$mdDialog', '$filter', '$mdToast', bindTeachMaterialsCtrl]);
+app.controller('bindTeachMaterialsCtrl', ['$scope', '$sce', 'bindHttp', 'localStorageService', '$mdDialog', '$filter', '$mdToast', bindTeachMaterialsCtrl]);
 
-function bindTeachMaterialsCtrl($scope, bindHttp, localStorageService, $mdDialog, $filter, $mdToast){
+function bindTeachMaterialsCtrl($scope, $sce, bindHttp, localStorageService, $mdDialog, $filter, $mdToast){
 
     $scope.filter = angular.isObject(localStorageService.get('teach_material_filter')) ? localStorageService.get('teach_material_filter') : {};
     $scope.filter.date_start = new Date();
@@ -85,6 +85,15 @@ function bindTeachMaterialsCtrl($scope, bindHttp, localStorageService, $mdDialog
             $scope.getCitySpecLinking();
         }
     }
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
+    };
 
     $scope.getTeachMaterials();
 }

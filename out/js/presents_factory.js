@@ -98,6 +98,15 @@ app_module.factory('presentsHttp', ['$http', '$rootScope', function($http, $root
         },
         getRecommendedTest : function(data){
             return $http.post('/presents/get-test-list', data);
+        },
+        getUnitTypes : function(data){
+            return $http.get('/dom-zad-auto-unit/types', data);
+        },
+        getUnitLanguages : function(data){
+            return $http.get('/dom-zad-auto-unit/languages', data);
+        },
+        getUnitVersions : function(data){
+            return $http.get('/dom-zad-auto-unit/versions', data);
         }
     };
 }]);

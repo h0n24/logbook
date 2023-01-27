@@ -81,8 +81,8 @@ function addLabWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, b
             let recommendedHwUrl = null;
             if($scope.form.hasOwnProperty('recommended') && $scope.form.recommended !== null &&
                 $scope.form.recommended.hasOwnProperty('download_url') &&
-                $scope.form.recommended.download_url != null
-            ){
+                $scope.form.recommended.download_url != null){
+
                 if($scope.form.recommended.download_url !== $scope.form.recommended.filename){
                     // Если добавление ДЗ происходит из рекомендованых материалов
                     recommendedHw = baseHttp.getLegacyFile($scope.form.recommended.download_url);
@@ -91,7 +91,10 @@ function addLabWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, b
                 }
                 data.append('recommended', angular.toJson($scope.form.recommended));
             }
-            if(recommendedHwUrl !== null){
+            // если есть html то не грузим файл на сервер (html может быть только в рекомендованых)
+            if (angular.isDefined($scope.form.recommended) && !!$scope.form.recommended && $scope.form.recommended.html != null) {
+                $scope.createHw(data);
+            } else if(recommendedHwUrl !== null){
                 data.append('filename', recommendedHwUrl);
                 $scope.createHw(data);
             }else{

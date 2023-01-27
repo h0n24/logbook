@@ -1,8 +1,8 @@
 
 var app_module = angular.module('app');
-app_module.controller('reportCtrl', ['$scope', 'reportHttp', reportCtrl]);
+app_module.controller('reportCtrl', ['$scope', '$sce', 'reportHttp', reportCtrl]);
 
-function reportCtrl($scope, reportHttp){
+function reportCtrl($scope, $sce, reportHttp){
     $scope.form = {};
     $scope.filterGroupReport = {};
 
@@ -94,6 +94,15 @@ function reportCtrl($scope, reportHttp){
                 }
             });
         }
+    };
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
     };
 
     $scope.getStartData();

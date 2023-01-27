@@ -134,12 +134,14 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
 
     $scope.setDefaultSpec = function(){
         var max = 0;
-        angular.forEach($scope.filter_data[$scope.filter.group].data, function(value, key){
-            if(+max < +value.order){
-                max = value.order;
-                $scope.filter.spec = value.id_spec;
-            }
-        });
+        if ($scope.filter_data.length > 0) {
+            angular.forEach($scope.filter_data[$scope.filter.group].data, function(value, key){
+                if(+max < +value.order){
+                    max = value.order;
+                    $scope.filter.spec = value.id_spec;
+                }
+            });
+        }
     };
 
     $scope.setDefaultGroup = function(){
@@ -811,6 +813,15 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
      */
     $scope.setTeachFile = function(file){
         $scope.teachFile = file;
+    };
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
     };
 
     $scope.getModalData(null, true);

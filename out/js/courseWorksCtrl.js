@@ -3,7 +3,7 @@
  */
 var app_module = angular.module('app');
 
-app_module.controller('courseWorksCtrl', ['$scope', 'examsHttp', '$filter', '$rootScope', courseWorksCtrl]);
+app_module.controller('courseWorksCtrl', ['$scope', '$sce', 'examsHttp', '$filter', '$rootScope', courseWorksCtrl]);
 
 app.run(function ($rootScope, baseHttp) {
     baseHttp.getArrayMarks().success(function(r){
@@ -20,7 +20,7 @@ app.run(function ($rootScope, baseHttp) {
  * @param $filter
  * @param $rootScope
  */
-function courseWorksCtrl($scope, examsHttp, $filter, $rootScope){
+function courseWorksCtrl($scope, $sce, examsHttp, $filter, $rootScope){
     /**
      * Прослушка изменений массива оценок, полученных с сервера.
      */
@@ -81,6 +81,15 @@ function courseWorksCtrl($scope, examsHttp, $filter, $rootScope){
      */
     $scope.setThemeCourseWork = function (theme, idCourseWork) {
         examsHttp.setThemeCourseWork({'theme': theme, 'id_course_work': idCourseWork});
+    };
+
+    /**
+     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * @param str
+     * @returns {*}
+     */
+    $scope.trustAsHtmlFuncTransform = function (str){
+        return $sce.trustAsHtml(str);
     };
 
     $scope.getCourseWorks({});

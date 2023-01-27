@@ -15,6 +15,21 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
     $scope.file_hw_filename = $scope.SELECT_FILE;
     $scope.file_cover = $scope.SELECT_FILE;
 
+    $scope.autotestValues = {
+        is_autotest: 0,// по умолчанию автотесты не выбраны
+        unit_language: null,
+        unit_type: null,
+        unit_test: null,
+        select_unit_version: null,
+    };
+
+    // данные для селектов
+    $scope.autotestLists = {
+        unitLanguages: null,
+        unitTypes: null,
+        unitVersions: null,
+    };
+
     $scope.fileName = function(e){
         $scope.file_hw_filename = e.target.files[0].name;
     };
@@ -69,22 +84,25 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
                 resolve(null);
             });
             let recommendedHwUrl = null;
-            if(angular.isDefined($scope.form.recommended) && $scope.form.recommended){
-                // Если добавление ДЗ происходит из рекомендованых материалов
-                if($scope.form.recommended.download_url !== $scope.form.recommended.filename){
-                    recommendedHw = baseHttp.getLegacyFile($scope.form.recommended.download_url);
-                }else{
-                    recommendedHwUrl = $scope.form.recommended.filename;
+                if(angular.isDefined($scope.form.recommended) && $scope.form.recommended){
+                    // Если добавление ДЗ происходит из рекомендованых материалов и если нет html
+                    if (!(angular.isDefined($scope.form.recommended.html) && $scope.form.recommended.html != null)) {
+                        if($scope.form.recommended.download_url !== $scope.form.recommended.filename){
+                            recommendedHw = baseHttp.getLegacyFile($scope.form.recommended.download_url);
+                        }else{
+                            recommendedHwUrl = $scope.form.recommended.filename;
+                        }
+                    }
+                }else if(!(angular.isDefined($scope.form.file_hw) && $scope.form.file_hw)){
+                    // Если преподаватель сам не добавил файл и не выбрал из рекомендованных
+                    $mdToast.show({
+                        hideDelay : 4000,
+                        position : 'top right',
+                        template : '<md-toast class="md-toast red">' + $filter('translate')('file_upload_error') + '</md-toast>',
+                    });
+                    return false;
                 }
-            }else if(!(angular.isDefined($scope.form.file_hw) && $scope.form.file_hw)){
-                // Если преподаватель сам не добавил файл и не выбрал из рекомендованных
-                $mdToast.show({
-                    hideDelay : 4000,
-                    position : 'top right',
-                    template : '<md-toast class="md-toast red">' + $filter('translate')('file_upload_error') + '</md-toast>',
-                });
-                return false;
-            }
+
             // добавление дефолтной обложки если препод сам грузит ДЗ
             if (!(angular.isDefined($scope.form.recommended) && $scope.form.recommended) && !$scope.form.filename_cover) {
                 if(angular.isDefined($scope.form.recommended_select)){
@@ -114,6 +132,16 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
             data.append('spec', $scope.cur_spec.id_spec);
             data.append('dz_theme', $scope.form.dz_theme);
             data.append('deadline', $scope.form.deadline);
+            if (!$scope.autotestValues.recommended) {
+                data.append('is_autotest', $scope.autotestValues.is_autotest);
+                if ($scope.autotestValues.is_autotest == 1) {
+                    data.append('unit_language', $scope.autotestValues.unit_language);
+                    data.append('unit_type', $scope.autotestValues.unit_type);
+                    data.append('unit_test', $scope.autotestValues.unit_test);
+                    // раскомментировать когда понадобится версия
+                    // data.append('unit_version', $scope.autotestValues.unit_version);
+                }
+            }
             data.append('type', 0);
             if(angular.isDefined($scope.form.recommended) && $scope.form.recommended != null){
                 data.append('recommended', angular.toJson($scope.form.recommended.filename));
@@ -128,38 +156,46 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
                          * функция для загрузки файла ДЗ
                          */
                         let promiseFile;
-                        if(blob1 !== null){
-                            promiseFile = new Promise(function(resolve, reject){
-                                baseHttp.uploadFile(credentials, blob1, DIRECTORY_TYPE.HOMEWORK,  $scope.form.recommended.filename).success(function (rU) {
-                                    if (angular.isDefined(rU[0].link)) {
-                                        resolve(rU[0].link);
-                                    }else{
-                                        reject($filter('translate')('file_upload_error'));
-                                    }
-                                });
-                            });
-                        }else if(recommendedHwUrl !== null){
-                            promiseFile = new Promise(function(resolve, reject){
-                                resolve(recommendedHwUrl);
-                            });
-                        }else{
-                            promiseFile = new Promise(function(resolve, reject){
-                                baseHttp.uploadFile(credentials, $scope.form.file_hw, DIRECTORY_TYPE.HOMEWORK).success(function (rU) {
-                                    if (angular.isDefined(rU[0].link)) {
-                                        resolve(rU[0].link);
-                                    }else{
-                                        reject($filter('translate')('file_upload_error'));
-                                    }
-                                }).error(function (eR){
-                                    // Если мы не смогли отпарвить файл на сервер выбрасываем ошибку приложения
-                                    $mdToast.show({
-                                        hideDelay : 4000,
-                                        position : 'top right',
-                                        template : '<md-toast class="md-toast red">' + $filter('translate')('file_upload_server_error_lb_hw') + '</md-toast>',
+                        // если есть html то не грузим файл на сервер (html может быть только в рекомендованых)
+                        if (!(angular.isDefined($scope.form.recommended) && $scope.form.recommended.html != null)) {
+                            if(blob1 !== null){
+                                promiseFile = new Promise(function(resolve, reject){
+                                    baseHttp.uploadFile(credentials, blob1, DIRECTORY_TYPE.HOMEWORK,  $scope.form.recommended.filename).success(function (rU) {
+                                        if (angular.isDefined(rU[0].link)) {
+                                            resolve(rU[0].link);
+                                        }else{
+                                            reject($filter('translate')('file_upload_error'));
+                                        }
                                     });
                                 });
+                            }else if(recommendedHwUrl !== null){
+                                promiseFile = new Promise(function(resolve, reject){
+                                    resolve(recommendedHwUrl);
+                                });
+                            }else{
+                                promiseFile = new Promise(function(resolve, reject){
+                                    baseHttp.uploadFile(credentials, $scope.form.file_hw, DIRECTORY_TYPE.HOMEWORK).success(function (rU) {
+                                        if (angular.isDefined(rU[0].link)) {
+                                            resolve(rU[0].link);
+                                        }else{
+                                            reject($filter('translate')('file_upload_error'));
+                                        }
+                                    }).error(function (eR){
+                                        // Если мы не смогли отпарвить файл на сервер выбрасываем ошибку приложения
+                                        $mdToast.show({
+                                            hideDelay : 4000,
+                                            position : 'top right',
+                                            template : '<md-toast class="md-toast red">' + $filter('translate')('file_upload_server_error_lb_hw') + '</md-toast>',
+                                        });
+                                    });
+                                });
+                            }
+                        } else {
+                            promiseFile = new Promise(function(resolve, reject){
+                                resolve(null);
                             });
                         }
+
                         /**
                          * Функция для загрузки обложки ДЗ
                          */
@@ -201,6 +237,9 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
                             let hwfC = (typeof value[1] === "string") ? value[1] : null;
                             if(hwf !== null){
                                 data.append('filename', hwf);
+                            }
+                            if(hwf == null && $scope.form.recommended.download_url) {
+                                data.append('filename', $scope.form.recommended.download_url);
                             }
                             if(hwfC !== null){
                                 data.append('img_cover', hwfC);
@@ -291,8 +330,34 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
                 });
         };
 
+        // получить типы для автотестов
+        $scope.getUnitTypes = function () {
+            presentsHttp.getUnitTypes().success(function (r) {
+                $scope.autotestLists.unitTypes = r;
+            });
+        };
+
+        // получить языки для автотестов
+        $scope.getUnitLanguages = function () {
+            presentsHttp.getUnitLanguages().success(function (r) {
+                $scope.autotestLists.unitLanguages = r;
+            });
+        };
+
+        // раскомментировать когда понадобится
+        // получить версии для автотестов
+        // $scope.getUnitVersions = function () {
+        //     presentsHttp.getUnitVersions().success(function (r) {
+        //         $scope.autotestLists.getUnitVersions = r;
+        //     });
+        // };
+
         $scope.getRecommendedMaterials();
         $scope.getHomework();
+        // раскомментировать когда понадобится
+        // $scope.getUnitTypes();
+        // $scope.getUnitLanguages();
+        // $scope.getUnitVersions();
     }
 
     function zeroPad(num) {
