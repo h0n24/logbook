@@ -96,11 +96,15 @@ function makeURLinTextClickable(homework) {
     // if you find class .hw-md_single_stud-work__answer-text make any text inside that is a link clickable
     const studentsComments = homework.querySelector(".hw-md_single_stud-work__answer-text");
     // detect if text contains url
-    const text = studentsComments.innerText;
+    let text = studentsComments.innerText;
     const url = text.match(/(https?:\/\/[^\s]+)/g);
+    // make the url in the text clickable for every url
     if (url) {
-        // make the url in the text clickable
-        studentsComments.innerHTML = text.replace(url[0], `<a href="${url[0]}" target="_blank">${url[0]}</a>`);
+        for (let i = 0; i < url.length; i++) {
+            const selURL = url[i];
+            text = text.replace(selURL, `<a href="${selURL}" target="_blank">${selURL}</a>`);
+        }
+        studentsComments.innerHTML = text;
     }
 }
 function enhanceHomeworkAssessment(homework, single) {

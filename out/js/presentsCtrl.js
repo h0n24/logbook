@@ -523,7 +523,7 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
                     template: '<md-toast class="md-toast green">' + $scope.messages + '</md-toast>',
                 });
                 $mdDialog.hide();
-            } else if (r.error) {
+            } else if (r?.error) {
                 $scope.messages = r.error;
                 $mdToast.show({
                     hideDelay   : 3000,
@@ -550,7 +550,7 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
                     template: '<md-toast class="md-toast green">' + $scope.messages + '</md-toast>',
                 });
                 $scope.getPresents({lenta: $scope.cur_lenta, group: $scope.cur_group}, null);
-            } else if (r.error) {
+            } else if (r?.error) {
                 $scope.messages = r.error;
             }
         })

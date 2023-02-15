@@ -231,68 +231,68 @@ blockUrls = blockUrls.concat(blockImageUrls);
 // change this after running find-js-files.js
 let automatedBlockUrls = [
   [
-    "logbook.itstep.org/assets/ec9e6c55/bootstrap/dist/js/bootstrap.js",
+    "logbook.itstep.org/assets/b43727a9/bootstrap/dist/js/bootstrap.js",
     "script",
     "/js/bootstrap.js",
   ],
   ["logbook.itstep.org/js/library/d3.js", "script", "/js/d3.js"],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular/angular.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular/angular.min.js",
     "script",
     "/js/angular.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-ui-router/release/angular-ui-router.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-ui-router/release/angular-ui-router.min.js",
     "script",
     "/js/angular-ui-router.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-animate/angular-animate.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-animate/angular-animate.min.js",
     "script",
     "/js/angular-animate.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-aria/angular-aria.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-aria/angular-aria.min.js",
     "script",
     "/js/angular-aria.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-material/angular-material.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-material/angular-material.min.js",
     "script",
     "/js/angular-material.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-messages/angular-messages.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-messages/angular-messages.min.js",
     "script",
     "/js/angular-messages.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-local-storage/dist/angular-local-storage.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-local-storage/dist/angular-local-storage.min.js",
     "script",
     "/js/angular-local-storage.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-translate/angular-translate.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-translate/angular-translate.min.js",
     "script",
     "/js/angular-translate.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-toArrayFilter/toArrayFilter.js",
+    "logbook.itstep.org/assets/b43727a9/angular-toArrayFilter/toArrayFilter.js",
     "script",
     "/js/toArrayFilter.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/angular-translate-loader-url/angular-translate-loader-url.min.js",
+    "logbook.itstep.org/assets/b43727a9/angular-translate-loader-url/angular-translate-loader-url.min.js",
     "script",
     "/js/angular-translate-loader-url.min.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/raven-js/dist/raven.js",
+    "logbook.itstep.org/assets/b43727a9/raven-js/dist/raven.js",
     "script",
     "/js/raven.js",
   ],
   [
-    "logbook.itstep.org/assets/ec9e6c55/raven-js/dist/plugins/angular.js",
+    "logbook.itstep.org/assets/b43727a9/raven-js/dist/plugins/angular.js",
     "script",
     "/js/angular.js",
   ],

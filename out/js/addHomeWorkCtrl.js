@@ -294,7 +294,7 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
             }).success(function (r) {
                 $scope.homework = r;
                 $scope.$parent.homework = r;
-                if (r.deadline == 0){
+                if (r?.deadline === 0){
                     var dayAdd = new Date(r.time),
                         dayEnd = new Date(dayAdd.setDate(dayAdd.getDate() + OVERDUE_DAYS));
                     $scope.homework.deadline = dayEnd;
@@ -354,9 +354,10 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
 
         $scope.getRecommendedMaterials();
         $scope.getHomework();
+        $scope.getUnitTypes();
+        $scope.getUnitLanguages();
+
         // раскомментировать когда понадобится
-        // $scope.getUnitTypes();
-        // $scope.getUnitLanguages();
         // $scope.getUnitVersions();
     }
 

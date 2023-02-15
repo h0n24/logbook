@@ -2,7 +2,7 @@
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "cs",
-  "version": "0.15",
+  "version": "0.16",
   "manifest_version": 3,
   "offline_enabled": true,
   "author": "Jan Šablatura",
@@ -32,7 +32,7 @@
       "resources": [
         "script-dist.js",
         "js/jquery.min.js",
-        "js/d3.min.js",
+        "js/d3.js",
         "js/angular.min.js",
         "js/angular-material.min.js",
         "js/angular-ui-router.min.js",

@@ -115,10 +115,26 @@ async function downloadTestZip(arrayOfScripts) {
     }
     // get the ZIP stream in a Blob
     const blob = await downloadZip(arrayOfFiles).blob();
+    // get date and convert it so we can use it in the file name
+    const date = new Date();
+    const localizedDate = date.toLocaleDateString("cs-CZ", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+    // get rid of spaces and colons in the date
+    const fileNameTime = localizedDate
+        .replace(/ /g, "-")
+        .replace(/:/g, "-")
+        .replace(/\//g, "-")
+        .replace(/\./g, "")
+        .replace(/,/g, "-");
     // make and click a temporary link to download the Blob
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "logbook-changing-assets.zip";
+    link.download = "logbook-changing-assets-" + fileNameTime + ".zip";
     link.click();
     link.remove();
     // in real life, don't forget to revoke your Blob URLs if you use them

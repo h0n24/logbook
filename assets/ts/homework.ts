@@ -134,15 +134,20 @@ function makeURLinTextClickable(homework) {
   );
 
   // detect if text contains url
-  const text = studentsComments.innerText;
+  let text = studentsComments.innerText;
   const url = text.match(/(https?:\/\/[^\s]+)/g);
 
+  // make the url in the text clickable for every url
   if (url) {
-    // make the url in the text clickable
-    studentsComments.innerHTML = text.replace(
-      url[0],
-      `<a href="${url[0]}" target="_blank">${url[0]}</a>`
-    );
+    for (let i = 0; i < url.length; i++) {
+      const selURL = url[i];
+      text = text.replace(
+        selURL,
+        `<a href="${selURL}" target="_blank">${selURL}</a>`
+      );
+    }
+
+    studentsComments.innerHTML = text;
   }
 }
 
