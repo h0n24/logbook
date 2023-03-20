@@ -113,6 +113,7 @@ function examsCtrl($scope, examsHttp, $compile, $sce, $templateRequest, $filter,
             $scope.current_exam = r.exam;
             $scope.access_marks = r.access_mark;
             $scope.serverDate = r.date;
+
             var marksBlock = $sce.getTrustedResourceUrl('views/templates/templateExams.html');
             $templateRequest(marksBlock).then(function(template) {
                 $compile($('#marks_block_' + $scope.cur_ex_id).html(template).contents())($scope);

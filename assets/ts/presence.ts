@@ -46,7 +46,7 @@ function addContextMenu(event): void {
 
 function whenClickedOnPresenceTh() {
   const workInClass: HTMLElement = document.querySelector(
-    ".wrapper-students thead tr th:nth-child(6)"
+    ".wrapper-students thead tr th:nth-child(7)"
   );
 
   workInClass.title =

@@ -98,7 +98,6 @@ function baseCtrl($scope, $translate, $rootScope, baseHttp, localStorageService,
                         item['short_name'] !== 'kz';
             });
             $scope.current_lang = r.current_lang;
-            console.log($scope.current_lang);
             if (r.current_lang) {
                 if ($scope.current_lang == 'ua') {
                     $translate.use('uk');

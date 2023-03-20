@@ -41,3 +41,8 @@ app_module.filter('imgView', ['$filter', function ($filter) {
         }
     };
 }]);
+app_module.filter('to_trusted', ['$sce', function($sce){
+    return function(text) {
+        return $sce.trustAsHtml(text);
+    };
+}]);

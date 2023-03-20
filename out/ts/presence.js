@@ -34,7 +34,7 @@ function addContextMenu(event) {
     }
 }
 function whenClickedOnPresenceTh() {
-    const workInClass = document.querySelector(".wrapper-students thead tr th:nth-child(6)");
+    const workInClass = document.querySelector(".wrapper-students thead tr th:nth-child(7)");
     workInClass.title =
         "Pravé tlačítko: Dát maximální známku všem studentům. Pozor: trvá +1 sekundu za každého žáka.";
     workInClass.addEventListener("contextmenu", (event) => {

@@ -51,6 +51,7 @@ function presentsCtrl($scope, presentsHttp, $rootScope, $timeout, localStorageSe
         presentsHttp.getPresents(data, headers).success(function (r) {
 
             $scope.th_presents_colums = [
+                {th: $filter('translate')('stud_photo')},
                 {th: $filter('translate')('fio_stud')},
                 {th: $filter('translate')('vizit_mystat')},
                 {th: ''},

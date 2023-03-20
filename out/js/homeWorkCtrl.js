@@ -745,6 +745,14 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
      * указывает закрывать модалку после сохранения ДЗ или нет
      */
     $scope.saveStudHw = function(studDz, isNewHw) {
+        if (studDz.mark <= 6 && !studDz.coment) {
+            $mdToast.show({
+                hideDelay : 4000,
+                position : 'top right',
+                template : '<md-toast class="md-toast red">' + $filter('translate')('comment_save_error') + '</md-toast>'
+            });
+            return;
+        }
         $scope.saveCommentFile(studDz.id_domzad, id_stud =(studDz.stud_stud || studDz.id_stud), $scope.teachFile).then(res => {
             // используем старый метод для сохранения оценки, в нем использовался объект объектов с оценками.
             let DzMarks = {};
@@ -773,7 +781,8 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
                         position    : 'top right',
                         template: '<md-toast class="md-toast red">' + r.error + '</md-toast>',
                     });
-                }else {
+                } else {
+                    $scope.teachFile = null; //обнуление прикрепленного файла после удачного сохранения
                     $scope.getHomeworks();
                     $scope.getModalData();
                     if ($scope.ActiveStudHwNewValue) {

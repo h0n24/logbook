@@ -584,6 +584,16 @@ html main.content .presents {
         text-transform: uppercase;
       }
     }
+
+    // druhé - nadpisprofilovky
+    &:nth-child(2) {
+      text-indent: -9999px;
+    }
+
+    // třetí jméno studenta
+    &:nth-child(3) {
+      text-align: left;
+    }
   }
 
   .number__presents {
@@ -610,38 +620,44 @@ html main.content .presents {
     }
   }
 
-  .table td i.user-photo {
-    cursor: default;
-  }
-
-  .table td i.user-photo[style="background-image: url('https://logbook.itstep.org/img/avatarka.svg')"]:hover span
-  {
-    // display: inline-block;
-    display: none !important;
-  }
-
-  .table .number .user-photo__presents {
-    // left: 3rem;
+  .table td.photo {
     height: 2rem;
     width: 2rem;
-    // margin-top: -1rem;
 
-    // rework
-    position: relative;
-    left: 0;
-    margin-top: 0;
-    top: 0;
+    .user_photo {
+      position: relative;
+    }
 
-    span {
-      top: 100%;
-      left: 100%;
+    .user_photo-small {
+      width: 2rem;
+      height: 2rem;
+      aspect-ratio: auto 44 / 44;
+      border-radius: 100%;
+    }
 
-      img {
-        left: 0;
-        z-index: 90;
+    .user_photo-big {
+      display: none;
+
+      position: absolute;
+      width: 10rem;
+      height: auto;
+      right: 50%;
+      bottom: 0;
+      z-index: 3;
+    }
+
+    .user_photo:hover {
+      .user_photo-big {
+        display: inline-block;
+
+        &[src="https://logbook.itstep.org/img/avatarka.svg"] {
+          display: none;
+        }
       }
     }
   }
+
+
   .selector_students .ng-binding {
     display: inline-block;
   }
