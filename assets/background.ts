@@ -1,3 +1,6 @@
+// change this after running find-js-files.js
+import { automatedBlockUrls } from "./background-auto";
+
 // remove all previous rules
 for (let index = 0; index < 200; index++) {
   // @ts-ignore: Not in this file, it's the chrome
@@ -6,8 +9,7 @@ for (let index = 0; index < 200; index++) {
   });
 }
 
-let blockUrls = [];
-
+let blockUrls: any = [];
 blockUrls = [
   [
     "logbook.itstep.org/assets/*/bootstrap/dist/css/bootstrap.css",
@@ -30,6 +32,8 @@ blockUrls = [
     "https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.js",
     "script",
   ],
+  ["logbook.itstep.org/assets/*/raven.js", "script"],
+  ["logbook.itstep.org/assets/*/raven-js/dist/plugins/angular.js", "script"],
   [
     "logbook.itstep.org/assets/*/angular-material/angular-material.min.js",
     "script",
@@ -40,14 +44,11 @@ blockUrls = [
     "script",
     "/js/angular.min.js",
   ],
-  ["logbook.itstep.org/js/library/d3.js", "script", "/js/d3.min.js"],
   [
     "logbook.itstep.org/assets/*/angular-ui-router.min.js",
     "script",
     "/js/angular-ui-router.min.js",
   ],
-  ["logbook.itstep.org/assets/*/raven.js", "script"],
-  ["logbook.itstep.org/assets/*/raven-js/dist/plugins/angular.js", "script"],
   [
     "https://logbook.itstep.org/js/angular/script.js",
     "script",
@@ -134,346 +135,25 @@ blockUrls = [
     "script",
     "/js/signal-filters.js",
   ],
-  [
-    "logbook.itstep.org/assets/e949524c/controllers/homeWorkCtrl.js",
-    "script",
-    "/js/homeWorkCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/bd361891/controllers/classWorkCtrl.js",
-    "script",
-    "/js/classWorkCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/bd361891/classwork-factory.js",
-    "script",
-    "/js/classwork-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/89703d3/controllers/examsCtrl.js",
-    "script",
-    "/js/examsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/89703d3/exams-factory.js",
-    "script",
-    "/js/exams-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/89703d3/controllers/courseWorksCtrl.js",
-    "script",
-    "/js/courseWorksCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/e949524c/homeworks-factory.js",
-    "script",
-    "/js/homeworks-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/e949524c/homeworks-filters.js",
-    "script",
-    "/js/homeworks-filters.js",
-  ],
-  [
-    "logbook.itstep.org/assets/d343d539/controllers/individualCtrl.js",
-    "script",
-    "/js/individualCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/d343d539/individual-factory.js",
-    "script",
-    "/js/individual-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/df8147d3/controllers/newsCtrl.js",
-    "script",
-    "/js/newsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/df8147d3/news-factory.js",
-    "script",
-    "/js/news-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/b84bf8b4/controllers/profileCtrl.js",
-    "script",
-    "/js/profileCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/b84bf8b4/profile-factory.js",
-    "script",
-    "/js/profile-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/8c5ef1a5/controllers/reportCtrl.js",
-    "script",
-    "/js/reportCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/8c5ef1a5/report-factory.js",
-    "script",
-    "/js/report-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/91a71d61/controllers/scheduleCtrl.js",
-    "script",
-    "/js/scheduleCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/91a71d61/schedule_factory.js",
-    "script",
-    "/js/schedule_factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/254aca17/controllers/mainStudCtrl.js",
-    "script",
-    "/js/mainStudCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/254aca17/controllers/sendStudentsMailCtrl.js",
-    "script",
-    "/js/sendStudentsMailCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/254aca17/controllers/studentsCommentCtrl.js",
-    "script",
-    "/js/studentsCommentCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/254aca17/controllers/studentsCtrl.js",
-    "script",
-    "/js/studentsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/254aca17/students-module.js",
-    "script",
-    "/js/students-module.js",
-  ],
-  [
-    "logbook.itstep.org/assets/254aca17/students-factory.js",
-    "script",
-    "/js/students-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/254aca17/controllers/studentProfileCtrl.js",
-    "script",
-    "/js/studentProfileCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/f05063ec/controllers/tasksCtrl.js",
-    "script",
-    "/js/tasksCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/f05063ec/tasks-factory.js",
-    "script",
-    "/js/tasks-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/bind_factory.js",
-    "script",
-    "/js/bind_factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/bindFormsCtrl.js",
-    "script",
-    "/js/bindFormsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/bindMainCtrl.js",
-    "script",
-    "/js/bindMainCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/bindMaterialsCtrl.js",
-    "script",
-    "/js/bindMaterialsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/bindTeachMaterialsCtrl.js",
-    "script",
-    "/js/bindTeachMaterialsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/bindCityCtrl.js",
-    "script",
-    "/js/bindCityCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/linkingMainCtrl.js",
-    "script",
-    "/js/linkingMainCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/linkingMethodCtrl.js",
-    "script",
-    "/js/linkingMethodCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/linkingSpecCtrl.js",
-    "script",
-    "/js/linkingSpecCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/bindAuthorsCtrl.js",
-    "script",
-    "/js/bindAuthorsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/linkingFormCtrl.js",
-    "script",
-    "/js/linkingFormCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/logsCtrl.js",
-    "script",
-    "/js/logsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/linkingDirectionCtrl.js",
-    "script",
-    "/js/linkingDirectionCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/linkingEditSpecCtrl.js",
-    "script",
-    "/js/linkingEditSpecCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/logs/materialsLogsCtrl.js",
-    "script",
-    "/js/materialsLogsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/logs/methodPackageLogsCtrl.js",
-    "script",
-    "/js/methodPackageLogsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/logs/mainLogsCtrl.js",
-    "script",
-    "/js/mainLogsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/logs/methodLinkingLogsCtrl.js",
-    "script",
-    "/js/methodLinkingLogsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/logs/methodBindLogsCtrl.js",
-    "script",
-    "/js/methodBindLogsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/controllers/logs/methodPublicSpecLogsCtrl.js",
-    "script",
-    "/js/methodPublicSpecLogsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/3930875e/logs_factory.js",
-    "script",
-    "/js/logs_factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/ff95d2e3/controllers/groupsCtrl.js",
-    "script",
-    "/js/groupsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/ff95d2e3/groups-factory.js",
-    "script",
-    "/js/groups-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/10ceca08/controllers/portfolioCtrl.js",
-    "script",
-    "/js/portfolioCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/10ceca08/portfolio-factory.js",
-    "script",
-    "/js/portfolio-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/6dc6dc59/presents_factory.js",
-    "script",
-    "/js/presents_factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/6dc6dc59/controllers/presentsCtrl.js",
-    "script",
-    "/js/presentsCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/6dc6dc59/controllers/addMaterialCtrl.js",
-    "script",
-    "/js/addMaterialCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/6dc6dc59/controllers/addHomeWorkCtrl.js",
-    "script",
-    "/js/addHomeWorkCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/6dc6dc59/controllers/addLabWorkCtrl.js",
-    "script",
-    "/js/addLabWorkCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/39fde54e/home/controllers/homeCtrl.js",
-    "script",
-    "/js/homeCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/39fde54e/home/home-factory.js",
-    "script",
-    "/js/home-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/39fde54e/dateService.js",
-    "script",
-    "/js/dateService.js",
-  ],
-  [
-    "logbook.itstep.org/assets/6b5d496/controllers/certificatesCtrl.js",
-    "script",
-    "/js/certificatesCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/6b5d496/certificates_factory.js",
-    "script",
-    "/js/certificates_factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/afde36d2/controllers/dossierCtrl.js",
-    "script",
-    "/js/dossierCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/afde36d2/dossier-factory.js",
-    "script",
-    "/js/dossier-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/56965b75/controllers/TraficCtrl.js",
-    "script",
-    "/js/TraficCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/56965b75/traffic-factory.js",
-    "script",
-    "/js/traffic-factory.js",
-  ],
-  [
-    "logbook.itstep.org/assets/dba1063e/controllers/contentAuthorCtrl.js",
-    "script",
-    "/js/contentAuthorCtrl.js",
-  ],
-  [
-    "logbook.itstep.org/assets/dba1063e/content-factory.js",
-    "script",
-    "/js/content-factory.js",
-  ],
+];
+
+let blockJson = [
+  [
+    "logbook.itstep.org/auth/get-marks-selects",
+    "xmlhttprequest",
+    "/resources/get-marks-selects.json",
+  ],
+  [
+    "logbook.itstep.org/bind/city-list",
+    "xmlhttprequest",
+    "/resources/city-list.json",
+  ],
+];
+
+// append to blockUrls
+blockUrls = blockUrls.concat(blockJson);
+
+let blockImageUrls = [
   [
     "logbook.itstep.org/img/home/star_icon.svg",
     "image",
@@ -547,23 +227,22 @@ blockUrls = [
   ],
   ["logbook.itstep.org/img/avatarka.svg", "image", "/resources/avatarka.svg"],
   ["logbook.itstep.org/favicon.ico", "image", "/resources/favicon.ico"],
-  [
-    "logbook.itstep.org/auth/get-marks-selects",
-    "xmlhttprequest",
-    "/resources/get-marks-selects.json",
-  ],
 ];
 
-let rulesArray = [];
+// append array blockImageUrls to blockUrls array
+blockUrls = blockUrls.concat(blockImageUrls);
 
+// append automatedBlockUrls to blockUrls
+blockUrls = blockUrls.concat(automatedBlockUrls);
+
+// console.log(blockUrls);
+
+let rulesArray: any = [];
 blockUrls.forEach((url, index) => {
   let id = index + 1;
-
   const [domain, resourceType, redirectUrl] = url;
-  let rule;
-
+  let rule: any;
   // console.log(`Blocking ${domain} with ${resourceType}`);
-
   if (redirectUrl !== undefined) {
     // redirecting url
     rule = {
@@ -589,15 +268,12 @@ blockUrls.forEach((url, index) => {
       },
     };
   }
-
   rulesArray.push(rule);
 });
-
 // @ts-ignore: Not in this file, it's the chrome
 chrome.declarativeNetRequest.updateDynamicRules({
   addRules: rulesArray,
 });
-
 // @ts-ignore: Not in this file, it's the chrome
 // chrome.declarativeNetRequest.getEnabledRulesets((rulesetIds) =>
 //   console.log("rules added", rulesetIds)

@@ -47,7 +47,7 @@ function addContextMenu(event): void {
 function whenClickedOnPresenceTh() {
   const workInClass: HTMLElement = document.querySelector(
     ".wrapper-students thead tr th:nth-child(7)"
-  );
+  ) as HTMLElement;
 
   workInClass.title =
     "Pravé tlačítko: Dát maximální známku všem studentům. Pozor: trvá +1 sekundu za každého žáka.";
@@ -64,8 +64,8 @@ function whenClickedOnPresenceTh() {
     let iteration = 0;
 
     classWorkSelects.forEach((select, key, parent) => {
-      const popupID = select.getAttribute("aria-owns");
-      const popup = document.getElementById(popupID);
+      const popupID = select.getAttribute("aria-owns") as string;
+      const popup = document.getElementById(popupID) as HTMLElement;
 
       // skip if already selected
       try {
@@ -152,7 +152,9 @@ function whenPresenceChanged() {
 }
 
 function hideMaterialsWhenNoTeacher(isTeacher) {
-  const addMaterial: HTMLDivElement = document.querySelector(".add-material");
+  const addMaterial: HTMLDivElement = document.querySelector(
+    ".add-material"
+  ) as HTMLDivElement;
 
   if (isTeacher) {
     // addMaterial.style.display = "inline-block";

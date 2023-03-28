@@ -21,6 +21,18 @@ replacements.push(["Udělte známku:", "Udělte známku"]);
 // nemůže být změněno v lokalizačním systému
 replacements.push(["Docházka, %", "Docházka"]); // proč? chyběli by % (css)
 replacements.push(["přidat materiál", "přidat DÚ, materiál"]); // proč? není jasné jestli se používá jen v presence
+// chybí v lokalizaci
+replacements.push([
+    "delete_hw_subtitle",
+    "Odstraňujete-li DÚ, přidejte komentář proč nebo připojte soubor.",
+]);
+replacements.push([
+    "delete_hw_comment",
+    "Popište žákovi, proč úkol odstraňujete.",
+]);
+replacements.push(["delete_hw_choose_file", "Vyberte soubor"]);
+replacements.push(["delete_hw_cancel_btn", "Zrušit"]);
+replacements.push(["delete_hw_delete_btn", "Odstranit DÚ"]);
 // more effective replacement for strings
 function replaceWithTreeWalker() {
     let allTextNodes = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), 
