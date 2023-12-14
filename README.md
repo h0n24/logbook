@@ -2,7 +2,7 @@
  Přepracovaný LogBook se spoustou nových funkcí. Rychlejší a optimalizovanější verze. Řada činností, jako například hodnocení domácích úkolů nebo bodování studentů je automatizovaná.
  
 ## Poslední stabilní verze
-_<prozatím nevydáno, není  dostupná na internetovém obchodě Chrome>._
+https://chromewebstore.google.com/detail/logbook-redesigned/fljkbncmniloojmmfakganhdijaalbkc?hl=cs
 
 Pozor, nebude obsahovat veškerou funkcionalitu, která je v tomto repozitáři. Pokud chcete nejnovější verzi, přečtete si, jak se zůčastnit betatestu.
 
