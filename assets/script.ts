@@ -4,7 +4,7 @@
 
 // imports ---------------------------------------------------------------------
 import * as incl from "./ts/_incl";
-import { autoLogin } from "./ts/autoLogin";
+import { autoLogin, onLogout } from "./ts/autoLogin";
 import { createPageTitle } from "./ts/createPageTitle";
 import { onContextMenu, addInfoForMenu } from "./ts/contextMenu";
 import { replaceDates } from "./ts/replaceDates";
@@ -64,6 +64,7 @@ document.body.addEventListener("contextmenu", onContextMenu);
 
         // auto login
         autoLogin(state);
+        onLogout(state);
 
         // UX QOL improvements
         addInfoForMenu();

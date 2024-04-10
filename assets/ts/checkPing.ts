@@ -76,7 +76,7 @@ function hasNoPing(err: any) {
 
 function testPing() {
   try {
-    ping("https://logbook.itstep.org/", 0.4)
+    ping("https://logbook.itstep.org/favicon.ico", 0.4)
       .then((delta) => hasPing(delta))
       .catch((err) => hasNoPing(err));
   } catch (error) {

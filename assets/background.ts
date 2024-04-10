@@ -227,8 +227,9 @@ let blockImageUrls = [
     "/resources/students.svg",
   ],
   ["logbook.itstep.org/img/avatarka.svg", "image", "/resources/avatarka.svg"],
-  ["logbook.itstep.org/favicon.ico", "image", "/resources/favicon.ico"],
 ];
+
+// was before ping rework:   ["logbook.itstep.org/favicon.ico", "image", "/resources/favicon.ico"],
 
 // append array blockImageUrls to blockUrls array
 blockUrls = blockUrls.concat(blockImageUrls);
