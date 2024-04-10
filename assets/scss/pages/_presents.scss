@@ -100,6 +100,52 @@ html main.content .presents {
     color: #fff;
   }
 
+  // ikonka u jednotlivých hodin
+  .pars li {
+    position: relative;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .pars li::after,
+  .pars li::before {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 0.1rem #fff;
+    content: "";
+    display: block;
+    opacity: 0;
+
+    height: 0.5rem;
+    width: 0.5rem;
+  }
+
+  .pars li.show-badge-diamonds::before {
+    animation: fadeIn 0.2s linear 1s forwards;
+    // opacity: 1;
+    background-color: color.$inputs;
+    transform: translate(-0.25rem, -0.25rem);
+    z-index: 1;
+  }
+
+  .pars li.show-badge-work::after {
+    animation: fadeIn 0.2s linear 1s forwards;
+    // opacity: 1;
+    background-color: color.$primary;
+    transform: translate(-0.25rem, -0.25rem);
+    z-index: 2;
+  }
+
   // výběr jednotlivých hodin
   ul.pars {
     height: 3rem;
@@ -366,6 +412,23 @@ html main.content .presents {
     font-weight: 600;
   }
 
+  .wrapper-students.hide-cells-online {
+    // thead tr th.online,
+    // tbody tr td.presents-online {
+    // }
+
+    thead tr th.online .visit_online {
+      opacity: 0.5;
+    }
+
+    tbody tr td.presents-online {
+      input {
+        // width: 1px;
+        opacity: 0.5;
+      }
+    }
+  }
+
   .wrapper-students thead {
     position: sticky;
     top: 3rem;
@@ -433,6 +496,10 @@ html main.content .presents {
   .table {
     .presents-online input[type="checkbox"] {
       accent-color: #d5d5d5;
+    }
+
+    .mystat {
+      text-align: left;
     }
 
     .comment {

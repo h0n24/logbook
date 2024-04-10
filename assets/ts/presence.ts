@@ -1,5 +1,9 @@
 import * as incl from "./_incl";
 
+const selectorForWorkInClass = ".wrapper-students thead tr th:nth-child(8)";
+const titleTextNotRated = "Pozor: máte nepřidělené známky";
+const titleTextNotDiamonds = "Pozor: máte nepřidělené diamanty";
+
 function hideMarkPopup(event, popup) {
   // click outside
   setTimeout(() => {
@@ -46,7 +50,7 @@ function addContextMenu(event): void {
 
 function whenClickedOnPresenceTh() {
   const workInClass: HTMLElement = document.querySelector(
-    ".wrapper-students thead tr th:nth-child(8)"
+    selectorForWorkInClass
   ) as HTMLElement;
 
   workInClass.title =
@@ -221,25 +225,150 @@ function correctBugTabsActiveWhenBreak() {
 
 function automaticallySelectOnlineForOnlineGroups() {
   const groupName = document.querySelector(".groupName") as HTMLElement;
-  if (groupName.innerHTML.includes("JAO")) {
-    // automatically set online to every online group
-    // check default checkbox
+  const groupNameText = groupName.textContent as string;
+  if (groupNameText.includes("JAO")) {
+    // automatically set student as online to every online group
     const mainCheckbox = document.querySelector(
       "#isAllOnline"
     ) as HTMLInputElement;
     if (mainCheckbox) {
-      mainCheckbox.checked = true;
+      if (!mainCheckbox.checked) {
+        try {
+          const checkboxes = document.querySelectorAll(
+            ".presents-online input[type='checkbox']"
+          );
+          checkboxes.forEach((checkbox) => {
+            // set every checkbox to checked
+            if (!(checkbox as HTMLInputElement).checked) {
+              // simulate click
+              (checkbox as HTMLElement).click();
+            }
+          });
+
+          mainCheckbox.checked = true;
+        } catch (error) {
+          console.error("Error while setting online groups");
+        }
+      }
     }
 
-    // check every checkbox inside td.presents-online
-    const checkboxes = document.querySelectorAll(
-      ".presents-online input[type='checkbox']"
-    );
-    checkboxes.forEach((checkbox) => {
-      // set every checkbox to checked
-      (checkbox as HTMLInputElement).checked = true;
-    });
+    // add class hide-cell-online to class .wrapper-students
+    const wrapperStudents = document.querySelector(
+      ".wrapper-students"
+    ) as HTMLElement;
+
+    if (wrapperStudents) {
+      wrapperStudents.classList.add("hide-cells-online");
+    }
   }
+}
+
+function detectIfNotDiamonds() {
+  function detectDiamonds() {
+    const diamondsElement = document.querySelector(
+      ".diamonds .diamond"
+    ) as HTMLElement;
+    const activeTabElement = document.querySelector(
+      ".presents .pars li.active"
+    ) as HTMLElement;
+
+    if (diamondsElement) {
+      const diamonds = diamondsElement.textContent as string;
+
+      if (diamonds == "5") {
+        activeTabElement.classList.add("show-badge-diamonds");
+        if (activeTabElement.title != titleTextNotRated) {
+          activeTabElement.title = titleTextNotDiamonds;
+        }
+      } else {
+        activeTabElement.classList.remove("show-badge-diamonds");
+        if (activeTabElement.title == titleTextNotDiamonds) {
+          activeTabElement.title = "";
+        }
+      }
+    }
+  }
+
+  try {
+    detectDiamonds();
+
+    incl.debounce(detectIfNotDiamonds, 3000)();
+  } catch (error) {}
+
+  try {
+    // when someone clicks on .awarded span then remove data-diamonds
+    const awarded = document.querySelectorAll(".awarded span i");
+
+    awarded.forEach((award) => {
+      award.addEventListener("click", () => {
+        // activeTabElement.removeAttribute("data-diamonds");
+        incl.debounce(detectIfNotDiamonds, 3000)();
+      });
+    });
+  } catch (error) {}
+}
+
+function detectIfNotRated() {
+  const activeTabElement = document.querySelector(
+    ".presents .pars li.active"
+  ) as HTMLElement;
+
+  try {
+    // detect every md-select
+    const selects = document.querySelectorAll(
+      '.presentr-classWork md-select[aria-disabled="false"]'
+    );
+
+    // find if atleast one of those's innerHTML contains "-"
+    // find element "md-select-value" and check if it contains "-"
+    let isNotRated = false;
+    selects.forEach((select) => {
+      const selectValue = select.querySelector(
+        ".md-select-value span"
+      ) as HTMLElement;
+
+      const selectValueText = selectValue?.textContent;
+
+      if (selectValueText?.includes("-")) {
+        isNotRated = true;
+      }
+    });
+
+    if (isNotRated) {
+      activeTabElement.classList.add("show-badge-work");
+      activeTabElement.title = titleTextNotRated;
+    } else {
+      activeTabElement.classList.remove("show-badge-work");
+      if (activeTabElement.title == titleTextNotRated) {
+        activeTabElement.title = "";
+      }
+    }
+  } catch (error) {}
+
+  try {
+    // when someone clicks on .presentr-classWork md-select[aria-disabled="false"]
+    // then remove data-work
+    const classWorkSelects = document.querySelectorAll(
+      ".presentr-classWork md-input-container"
+    );
+    classWorkSelects.forEach((select) => {
+      select.addEventListener("click", () => {
+        incl.debounce(detectIfNotRated, 3000)();
+      });
+    });
+
+    const classWorkSelects2 = document.querySelector(
+      selectorForWorkInClass
+    ) as HTMLElement;
+    classWorkSelects2.addEventListener("click", () => {
+      incl.debounce(detectIfNotRated, 3000)();
+    });
+  } catch (error) {}
+}
+
+function detectIfNotRatedOrDiamonds() {
+  detectIfNotDiamonds();
+  detectIfNotRated(); // needs to be after detectIfNotDiamonds, so title is set properly
 }
 
 // add right click to menu
@@ -258,6 +387,24 @@ export function presenceEnhancements(state) {
       whenClickedOnPresenceTh();
 
       automaticallySelectOnlineForOnlineGroups();
+      detectIfNotRatedOrDiamonds();
+
+      // when clicked on .presents .pars li
+      const tabs = document.querySelectorAll(".presents .pars li");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", detectIfNotRatedOrDiamonds);
+      });
+
+      // observe .table-wrapper for changes
+      const tableWrapper = document.querySelector(".table-wrapper");
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.addedNodes.length) {
+            automaticallySelectOnlineForOnlineGroups();
+            detectIfNotRatedOrDiamonds();
+          }
+        });
+      });
     } catch (error) {}
   }, 100);
 

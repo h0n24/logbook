@@ -7,8 +7,16 @@ replacements.push(["№", "č. "]);
 replacements.push(["ч", " hod"]);
 replacements.push(["лет", "let"]);
 
-// může být změněno v lokalizačním systému:
+// custom náhrady ----------
+replacements.push(["Označte online", "Online"]);
+// replacements.push(["Označit přítomnost", "Přítomen?"]);
+replacements.push(["Označit přítomnost", "Na hodině?"]);
+
 replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]); // není jisté, zda půjde
+
+// chyby v lokalizaci ----------
+// může být změněno v lokalizačním systému:
+replacements.push(["krystaly odstraněny", "Diamanty odebrány"]);
 // replacements.push(["V skupine  není studentů", "Ve skupině nejsou studenti"]);
 replacements.push([
   "V skupine  není studentů",
