@@ -219,6 +219,29 @@ function correctBugTabsActiveWhenBreak() {
   observer.observe(breakElement);
 }
 
+function automaticallySelectOnlineForOnlineGroups() {
+  const groupName = document.querySelector(".groupName") as HTMLElement;
+  if (groupName.innerHTML.includes("JAO")) {
+    // automatically set online to every online group
+    // check default checkbox
+    const mainCheckbox = document.querySelector(
+      "#isAllOnline"
+    ) as HTMLInputElement;
+    if (mainCheckbox) {
+      mainCheckbox.checked = true;
+    }
+
+    // check every checkbox inside td.presents-online
+    const checkboxes = document.querySelectorAll(
+      ".presents-online input[type='checkbox']"
+    );
+    checkboxes.forEach((checkbox) => {
+      // set every checkbox to checked
+      (checkbox as HTMLInputElement).checked = true;
+    });
+  }
+}
+
 // add right click to menu
 export function presenceEnhancements(state) {
   if (state !== "presents") return;
@@ -233,6 +256,8 @@ export function presenceEnhancements(state) {
       whenPresenceChanged();
       whenTeacherRoleChanged();
       whenClickedOnPresenceTh();
+
+      automaticallySelectOnlineForOnlineGroups();
     } catch (error) {}
   }, 100);
 

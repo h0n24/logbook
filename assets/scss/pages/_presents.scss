@@ -402,6 +402,10 @@ html main.content .presents {
       gap: 0.5rem;
     }
 
+    #isAllOnline {
+      accent-color: #d5d5d5;
+    }
+
     .selector_students .selector_students,
     .diamonds .diamond {
       display: flex;
@@ -427,6 +431,10 @@ html main.content .presents {
   }
 
   .table {
+    .presents-online input[type="checkbox"] {
+      accent-color: #d5d5d5;
+    }
+
     .comment {
       min-width: 250px;
       max-width: 250px;
