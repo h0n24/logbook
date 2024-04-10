@@ -1,6 +1,6 @@
 // TODO: between dates -> in .beetwen_nav there is - instead of –⁠ (pomlčka)
 
-const replacements = [];
+const replacements = [] as [string, string][];
 
 // nenalezeno v lokalizačním systému
 replacements.push(["№", "č. "]);

@@ -6,6 +6,7 @@ export const storeCred = async (creds: {
   // check if PasswordCredential is supported by this browser.
   if (PC) {
     const cred = new PC(creds);
+    // @ts-ignore custom chrome extension
     return navigator.credentials.store(cred);
   } else {
     return null;

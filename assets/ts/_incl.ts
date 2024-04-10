@@ -20,25 +20,25 @@ export function clickOnPosition(x: number, y: number) {
     screenY: y,
   });
 
-  const el = document.elementFromPoint(x, y);
+  const el = document.elementFromPoint(x, y) as HTMLElement;
   el.dispatchEvent(ev);
 }
 
 // show and hide loader programatically
 export function showLoader() {
-  const loader = document.querySelector("loading .loader");
+  const loader = document.querySelector("loading .loader") as HTMLElement;
   loader.classList.remove("ng-hide");
 }
 
 export function hideLoader() {
-  const loader = document.querySelector("loading .loader");
+  const loader = document.querySelector("loading .loader") as HTMLElement;
   loader.classList.add("ng-hide");
 }
 
 // loading observer with debounce,
 // solving issue with catching angular loading times
 export function runLoadingObserver(func: Function) {
-  const targetNode = document.querySelector("loading .loader");
+  const targetNode = document.querySelector("loading .loader") as HTMLElement;
   const config = { attributes: true };
 
   const debounceObserver = debounce(() => func());

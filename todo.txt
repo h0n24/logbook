@@ -1,6 +1,4 @@
-vyřešit loadování souborů -> automatický skript, který najde odkazy všech a stáhne je
 
----
 TODO next:
 
 - u skupin JAO automaticky vyznačit online
