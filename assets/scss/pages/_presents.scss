@@ -122,6 +122,8 @@ html main.content .presents {
     width: auto;
     margin-right: 0.5rem;
     user-select: none;
+    min-width: auto;
+    box-sizing: border-box;
 
     &:last-child {
       margin-right: 0;
@@ -135,6 +137,9 @@ html main.content .presents {
     border: 0.05rem solid color.$primary !important;
     border-radius: style.$border-radius;
     user-select: none;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    box-sizing: border-box;
   }
 
   .pars li:not(:last-child) > a {
@@ -370,7 +375,7 @@ html main.content .presents {
 
     &:hover {
       th.number,
-      th:nth-child(6) {
+      th:nth-child(8) {
         text-decoration: underline;
         text-decoration-style: dotted;
         text-decoration-thickness: 1px;
@@ -379,7 +384,7 @@ html main.content .presents {
     }
 
     // hide th after 9 items (cuz its sometimes buggy)
-    th:nth-of-type(1n + 9) {
+    th:nth-of-type(1n + 10) {
       display: none;
     }
 
@@ -390,6 +395,11 @@ html main.content .presents {
     tr {
       opacity: 0;
       animation: 0.2s linear 0.2s 1 normal forwards running fadeIn;
+    }
+
+    .visit_online {
+      display: flex;
+      gap: 0.5rem;
     }
 
     .selector_students .selector_students,

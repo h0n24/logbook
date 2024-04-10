@@ -14,6 +14,7 @@ import { presenceEnhancements } from "./ts/presence";
 import { homeworkEnhancements } from "./ts/presenceAddHomework";
 import { homeworkAutomation } from "./ts/homework";
 import { addRightClickStar } from "./ts/contextMenuStar";
+import { scheduleEnhancements } from "./ts/schedule";
 
 // debug
 // import { debugAngular } from "./ts/debugAngular";
@@ -83,6 +84,8 @@ document.body.addEventListener("contextmenu", onContextMenu);
 
           homeworkEnhancements(state);
           homeworkAutomation(state);
+
+          scheduleEnhancements(state);
         }
 
         // mutation observer with debounce, it checks if loading ended
