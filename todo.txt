@@ -1,6 +1,25 @@
 vyřešit loadování souborů -> automatický skript, který najde odkazy všech a stáhne je
 
 ---
+TODO next:
+
+- u skupin JAO automaticky vyznačit online
+- u skupiny v presence -> možnost vygenerovat tabulku se seznamem studentů
+
+kód: 
+
+.table .presents_stud td:not(.name) {
+    display: none;
+}
+
+.table .presents_stud [ng-model="stud.was"] {
+    display: none;
+}
+
+.wrapper-students .table thead {
+    display: none;
+}
+
 
 TODO possible:
 
@@ -19,3 +38,4 @@ ukazovat, jestli jsem zadal dú -> na hlavní stránce
 TODO probably impossible yet:
 
 udělat offline verzi, která napíše "jste offline", zkuste restartovat VPN + online checker
+

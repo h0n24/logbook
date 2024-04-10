@@ -123,8 +123,16 @@ async function downloadTestZip(arrayOfScripts: string[]) {
   // define what we want in the ZIP
   let arrayOfFiles: any[] = [];
   for (let i = 0; i < arrayOfScripts.length; i++) {
-    const code = await fetch(arrayOfScripts[i]);
-    arrayOfFiles.push(code);
+    console.info(
+      "fetching " + i + 1 + " from " + arrayOfScripts.length,
+      arrayOfScripts[i]
+    );
+    try {
+      const code = await fetch(arrayOfScripts[i]);
+      arrayOfFiles.push(code);
+    } catch (error) {
+      console.warn("Error fetching " + arrayOfScripts[i], error);
+    }
   }
 
   // get the ZIP stream in a Blob
@@ -196,6 +204,8 @@ export function findScripts() {
   navigator.clipboard.writeText(automatedBlockUrlsJSON);
 
   // log to console
+  console.clear();
+  console.warn("Automated block URLs JSON copied to clipboard: ");
   console.log(automatedBlockUrlsJSON);
 
   // download the zip

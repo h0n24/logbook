@@ -20,8 +20,12 @@ import { addRightClickStar } from "./ts/contextMenuStar";
 // debugAngular();
 
 // grab links to assets and download them
-// import { findScripts } from "./ts/automate/find-js-files";
-// findScripts();
+let needsRedownloadAssets = false;
+import { findScripts } from "./ts/automate/find-js-files";
+if (needsRedownloadAssets) {
+  alert("Downloading assets, please wait around 20 seconds.");
+  findScripts();
+}
 
 // init ------------------------------------------------------------------------
 

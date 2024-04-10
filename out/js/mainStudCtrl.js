@@ -3,28 +3,36 @@
  */
 var app_module = angular.module('app');
 
-app_module.controller('mainStudCtrl', ['$scope', 'studentsHttp', '$state', 'localStorageService', mainStudCtrl]);
+app_module.controller('mainStudCtrl', ['$scope', 'studentsHttp', '$state', 'localStorageService', '$location',
+    '$rootScope', '$mdDialog', '$filter', '$mdToast', mainStudCtrl])
 
-function mainStudCtrl($scope, studentsHttp, $state, localStorageService){
-
-    $scope.activeTab_stud =  localStorageService.get('activeTab_stud');
+function mainStudCtrl($scope, studentsHttp, $state, localStorageService, $location, $rootScope, $mdDialog, $filter, $mdToast){
     $scope.curGroup = 0;
-
-    $scope.redirect = function(url){
-        $scope.activeTab_stud = url;
-        localStorageService.set('activeTab_stud', url);
-        $state.go(url);
-    };
     $scope.curGroup = 0;
     $scope.students_sender = {};
     $scope.groups_sender = [];
     $scope.sender = {};
     $scope.place = [];
     $scope.cur_group = localStorageService.get('cur_select_group');
+    $scope.isHasGroups = true;
 
+    $scope.getActiveTab = function () {
+        if ($location.url() === '/students/comment') {
+            return 'students.comment';
+        } else if ($location.url() === '/students/send_mail') {
+            return 'students.send_mail';
+        } else {
+            return 'students.list'
+        }
+    }
+
+    $scope.redirect = function(url){
+        $state.go(url);
+    };
 
     $scope.getGroups = function(){
         studentsHttp.getGroups().success(function(r){
+            $scope.isHasGroups = !!r;
             if(r) {
                 $scope.groups = r;
             }else{
@@ -43,34 +51,6 @@ function mainStudCtrl($scope, studentsHttp, $state, localStorageService){
             $scope.$apply();
             studentsHttp.getStudents({group : cur_group}).success(function(r){
                 $scope.students = r;
-                // function compareNumbers(a, b) {
-                //     return a - b;
-                // }
-                //
-                // var tempArray = [];
-                // for (var i = 0, maxI = r.length; i < maxI; i += 1) {
-                //     tempArray[i] = +r[i].gpa;
-                // }
-                // tempArray = tempArray.sort(compareNumbers).reverse();
-                //
-                // for (var i = 0, maxI = r.length; i < maxI; i += 1) {
-                //     var rate = -1, j = 0;
-                //
-                //     while (rate != j) {
-                //         if (r[i].gpa == tempArray[j]){
-                //             rate = j;
-                //         } else {
-                //             j += 1;
-                //         }
-                //     }
-                //     $scope.place[i] = rate + 1;
-                // }
-                // for (var i = 0, maxI = r.length; i < maxI; i += 1) {
-                //     tempArray[i] = $scope.place[maxI - 1 - i];
-                // }
-                // $scope.place = tempArray;
-
-
             })
         }, 100);
     };
@@ -81,18 +61,9 @@ function mainStudCtrl($scope, studentsHttp, $state, localStorageService){
             $scope.students_comment = r;
         });
         $scope.curStud = -1;
-        // $scope.curGroup = this.$index;
-        // if(angular.isDefined(index)){
-        //     $scope.curGroup = index;
-        // }
     };
 
     $scope.getStudentsSender = function(group){
-        // if(($scope.groups_sender.indexOf(group.id_tgroups)) != -1){
-        //     $scope.groups_sender.splice($scope.groups_sender.indexOf(group.id_tgroups), 1);
-        // }else{
-        //     $scope.groups_sender.push(group.id_tgroups);
-        // }
         studentsHttp.getStudentsShort({group : group}).success(function(r){
             $scope.students_sender = r;
             $scope.sender.students = [];
@@ -100,8 +71,20 @@ function mainStudCtrl($scope, studentsHttp, $state, localStorageService){
                 $scope.sender.students.push('' + val.id_stud);
             });
         });
-        //$scope.curGroup = this.$index;
-        // this.curGroup = !this.curGroup;
     };
     $scope.getGroups();
+
+    $scope.$watch('isHasGroups', function (value, old) {
+        if ($scope.isHasGroups === false && $location.url() === '/students/comment') {
+            let $commentController = new studentsCommentCtrl(
+                $scope,
+                studentsHttp,
+                $mdDialog,
+                $filter,
+                $mdToast,
+                $rootScope,
+                $location
+            );
+        }
+    });
 }

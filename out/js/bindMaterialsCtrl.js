@@ -55,6 +55,8 @@ function bindMaterialsCtrl($scope, $sce, bindHttp, $timeout, localStorageService
     $scope.form_cover = {type: null, filename: null, file_url: null, file: null, id_spec: null};
     $scope.imgTypes = ["image/png", "image/jpeg", "image/gif", "image/svg"];
     $scope.fileTypes = ["application/pdf"];
+    $scope.isIncludeRemovedMatreials = false;
+
 
     $scope.openModal = function (type, data, week, theme, title) {
         //html html_link
@@ -578,7 +580,8 @@ function bindMaterialsCtrl($scope, $sce, bindHttp, $timeout, localStorageService
             package_to : data.spec,
             week_to :  data.week_to,
             language_to : data.language,
-            type : data.type
+            type : data.type,
+            enable_materials: $scope.isIncludeRemovedMatreials
         };
         bindHttp.copyPackageFromWeek({data : sendData}).success(function (r) {
             if (r.success) {

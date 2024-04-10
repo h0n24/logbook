@@ -92,10 +92,10 @@ function baseCtrl($scope, $translate, $rootScope, baseHttp, localStorageService,
     $scope.getBaseConfig = function () {
         baseHttp.getBaseConfig().success(function (r) {
             $rootScope.langList = r.languages;
-            $scope.langListFiltered = r.languages.filter(function(item) { // исключаем испанский, польский и казахский языки из списка в меню
+            $scope.langListFiltered = r.languages.filter(function(item) { // исключаем испанский и казахский языки из списка в меню
                 return  item['short_name'] !== 'es' &&
-                        item['short_name'] !== 'pl' &&
-                        item['short_name'] !== 'kz';
+                        item['short_name'] !== 'kz' &&
+                        item['short_name'] !== r.current_lang;
             });
             $scope.current_lang = r.current_lang;
             if (r.current_lang) {
@@ -433,10 +433,10 @@ function baseCtrl($scope, $translate, $rootScope, baseHttp, localStorageService,
             });
 
             $rootScope.langList = r.languages;
-            $scope.langListFiltered = r.languages.filter(function (item) { // исключаем испанский, польский и казахский языки из списка в меню
+            $scope.langListFiltered = r.languages.filter(function (item) { // исключаем испанский и казахский языки из списка в меню
                 return item['short_name'] !== 'es' &&
-                    item['short_name'] !== 'pl' &&
-                    item['short_name'] !== 'kz';
+                       item['short_name'] !== 'kz' &&
+                       item['short_name'] !== r.current_lang;
             });
             $scope.current_lang = r.current_lang;
 
@@ -465,7 +465,7 @@ function baseCtrl($scope, $translate, $rootScope, baseHttp, localStorageService,
 
             $rootScope.count_new_exams = r.exams;//
 
-            $rootScope.count_pairs = parseInt(r.count_pairs);//
+            $rootScope.count_pairs = parseInt(r.count_pairs);
 
             $rootScope.count_unread_news = r.unreadNews;
         });

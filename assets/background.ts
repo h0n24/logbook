@@ -32,6 +32,7 @@ blockUrls = [
     "https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.js",
     "script",
   ],
+  ["google-analytics.com", "script"],
   ["logbook.itstep.org/assets/*/raven.js", "script"],
   ["logbook.itstep.org/assets/*/raven-js/dist/plugins/angular.js", "script"],
   [

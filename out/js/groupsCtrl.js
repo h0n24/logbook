@@ -96,6 +96,10 @@ function groupsCtrl($scope, $sce, groupsHttp) {
         })
     }
 
+    $scope.convertTime = function (start, end) {
+        return start && end ? `${start.split(':').slice(0,2).join(':')} - ${end.split(':').slice(0,2).join(':')}` : '';
+    }
+
     $scope.changeSpec = function(){
         $scope.offset = 0;
         $scope.getStudents({id_tgroups : $scope.filter.group, spec : $scope.filter.spec});

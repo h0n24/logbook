@@ -1,8 +1,8 @@
 var app_module = angular.module('app');
 
-app_module.controller('studentsCtrl', ['$scope', 'studentsHttp', 'localStorageService', '$mdDialog',  studentsCtrl]);
+app_module.controller('studentsCtrl', ['$scope', 'studentsHttp', 'localStorageService', studentsCtrl]);
 
-function studentsCtrl($scope, studentsHttp, localStorageService, $mdDialog){
+function studentsCtrl($scope, studentsHttp, localStorageService){
 
     if($scope.groups) {
         $scope.getStudents($scope.$parent.cur_group, false)

@@ -3,8 +3,14 @@ var app_module = angular.module('app');
 app_module.controller('reportCtrl', ['$scope', '$sce', 'reportHttp', reportCtrl]);
 
 function reportCtrl($scope, $sce, reportHttp){
+
+    $scope.getWidthStartPosition = getWidthStartPosition;
+    $scope.getLessonWidth = getLessonWidth;
+
     $scope.form = {};
     $scope.filterGroupReport = {};
+
+    $scope.reportSchedule = [];
 
     $scope.select = {
         year: '',
@@ -55,6 +61,7 @@ function reportCtrl($scope, $sce, reportHttp){
         reportHttp.getData($scope.form).success(function(r){
             if(r){
                 $scope.report_data = r;
+                $scope.reportSchedule = addEmptyProperty(r.details_report);
                 $scope.showReport = 1;
             }else{
                 $scope.showReport = 0;

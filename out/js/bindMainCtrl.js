@@ -270,6 +270,14 @@ function bindMainCtrl($scope, $state, bindHttp, baseHttp, $timeout, $rootScope, 
         return $sce.trustAsResourceUrl(value);
     };
 
+    $scope.deleteCellMaterials = function (current_spec, idType, weekNumber){
+        let idMaterial = [];
+        $scope.materials[weekNumber].data[idType].forEach((m)=> {
+            idMaterial.push(m.public_materials_id);
+        })
+        $scope.deleteMaterials(current_spec, idType, weekNumber, idMaterial);
+    };
+
     /**
      * Удаление материалов
      *

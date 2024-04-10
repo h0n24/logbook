@@ -95,7 +95,7 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
     $scope.getStartData = function(){
         $scope.allGroups = false; // Сбрасываем кнопку 'Показать все группы' до значения по-умолчанию - false.
         homeworkHttp.getGroupsSpec({type : $scope.ospr}).success(function(r){
-            if(typeof r.groups_spec !== 'undefined') {
+            if (r?.groups_spec && typeof r.groups_spec !== 'undefined') {
                 $scope.filter_data = r.groups_spec;
                 $scope.months = r.months;
                 $scope.setDefaultGroup();//устанавливаем дефолтное значение
@@ -104,7 +104,7 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
                 $scope.setLimit();
                 $scope.offset = CLEAR_OFFSET;
                 $scope.getHomeworks();
-            }else{
+            } else {
                 delete $scope.filter_data;
             }
         });
@@ -383,6 +383,10 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
         });
     };
 
+    $scope.convertTime = function (start, end) {
+        return start && end ? `${start.split(':').slice(0,2).join(':')} - ${end.split(':').slice(0,2).join(':')}` : '';
+    }
+
     /**
      *
      * @param id
@@ -648,7 +652,7 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
     $scope.getGroups = function () {
         $scope.allGroups = !$scope.allGroups;
         homeworkHttp.getGroupsSpec({type : $scope.ospr, all_groups: $scope.allGroups}).success(function(r){
-            if(typeof r.groups_spec !== 'undefined') {
+            if (r?.groups_spec && typeof r.groups_spec !== 'undefined') {
                 $scope.filter_data = r.groups_spec;
                 $scope.offset = CLEAR_OFFSET;
                 if ($scope.filter_data[$scope.filter.group] && $scope.filter_data[$scope.filter.group].data) {
@@ -657,7 +661,7 @@ function homeWorkCtrl ($scope, homeworkHttp, $location, $mdDialog, $filter, $com
                     $scope.getStudents();
                     $scope.getHomeworks();
                 }
-            }else{
+            } else {
                 delete $scope.filter_data;
             }
         });

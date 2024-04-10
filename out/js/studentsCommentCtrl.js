@@ -3,7 +3,8 @@
  */
 var app_module = angular.module('app');
 
-app_module.controller('studentsCommentCtrl', ['$scope', 'studentsHttp', '$mdDialog', '$filter', '$mdToast', '$rootScope', '$location', studentsCommentCtrl]);
+app_module.controller('studentsCommentCtrl', ['$scope', 'studentsHttp', '$mdDialog', '$filter', '$mdToast',
+    '$rootScope', '$location', studentsCommentCtrl]);
 
 function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast, $rootScope, $location){
     /**
@@ -15,7 +16,7 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
     $scope.currentReviewsPage = 1; // начальное значение "страницы" в модальном окне отзывов (нужно для пагинации, которую используем для дозагрузки отзывов)
     $scope.activeReviewsCount = 20; // начальное кол-во записей в модальном окне отзывов по студенту
     $scope.commentLength = 5; // минимальная длина комментария
-    $scope.comment.group = angular.isDefined($scope.groups) ? $scope.groups[0].id_tgroups : '';
+    $scope.comment.group = angular.isDefined($scope.groups) && $scope.groups !== false ? $scope.groups[0].id_tgroups : '';
     $scope.showMobileFilter = false; // открытие фильтра в мобильном разрешении
     $scope.overdueComments = 1; // флаг отображения просроченных комментариев в модалке
     $scope.allComments = 0; // флаг отображения всех комментариев в модалке
@@ -23,7 +24,7 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
     $scope.oldReviewsFirst = 'id'; // флаг сортировки отзывов модального окна - вначале старые
     $scope.sortFlag = '-id'; // параметр сортировки отзывов модального окна для запроса
     $scope.maxReviewCommentLength = 500; // максимальная длина комментария
-    $scope.minReviewCommentLength = 10; // максимальная длина комментария
+    $scope.minReviewCommentLength = 10; // минимальная длина комментария
 
     /**
      * модели для фильтра в модалке отзывов
@@ -38,7 +39,6 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
         studentsHttp.setComments(data).success(function(r){
             if(r.error) {
                 angular.forEach(r.error, function (value, key) {
-                 //   Materialize.toast(value, 4000, 'red');
                     $mdToast.show({
                         hideDelay   : 4000,
                         position    : 'top right',
@@ -46,7 +46,6 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
                     });
                 });
             }else {
-            //    Materialize.toast(r.success, 4000, 'green');
                 $mdToast.show({
                     hideDelay   : 4000,
                     position    : 'top right',
@@ -56,12 +55,14 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
                 $scope.getComments($scope.active_stud, $scope.comment.spec);
             }
         })
-    }
+    };
 
     $scope.getStudentsShort = function(group, index){
         studentsHttp.getStudentsShort({group : group}).success(function(r){
             $scope.students_comment = r;
-            $scope.changeStud($scope.students_comment[0].id_stud, false);
+            if(!!$scope.students_comment[0]) {
+                $scope.changeStud($scope.students_comment[0].id_stud, false);
+            }
         });
         $scope.curStud = 0;
         $scope.curGroup = this.$index;
@@ -69,8 +70,6 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
             $scope.curGroup = index;
         }
     };
-
-    //$scope.getStudentsShort($scope.comment.group);
 
     $scope.changeStud = function(stud, updateStud){
         $scope.comment.stud = stud;
@@ -80,14 +79,13 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
             $scope.curStud = this.$index;
         }
         $scope.getSpecs(stud);
-    }
+    };
 
     $scope.getComments = function(stud, spec){
         studentsHttp.getComments({stud : stud, spec : spec}).success(function(r){
             $scope.student_comments = r;
-
         })
-    }
+    };
 
     $scope.getSpecs = function(stud){
         studentsHttp.getSpecs({stud : stud}).success(function(r){
@@ -95,15 +93,7 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
                 $scope.specs_list = r;
             }
         })
-    }
-
-
-
-    //$scope.deleteComment = function(comment){
-    //    studentsHttp.deleteComment({id_comment : comment}).success(function(r){
-    //        $scope.getComments($scope.active_stud);
-    //    })
-    //}
+    };
 
     $scope.showConfirmDeleteComment = function(id) {
         var confirm = $mdDialog.confirm({
@@ -222,15 +212,6 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
         $scope.sortFlag = sortFlag;
         $scope.currentReviewsPage = 1;
         $scope.getCommentsList();
-        // для сортировки на фронте
-        // $scope.studReviewsList.data = $scope.studReviewsList.data.sort((a, b) => {
-        //     let aDate = new Date(a.date_create_request);
-        //     let dDate = new Date(b.date_create_request);
-        //     if (sortFlag) {
-        //         return aDate - dDate;
-        //     }
-        //     return dDate - aDate;
-        // });
     };
 
     /**
@@ -283,7 +264,7 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
      * через $rootScope чтобы было видно в модалке с другим контроллером
      */
     $rootScope.showMyReviews = function() {
-        if ($location.url() != '/students/comment') {
+        if ($location.url() !== '/students/comment') {
             return;
         }
 
@@ -317,7 +298,7 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
                 $scope.students[result[i].id_stud] = result[i];
             }
         });
-    }
+    };
 
     /**
      * Сохранение комментария в модальном окне
@@ -329,9 +310,10 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
         }
         review.isInSave = true;
         let data = {
+            id: review.id,
             comment: review.comment,
-            id_stud: review.id_stud,
-            id_teach: review.id_teach,
+            id_stud: review.student_id,
+            id_teach: review.teacher_id,
             id_spec: review.id_spec,
             base_study_form__id: review.base_study_form__id,
             id_tgroups: review.id_tgroups,
@@ -381,8 +363,8 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
                 // если это последний отзыв во вкладке Просроченные,
                 // но остались отзывы во вкладке Все - переходим на вкладку Все
             } else if ($scope.studReviewsList._meta.totalAllCount > 1
-                && $scope.is_late == $scope.overdueComments
-                && $scope.studReviewsList._meta.totalOverdueCount == 1) {
+                && $scope.is_late === $scope.overdueComments
+                && $scope.studReviewsList._meta.totalOverdueCount === 1) {
                 $scope.getAllCommentsList();
                 return
             }
@@ -392,7 +374,7 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
 
             // удаляем отзыв на фронте, чтобы не отсылать запрос
             $scope.studReviewsList.data.some( (item, key) => {
-                if (item.id_stud === review.id_stud &&  item.date_create_request === review.date_create_request) {
+                if (item.student_id === review.student_id &&  item.date_create_request === review.date_create_request) {
                     $scope.studReviewsList.data.splice(key, 1);
                     $scope.studReviewsList._meta.totalCount = $scope.studReviewsList._meta.totalCount - 1;
                 }
@@ -498,7 +480,7 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
                     student_id: resultComments[i].dataset.stud,
                     message: resultComments[i].value,
                     id_spec: resultComments[i].dataset.spec
-                }
+                };
                 j++;
             }
             // длинна комментария должна быть не меньше 5 символов
@@ -547,5 +529,4 @@ function studentsCommentCtrl($scope, studentsHttp, $mdDialog, $filter, $mdToast,
      * Запускаем модальное окно с отзывами
      */
     $rootScope.showMyReviews();
-
 }

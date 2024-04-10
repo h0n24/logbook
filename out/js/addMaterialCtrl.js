@@ -8,6 +8,7 @@ function addMaterialCtrl($scope, presentsHttp, localStorageService, $rootScope, 
     $scope.form.type = 1;
     $scope.cur_group = localStorageService.get('cur_group_pr');
     $scope.cur_lenta = localStorageService.get('cur_lenta_pr');
+    $scope.cur_schedule  = localStorageService.get('cur_schedule_pr');
     $scope.cur_date  = localStorageService.get('cur_date_pr');
     $scope.cur_spec  =  localStorageService.get('cur_spec_pr');
     $scope.form.theme  =  localStorageService.get('theme') ? localStorageService.get('theme') : "";
@@ -58,6 +59,8 @@ function addMaterialCtrl($scope, presentsHttp, localStorageService, $rootScope, 
             data.append('id_spec', $scope.cur_spec.id_spec);
             data.append('date_vizit', $scope.cur_date);
             data.append('lenta', $scope.cur_lenta);
+            data.append('schedule', $scope.cur_schedule);
+
             $scope.showLoadedMaterials = 1;
             if((
                 angular.isDefined(angular.isDefined($scope.form.file)) || angular.isDefined($scope.form.filename_book)) &&
@@ -126,6 +129,7 @@ function addMaterialCtrl($scope, presentsHttp, localStorageService, $rootScope, 
             presentsHttp.getMaterials({
                 group: $scope.cur_group,
                 lenta: $scope.cur_lenta,
+                schedule: $scope.cur_schedule,
                 date_vizit: $scope.cur_date
             }).success(function (r) {
                 $scope.materials_details = r;

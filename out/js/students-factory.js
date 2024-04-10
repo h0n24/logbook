@@ -82,4 +82,4 @@ app_module.factory('studentsHttp', ['$http', function($http){
             return $http.post('/teachComment/comments/save', data);
         },
     };
-}])
+}]);

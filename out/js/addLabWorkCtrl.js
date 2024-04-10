@@ -7,6 +7,7 @@ function addLabWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, b
     $scope.form = {recommended : null};
     $scope.cur_group = localStorageService.get('cur_group_pr');
     $scope.cur_lenta = localStorageService.get('cur_lenta_pr');
+    $scope.cur_schedule  = localStorageService.get('cur_schedule_pr');
     $scope.cur_date = localStorageService.get('cur_date_pr');
     $scope.cur_spec = localStorageService.get('cur_spec_pr');
     $scope.theme = localStorageService.get('theme');
@@ -74,6 +75,7 @@ function addLabWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, b
             data.append('spec', $scope.cur_spec.id_spec);
             data.append('dz_theme', $scope.form.dz_theme);
             data.append('deadline', $scope.form.deadline);
+            data.append('cur_schedule', $scope.cur_schedule);
             data.append('type', 1);
             let recommendedHw = new Promise(function(resolve, reject){
                 resolve(null);
@@ -193,6 +195,7 @@ function addLabWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, b
                 group: $scope.cur_group,
                 lenta: $scope.cur_lenta,
                 date: $scope.cur_date,
+                cur_schedule: $scope.cur_schedule,
                 ospr: 1
             }).success(function (r) {
                 $scope.labwork = r;

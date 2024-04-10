@@ -6,14 +6,19 @@ var app_module = angular.module('app');
 var controller = app_module.controller('scheduleCtrl', ['$scope', '$sce', 'scheduleHttp', ScheduleController]);
 
 function ScheduleController($scope, $sce, scheduleHttp){
+    $scope.getLessonStartPosition = getLessonStartPosition;
+    $scope.getLessonHeight = getLessonHeight;
+
     $scope.week = 0;
     $scope.thisDay = 0;
     $scope.r = 0;
     $scope.init_schedule = false;
+    $scope.mappedSchedule = [];
 
     $scope.update_schedule = function() {
         scheduleHttp.getScheduleData({week: $scope.week}).success(function (r) {
             $scope.schedule = r.body;
+            $scope.mappedSchedule = mapTeachersSchedule($scope.schedule);
             $scope.lents = r.lents;
             $scope.days =  r.days;
             $scope.dates = r.dates;
@@ -62,6 +67,9 @@ function ScheduleController($scope, $sce, scheduleHttp){
         $scope.datesCur = res.dates[$scope.thisDay];
         $scope.curdateCur = res.curdate;
         $scope.daysShortCur = res.daysShort[$scope.thisDay];
+        // const test = this.schedule.map(timeline => {
+        //     for (let key in )
+        // })
     }
 
     var update_schedule_day = function() {

@@ -7,6 +7,7 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
     $scope.form = {};
     $scope.cur_group     = localStorageService.get('cur_group_pr');
     $scope.cur_lenta     = localStorageService.get('cur_lenta_pr');
+    $scope.cur_schedule  = localStorageService.get('cur_schedule_pr');
     $scope.cur_date      = localStorageService.get('cur_date_pr');
     $scope.cur_spec      = localStorageService.get('cur_spec_pr');
     $scope.theme         = localStorageService.get('theme');
@@ -72,7 +73,7 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
         $scope.file_cover = e.target.files[0].name;
     };
 
-    if(!angular.isDefined($scope.cur_spec) || !$scope.cur_spec){
+    if($scope.disabledForm || !angular.isDefined($scope.cur_spec) || !$scope.cur_spec){
         $rootScope.redirect('presents');
     }else {
         $scope.new_hw = function () {
@@ -126,12 +127,14 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
                 return false;
             }
             data.append('descr', $scope.form.descr);
-            data.append('lenta', $scope.cur_lenta);
+            data.append('lenta[l_start]', $scope.cur_lenta.l_start);
+            data.append('lenta[l_end]', $scope.cur_lenta.l_end);
             data.append('date', $scope.cur_date);
             data.append('group', $scope.cur_group);
             data.append('spec', $scope.cur_spec.id_spec);
             data.append('dz_theme', $scope.form.dz_theme);
             data.append('deadline', $scope.form.deadline);
+            data.append('cur_schedule', $scope.cur_schedule);
             if (!$scope.autotestValues.recommended) {
                 data.append('is_autotest', $scope.autotestValues.is_autotest);
                 if ($scope.autotestValues.is_autotest == 1) {
@@ -290,6 +293,7 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
                 group: $scope.cur_group,
                 lenta: $scope.cur_lenta,
                 date: $scope.cur_date,
+                cur_schedule: $scope.cur_schedule,
                 ospr: 0
             }).success(function (r) {
                 $scope.homework = r;

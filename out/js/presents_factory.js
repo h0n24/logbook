@@ -84,6 +84,9 @@ app_module.factory('presentsHttp', ['$http', '$rootScope', function($http, $root
         setWasAll : function(data){
             return $http.post('/presents/set-was-all', data, {headers : {'show-loader': ''}})
         },
+        setWasTypeAll : function(data){
+            return $http.post('/presents/set-was-type-all', data, {headers : {'show-loader': ''}})
+        },
         setComment : function(data){
             return $http.post('/presents/set-comment', data)
         },
