@@ -1,5 +1,7 @@
 import * as incl from "./_incl";
 
+// TODO: refactor this file into separate files
+
 const selectorForWorkInClass = ".wrapper-students thead tr th:nth-child(8)";
 const titleTextNotRated = "Pozor: máte nepřidělené známky";
 const titleTextNotDiamonds = "Pozor: máte nepřidělené diamanty";
@@ -371,6 +373,201 @@ function detectIfNotRatedOrDiamonds() {
   detectIfNotRated(); // needs to be after detectIfNotDiamonds, so title is set properly
 }
 
+function copyTableForPrinting() {
+  // if exists, remove
+  const tableCopyExists = document.querySelector("#print-table") as HTMLElement;
+  if (tableCopyExists) {
+    tableCopyExists.remove();
+  }
+
+  const table = document.querySelector(
+    ".wrapper-students table"
+  ) as HTMLElement;
+  const tableCopy = table.cloneNode(true) as HTMLElement;
+  tableCopy.id = "print-table";
+  tableCopy.classList.add("print-table");
+
+  // append new body to html with table
+  const newBody = document.createElement("body");
+  newBody.id = "print-table-body";
+
+  // create new h1 with content of .groupName
+  const h1 = document.createElement("h1");
+  h1.classList.add("print-table-title");
+  const groupName = document.querySelector(".groupName") as HTMLElement;
+  h1.innerHTML = "Skupina: " + groupName.textContent;
+  newBody.appendChild(h1);
+
+  // create new h2 with content of .specName
+  const h2 = document.createElement("h2");
+  h2.classList.add("print-table-subtitle");
+  const specName = document.querySelector(".specName") as HTMLElement;
+  let specNameText = specName.textContent as string;
+  specNameText = specNameText.replace("(", "");
+  specNameText = specNameText.replace(")", "");
+  h2.innerHTML = "Téma: " + specNameText;
+  newBody.appendChild(h2);
+
+  // create new h3 with date
+  const h3 = document.createElement("h3");
+  h3.classList.add("print-table-subtitle");
+  const date = new Date();
+
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  } as const;
+  const dateText = date.toLocaleDateString("cs-CZ", options);
+
+  const firstTimeElement = document.querySelector(
+    ".pars .tab.active a"
+  ) as HTMLElement;
+  let firstTimeText = firstTimeElement.textContent as string;
+  // text looks like this: '\n                        15:30 - 16:30\n                    '
+  firstTimeText = firstTimeText.replace(/\s/g, "");
+  firstTimeText = firstTimeText.replace("\n", "");
+  firstTimeText = firstTimeText.split("-")[0];
+
+  // get next element after ".pars .tab.active" that has class .tab
+  const firstTimeElementParent = firstTimeElement.parentElement as HTMLElement;
+  const nextElement = firstTimeElementParent.nextElementSibling as HTMLElement;
+  let secondTimeElement = nextElement.querySelector("a") as HTMLElement;
+  let secondTimeText = secondTimeElement.textContent as string;
+  secondTimeText = secondTimeText.replace(/\s/g, "");
+  secondTimeText = secondTimeText.replace("\n", "");
+  secondTimeText = secondTimeText.split("-")[1];
+
+  h3.textContent =
+    "Datum: " + dateText + ", " + firstTimeText + "–" + secondTimeText;
+  newBody.appendChild(h3);
+
+  newBody.appendChild(tableCopy);
+  document.documentElement.appendChild(newBody);
+
+  // original body with class .main hide via hidden attribute
+  const main = document.querySelector("body.main") as HTMLElement;
+  main.hidden = true;
+
+  // create temporary style for printing
+  const style = document.createElement("style");
+  style.innerHTML = `
+    @media print {
+      .print-table {
+        width: max-content !important;
+        font-size: 12px;
+        border-collapse: collapse;
+      }
+      .print-table th, .print-table td {
+        // border: 1px solid #000;
+        padding: 8px;
+        min-width: auto !important;
+        width: auto !important;
+        height: auto !important;
+        text-align: left !important;
+        color: #000 !important;
+      }
+    }
+
+    .open-menu-block, md-sidenav, toolbar, .topPanel {
+      display: none;
+    }
+    .table-wrapper .table {
+      display: none;
+    }
+
+    #print-table {
+      margin-top: 1rem;
+      display: table !important;
+    }
+
+    #print-table .presents_stud td:not(.name) {
+        display: none;
+    }
+
+    #print-table .presents_stud .number {
+      display: table-cell !important;
+      color: #000;
+      font-weight: 300;
+    }
+
+    #print-table .presents_stud .presents-online {
+      display: table-cell !important;
+    }
+
+    #print-table .presents_stud [ng-model="stud.was"] {
+        display: none;
+    }
+    
+    #print-table thead {
+        display: none;
+    }
+
+    .print-table-title {
+      font-weight: 500;
+      font-size: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .print-table-subtitle {
+      font-weight: 300;
+      font-size: 16px;
+      margin-bottom: 0.5rem;
+    }
+    
+  `;
+  document.head.appendChild(style);
+
+  // print
+  window.print();
+
+  function returnToOriginal() {
+    // remove temporary style
+    style.remove();
+
+    // remove temporary body
+    newBody.remove();
+
+    // show original body
+    main.hidden = false;
+  }
+
+  addEventListener("afterprint", (event) => {
+    returnToOriginal();
+  });
+
+  setTimeout(() => {
+    returnToOriginal();
+  }, 1000);
+}
+
+function printTable() {
+  // if print-students-button exists, return
+  const printButtonExists = document.querySelector(
+    "#print-students-button"
+  ) as HTMLElement;
+  if (printButtonExists) {
+    return;
+  }
+
+  // prepend button to .topPanel .dialog-demo-content
+  const topPanel = document.querySelector(
+    ".topPanel .dialog-demo-content"
+  ) as HTMLElement;
+  const printButton = document.createElement("a");
+  printButton.href = "#";
+  printButton.id = "print-students-button";
+  printButton.title = "Tisk studentů";
+  printButton.innerHTML = "🖨️";
+  printButton.classList.add("print-students-button");
+
+  printButton.addEventListener("click", () => {
+    copyTableForPrinting();
+  });
+
+  topPanel.appendChild(printButton);
+}
+
 // add right click to menu
 export function presenceEnhancements(state) {
   if (state !== "presents") return;
@@ -388,6 +585,8 @@ export function presenceEnhancements(state) {
 
       automaticallySelectOnlineForOnlineGroups();
       detectIfNotRatedOrDiamonds();
+
+      printTable();
 
       // when clicked on .presents .pars li
       const tabs = document.querySelectorAll(".presents .pars li");

@@ -24,6 +24,15 @@ function filterScripts(scriptsArray: string[]) {
     if (scriptsArray[i].startsWith("https://www.googletagmanager.com")) {
       continue;
     }
+    // remove google metrics
+    if (
+      scriptsArray[i].startsWith(
+        "https://www.google-analytics.com/analytics.js"
+      )
+    ) {
+      continue;
+    }
+
     // remove angular material cuz it's included two times
     if (
       scriptsArray[i].startsWith(
