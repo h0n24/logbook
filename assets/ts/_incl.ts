@@ -1,3 +1,5 @@
+// TODO: possible future rework to use scopes of angular, more here: https://jsfiddle.net/e7gw3Lm8/
+
 // simple debounce
 export function debounce(func: Function, timeout: number = 300) {
   let timer;

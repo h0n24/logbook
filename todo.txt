@@ -1,7 +1,5 @@
-
 TODO next:
 
-- u skupin JAO automaticky vyznačit online
 - u skupiny v presence -> možnost vygenerovat tabulku se seznamem studentů
 
 kód: 
@@ -32,6 +30,8 @@ sjednotit barvy u legendy apod
 groupsPage když není vybraná skupina -> legenda má opacity
 
 ukazovat, jestli jsem zadal dú -> na hlavní stránce
+
+rework setTimeout přes https://jsfiddle.net/e7gw3Lm8/
 
 TODO probably impossible yet:
 

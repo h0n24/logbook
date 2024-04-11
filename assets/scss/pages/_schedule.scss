@@ -142,7 +142,11 @@ html {
       }
 
       .beetwen_nav {
+        order: -1;
         top: 0;
+        // "25. 12. 2023- 31. 12. 2023".length = 26
+        width: 26ex;
+        text-align: center;
       }
 
       .nav_week {

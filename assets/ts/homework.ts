@@ -133,8 +133,17 @@ function makeURLinTextClickable(homework) {
     ".hw-md_single_stud-work__answer-text"
   );
 
+  let originalText = studentsComments.innerText;
+  let newText = createUrlfromText(originalText);
+
+  if (newText) {
+    studentsComments.innerHTML = newText;
+  }
+}
+
+function createUrlfromText(originalText: any) {
   // detect if text contains url
-  let text = studentsComments.innerText;
+  let text = originalText as string;
   const url = text.match(/(https?:\/\/[^\s]+)/g);
 
   // make the url in the text clickable for every url
@@ -147,7 +156,7 @@ function makeURLinTextClickable(homework) {
       );
     }
 
-    studentsComments.innerHTML = text;
+    return text;
   }
 }
 
@@ -221,6 +230,174 @@ function observeIfNewHomeworksAdded(homeworksWrap) {
   observer.observe(homeworksWrap, config);
 }
 
+function convertnl2br(text: string) {
+  return text.replace(/(?:\r\n|\r|\n)/g, "<br>");
+}
+
+function createModalForFiles(data, url) {
+  // detect if #modal-file exists and if it does, just update the content
+  const existingModal = document.querySelector("#modal-file");
+  if (existingModal) {
+    const pre = existingModal.querySelector(".modal-pre") as HTMLPreElement;
+    let dataText = createUrlfromText(data ?? "") ?? "";
+    dataText = convertnl2br(dataText);
+    pre.innerHTML = dataText;
+    existingModal.classList.add("active");
+    let download = existingModal.querySelector(
+      ".modal-footer a"
+    ) as HTMLAnchorElement;
+    download.href = url;
+    return;
+  }
+
+  // create modal via HTML dialog
+  const dialog = document.createElement("div");
+  dialog.id = "modal-file";
+  dialog.classList.add("modal-file", "active");
+
+  // create link a with href #close class .modal-overlay and aria-label Close
+  const modalOverlay = document.createElement("a");
+  modalOverlay.href = "#close";
+  modalOverlay.classList.add("modal-overlay");
+  modalOverlay.setAttribute("aria-label", "Close");
+
+  // create div with class .modal-container
+  const container = document.createElement("div");
+  container.classList.add("modal-container");
+
+  // create div with class .modal-header
+  const header = document.createElement("div");
+  header.classList.add("modal-header");
+
+  // create a#close with class btn btn-clear float-right aria-label Close
+  const close = document.createElement("a");
+  close.href = "#close";
+  close.classList.add("btn-modal-close");
+  close.setAttribute("aria-label", "Close");
+
+  // create modal title
+  const title = document.createElement("h4");
+  title.innerText = "Obsah souboru .txt";
+
+  // create div with class .modal-body
+  const body = document.createElement("div");
+  body.classList.add("modal-body");
+
+  // create pre with data from file
+  const pre = document.createElement("div");
+  pre.classList.add("modal-pre");
+
+  let dataText = createUrlfromText(data ?? "") ?? "";
+  dataText = convertnl2br(dataText);
+  // @ts-ignore
+  pre.innerHTML = dataText;
+
+  // create modal-footer
+  const footer = document.createElement("div");
+  footer.classList.add("modal-footer");
+
+  // add button to download original file
+  const download = document.createElement("a");
+  download.classList.add("btn", "btn-primary");
+  download.href = url;
+  download.innerText = "Stáhnout původní soubor";
+
+  // add second button to close
+  const close2 = document.createElement("a");
+  close2.href = "#close";
+  close2.classList.add("btn-modal-close2");
+  close2.innerText = "Zavřít okno";
+
+  // add button to close the modal
+  close.addEventListener("click", function (event) {
+    event.preventDefault();
+    dialog.classList.remove("active");
+  });
+
+  close2.addEventListener("click", function (event) {
+    event.preventDefault();
+    dialog.classList.remove("active");
+  });
+
+  // modal overlay click
+  modalOverlay.addEventListener("click", function (event) {
+    event.preventDefault();
+    dialog.classList.remove("active");
+  });
+
+  // append elements
+  header.appendChild(title);
+  header.appendChild(close);
+  body.appendChild(pre);
+  footer.appendChild(download);
+  footer.appendChild(close2);
+  container.appendChild(header);
+  container.appendChild(body);
+  container.appendChild(footer);
+  dialog.appendChild(modalOverlay);
+  dialog.appendChild(container);
+
+  // append modal to body
+  document.body.appendChild(dialog);
+
+  // close modal on escape key
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      dialog.classList.remove("active");
+    }
+  });
+}
+
+function manipulateWithWindowOpen() {
+  // This will get argument url from window.open without changing the original function
+  // @ts-ignore
+  window.open = (function (original) {
+    return function (url, windowName, windowFeatures) {
+      // console.log("url", url, windowName, windowFeatures);
+      const urlText = url as string;
+
+      // TODO: check if the modal is open?
+
+      // if url contains "https://fsx1.itstep.org/api/v1/files"
+      // then open the file in javascript
+      if (urlText.includes("https://fsx1.itstep.org/api/v1/files")) {
+        // fetch the file
+
+        // Q: how to get the filename from the response? i know the browser can do it
+        fetch(urlText, {
+          method: "GET",
+          headers: {
+            "Content-Type": "text/plain;charset=UTF-8",
+          },
+        })
+          .then((response) => {
+            return response.blob();
+          })
+          .then((blob) => {
+            // create a url for the file
+            if (blob.type.includes("text")) {
+              // read contents of the blob via FileReader
+              const reader = new FileReader();
+
+              reader.addEventListener("load", function () {
+                const data = reader.result;
+                createModalForFiles(data, urlText);
+              });
+
+              reader.readAsText(blob);
+            } else {
+              // returning original function for other type of files such as "application/zip"
+              return original(url, windowName, windowFeatures);
+            }
+          });
+      } else {
+        // returning original function
+        return original(url, windowName, windowFeatures);
+      }
+    };
+  })(window.open);
+}
+
 export function homeworkAutomation(state) {
   if (state !== "homeWork") return;
 
@@ -240,6 +417,8 @@ export function homeworkAutomation(state) {
       observeHomeworkCountAndUpdateMenu();
 
       observeIfNewHomeworksAdded(homeworksWrap);
+
+      manipulateWithWindowOpen();
     } catch (error) {}
   }, 100);
 }
