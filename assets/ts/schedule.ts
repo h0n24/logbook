@@ -52,13 +52,11 @@ function hideRowsWithEmptyContent() {
     } else {
       allEmptyRowElement.style.visibility = "visible";
     }
-    console.log("all rows empty", allRowsEmpty, allEmptyRowElement);
   } else {
     // hide element via style
     if (allEmptyRowElement) {
       allEmptyRowElement.style.visibility = "hidden";
     }
-    console.log("all rows nonempty", allRowsEmpty, allEmptyRowElement);
   }
 
   // create row with td with checkbox element
