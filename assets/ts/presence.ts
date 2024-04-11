@@ -420,26 +420,37 @@ function copyTableForPrinting() {
   } as const;
   const dateText = date.toLocaleDateString("cs-CZ", options);
 
-  const firstTimeElement = document.querySelector(
-    ".pars .tab.active a"
-  ) as HTMLElement;
-  let firstTimeText = firstTimeElement.textContent as string;
-  // text looks like this: '\n                        15:30 - 16:30\n                    '
-  firstTimeText = firstTimeText.replace(/\s/g, "");
-  firstTimeText = firstTimeText.replace("\n", "");
-  firstTimeText = firstTimeText.split("-")[0];
+  let firstTimeText = "";
+  let secondTimeText = "";
+  try {
+    const firstTimeElement = document.querySelector(
+      ".pars .tab.active a"
+    ) as HTMLElement;
+    firstTimeText = firstTimeElement.textContent as string;
+    // text looks like this: '\n                        15:30 - 16:30\n                    '
+    firstTimeText = firstTimeText.replace(/\s/g, "");
+    firstTimeText = firstTimeText.replace("\n", "");
+    firstTimeText = firstTimeText.split("-")[0];
 
-  // get next element after ".pars .tab.active" that has class .tab
-  const firstTimeElementParent = firstTimeElement.parentElement as HTMLElement;
-  const nextElement = firstTimeElementParent.nextElementSibling as HTMLElement;
-  let secondTimeElement = nextElement.querySelector("a") as HTMLElement;
-  let secondTimeText = secondTimeElement.textContent as string;
-  secondTimeText = secondTimeText.replace(/\s/g, "");
-  secondTimeText = secondTimeText.replace("\n", "");
-  secondTimeText = secondTimeText.split("-")[1];
+    // get next element after ".pars .tab.active" that has class .tab
+    const firstTimeElementParent =
+      firstTimeElement.parentElement as HTMLElement;
+    const nextElement =
+      firstTimeElementParent.nextElementSibling as HTMLElement;
+    let secondTimeElement = nextElement.querySelector("a") as HTMLElement;
+    secondTimeText = secondTimeElement.textContent as string;
+    secondTimeText = secondTimeText.replace(/\s/g, "");
+    secondTimeText = secondTimeText.replace("\n", "");
+    secondTimeText = secondTimeText.split("-")[1];
+  } catch (error) {}
 
-  h3.textContent =
-    "Datum: " + dateText + ", " + firstTimeText + "–" + secondTimeText;
+  if (firstTimeText == "" || secondTimeText == "") {
+    h3.textContent = "Datum: " + dateText;
+  } else {
+    h3.textContent =
+      "Datum: " + dateText + ", " + firstTimeText + "–" + secondTimeText;
+  }
+
   newBody.appendChild(h3);
 
   newBody.appendChild(tableCopy);
@@ -542,6 +553,12 @@ function copyTableForPrinting() {
 }
 
 function printTable() {
+  // if table doesnt have any content, return
+  const testTableContent = document.querySelector(
+    ".wrapper-students table tbody"
+  );
+  if (!testTableContent) return;
+
   // if print-students-button exists, return
   const printButtonExists = document.querySelector(
     "#print-students-button"
