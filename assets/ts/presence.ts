@@ -554,9 +554,9 @@ function copyTableForPrinting() {
 
 function printTable() {
   // if table doesnt have any content, return
-  const testTableContent = document.querySelector(
-    ".wrapper-students table tbody"
-  );
+  const testTable = document.querySelector(".wrapper-students table tbody");
+  let testTableContent = testTable?.textContent || "";
+  testTableContent = testTableContent?.replace(/\s/g, "");
   if (!testTableContent) return;
 
   // if print-students-button exists, return
