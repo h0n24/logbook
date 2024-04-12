@@ -82,6 +82,11 @@ html {
       // padding-bottom: 1rem;
       padding: 1rem;
       background: transparent;
+      height: fit-content !important;
+
+      div {
+        height: fit-content !important;
+      }
 
       div:before {
         background: #edece817;
@@ -90,7 +95,9 @@ html {
         right: 1px;
       }
       .subject {
-        min-height: 2rem;
+        min-height: auto;
+        // min-height: 2rem;
+        margin-bottom: 0.5rem;
         font-size: 1rem;
         color: color.$primary !important;
       }

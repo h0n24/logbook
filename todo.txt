@@ -1,22 +1,3 @@
-TODO next:
-
-- u skupiny v presence -> možnost vygenerovat tabulku se seznamem studentů
-
-kód: 
-
-.table .presents_stud td:not(.name) {
-    display: none;
-}
-
-.table .presents_stud [ng-model="stud.was"] {
-    display: none;
-}
-
-.wrapper-students .table thead {
-    display: none;
-}
-
-
 TODO possible:
 
 zakomponovat responder a zjednodušit práci

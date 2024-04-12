@@ -160,6 +160,11 @@ html main.content .presents {
     li {
       margin-right: 0;
     }
+
+    &:empty,
+    &:not(:has(li)) {
+      display: none;
+    }
   }
 
   .pars li,

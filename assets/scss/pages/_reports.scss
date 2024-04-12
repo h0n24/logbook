@@ -100,6 +100,10 @@ html main.content .report {
         width: 50%;
         padding-left: 1rem;
       }
+
+      p:first-child {
+        white-space: nowrap;
+      }
     }
 
     .not_empty {

@@ -4,7 +4,8 @@ const replacements = [] as [string, string][];
 
 // nenalezeno v lokalizačním systému
 replacements.push(["№", "č. "]);
-replacements.push(["ч", " hod"]);
+replacements.push(["ч.", " hod "]);
+replacements.push(["мин.", " min"]);
 replacements.push(["лет", "let"]);
 
 // custom náhrady ----------
@@ -13,6 +14,8 @@ replacements.push(["Označte online", "Online"]);
 replacements.push(["Označit přítomnost", "Na hodině?"]);
 
 replacements.push(["Naposledy v MyStatu :", "Naposledy v MyStatu"]); // není jisté, zda půjde
+
+replacements.push(["Prezentácia projektu", "Prezentace projektu"]);
 
 // chyby v lokalizaci ----------
 // může být změněno v lokalizačním systému:

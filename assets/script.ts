@@ -15,6 +15,7 @@ import { homeworkEnhancements } from "./ts/presenceAddHomework";
 import { homeworkAutomation } from "./ts/homework";
 import { addRightClickStar } from "./ts/contextMenuStar";
 import { scheduleEnhancements } from "./ts/schedule";
+import { reportsEnhacements } from "./ts/reports";
 
 // debug
 // import { debugAngular } from "./ts/debugAngular";
@@ -53,7 +54,15 @@ document.body.addEventListener("contextmenu", onContextMenu);
     scope.$on(
       "$stateChangeSuccess",
       function (event, toState, toParams, fromState, fromParams) {
-        console.log("hlavní", event, toState, toParams, fromState, fromParams);
+        console.log(
+          ">>>",
+          toState.name,
+          { event },
+          { toState },
+          { toParams },
+          { fromState },
+          { fromParams }
+        );
 
         const state = toState.name;
 
@@ -86,6 +95,8 @@ document.body.addEventListener("contextmenu", onContextMenu);
           homeworkAutomation(state);
 
           scheduleEnhancements(state);
+
+          reportsEnhacements(state);
         }
 
         // mutation observer with debounce, it checks if loading ended
