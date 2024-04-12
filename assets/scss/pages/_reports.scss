@@ -16,7 +16,7 @@ html main.content .report {
 
   #report .schedule .table {
     min-width: auto;
-    width: max-content;
+    width: max-content !important;
     display: table;
 
     thead {
@@ -95,6 +95,7 @@ html main.content .report {
     .reportDay-inner {
       display: flex;
       justify-content: space-around;
+      padding-right: 1rem;
 
       p {
         width: 50%;
@@ -188,5 +189,31 @@ html main.content .report {
 
   .form-report button {
     text-transform: initial;
+  }
+
+  .lab_work-table.hide-empty-cols {
+    // tbody td:not(:has(div)) {
+    //   // background-color: blue !important;
+    //   display: none;
+    // }
+    .hidden-column {
+      display: none;
+      // background-color: blue !important;
+    }
+  }
+
+  .hide-empty-cols-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    input[type="checkbox"] {
+      margin: 0;
+      accent-color: rgb(1, 135, 208);
+      width: 1rem;
+      height: 1rem;
+    }
   }
 }

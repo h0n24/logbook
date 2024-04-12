@@ -102,6 +102,9 @@ function hideRowsWithEmptyContent() {
 export function scheduleEnhancements(state) {
   if (state !== "schedulePage") return;
 
+  const hash = window.location.hash;
+  if (hash !== "#/schedulePage") return;
+
   // needs small timeout because angular firstly
   // adds and after that removes previous rows
   // so it would count previous rows as present

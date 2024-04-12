@@ -589,6 +589,9 @@ function printTable() {
 export function presenceEnhancements(state) {
   if (state !== "presents") return;
 
+  const hash = window.location.hash;
+  if (hash !== "#/presents") return;
+
   // needs small timeout because angular firstly
   // adds and after that removes previous rows
   // so it would count previous rows as present

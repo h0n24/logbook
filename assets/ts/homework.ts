@@ -401,6 +401,9 @@ function manipulateWithWindowOpen() {
 export function homeworkAutomation(state) {
   if (state !== "homeWork") return;
 
+  const hash = window.location.hash;
+  if (hash !== "#/homeWork") return;
+
   // needs small timeout because angular firstly
   // adds and after that removes previous rows
   // so it would count previous rows as present

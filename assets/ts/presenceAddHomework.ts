@@ -1,6 +1,9 @@
 export function homeworkEnhancements(state) {
   if (state !== "presents.addHomeWork") return;
 
+  const hash = window.location.hash;
+  if (hash !== "#/addHomeWork") return; // TODO: check - only assumed
+
   // needs small timeout because angular firstly
   // adds and after that removes previous rows
   // so it would count previous rows as present

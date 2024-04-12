@@ -8,6 +8,8 @@ replacements.push(["ч.", " hod "]);
 replacements.push(["мин.", " min"]);
 replacements.push(["лет", "let"]);
 
+replacements.push(["UI/UX-TH-11 -23", "UI/UX-TH-11-23"]); // can be removed after year 2025
+
 // custom náhrady ----------
 replacements.push(["Označte online", "Online"]);
 // replacements.push(["Označit přítomnost", "Přítomen?"]);

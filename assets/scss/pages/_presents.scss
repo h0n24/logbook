@@ -1218,6 +1218,107 @@ html main.content .presents {
   }
 } // end of presents
 
+body .presents #presentsModal {
+  width: 600px;
+
+  h4 {
+    text-align: left;
+    font-size: 1.25rem;
+    color: color.$dark;
+    margin-bottom: 2rem;
+  }
+}
+
+// modal with additional presence request
+#presentsModal {
+  .left-form-side {
+    display: flex;
+    width: 100%;
+    float: none;
+    gap: 1rem;
+
+    md-select {
+      margin-top: 0;
+    }
+  }
+
+  .right-form-side {
+    width: 100%;
+    float: none;
+  }
+
+  .clearfix {
+    display: none;
+  }
+
+  .modal-footer {
+    padding: 0;
+  }
+
+  md-input-container {
+    padding: 0;
+  }
+
+  md-input-container.md-input-focused label,
+  md-input-container.md-input-has-value label {
+    margin-bottom: 0.2rem;
+  }
+
+  md-input-container:not(.md-input-invalid).md-input-focused label,
+  md-input-container:not(.md-input-invalid).md-input-focused md-icon {
+    color: color.$dark !important;
+  }
+
+  .md-errors-spacer:empty {
+    display: none;
+  }
+
+  .modal-footer button.btn.btn-flat {
+    margin-top: 0 !important;
+  }
+
+  .modal-footer.footer-table {
+    margin: 0;
+
+    table {
+      width: auto;
+    }
+  }
+
+  .modal-footer.footer-table thead {
+    background-color: #fff;
+
+    th {
+      color: color.$dark;
+      text-align: left !important;
+      border-bottom: 0.05rem solid #dadee4;
+      border-bottom-width: 0.1rem;
+      padding: 0.6rem 0.4rem;
+      width: auto;
+      height: auto;
+      font-weight: 700;
+
+      i.material-icons {
+        // color: color.$dark;
+        display: none;
+      }
+    }
+  }
+  .modal-footer.footer-table tbody {
+    td {
+      text-align: left !important;
+      border-bottom: 0.05rem solid #dadee4;
+      padding: 0.6rem 0.4rem;
+      height: auto;
+      text-transform: lowercase;
+
+      &:first-child::before {
+        display: none;
+      }
+    }
+  }
+}
+
 // own functionality
 .print-students-button {
   float: right;
