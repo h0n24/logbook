@@ -22,6 +22,7 @@ import { reportsEnhacements } from "./ts/reports";
 // debugAngular();
 
 // grab links to assets and download them
+// TODO: dont forget to manually comment validateCommentLength() in homeWOrkCtrl.js as its buggy
 let needsRedownloadAssets = false;
 import { findScripts } from "./ts/automate/find-js-files";
 if (needsRedownloadAssets) {
@@ -43,6 +44,9 @@ document.body.addEventListener("contextmenu", onContextMenu);
 // after angular ---------------------------------------------------------------
 (function () {
   try {
+    // trap event listeners
+    incl.trapAddEventListeners();
+
     // save angular scope
     // @ts-ignore: Not in this file, it's on the website
     let scope = angular.element(document).scope();

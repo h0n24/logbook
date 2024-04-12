@@ -329,6 +329,16 @@ html .md-dialog-container {
 
   .hw-md_single_stud-work__outer {
     margin-bottom: 1rem;
+
+    // if has no file
+    .flex-center {
+      visibility: hidden;
+    }
+
+    // if has file
+    .flex-center:has(div) {
+      visibility: visible;
+    }
   }
 
   .hw-md_stud-work__wrap,
@@ -495,5 +505,11 @@ body md-dialog.hw-md_single,
 body md-dialog.hw-md {
   .btn {
     background-color: color.$primary !important;
+  }
+}
+
+body .hw-md_content {
+  br {
+    display: none;
   }
 }

@@ -29,8 +29,9 @@ function enhanceSingleHomeworkFromModalAfterEvent() {
             ".md-dialog-container[tabindex='-1'] md-dialog .hw-md_single__content"
           ) as Element;
 
+          if (!newHomework) return;
           enhanceHomeworkAssessment(newHomework, true);
-        }, 500);
+        }, 1);
       });
     }
   } catch (error) {}
@@ -38,9 +39,12 @@ function enhanceSingleHomeworkFromModalAfterEvent() {
 
 function findStudentsFirstName(homework: Element, single?: boolean) {
   const singleSel = single ? ".hw-md_single_stud__info" : ".hw-md_stud__info";
+
   const fullNameEl = homework.querySelector(
     `${singleSel} .bold`
   ) as HTMLSpanElement;
+
+  if (!fullNameEl) return "";
 
   // find vocativ for a name
   const fullName = fullNameEl.innerText;
@@ -89,6 +93,8 @@ function automateMessagesForStudents(
     ".hw-md_single_teacher__comment"
   ) as HTMLTextAreaElement;
 
+  if (!textarea) return;
+
   let partialInteresting = selectRandomFromArray([
     "Moc pěkná práce!",
     "Luxusní práce!",
@@ -115,6 +121,7 @@ function automateMessagesForStudents(
 
   // simulate input event
   textarea.dispatchEvent(new Event("input"));
+  textarea.dispatchEvent(new Event("change"));
 
   // hide message count until textarea is changed
   const messageCount = homework.querySelector(
@@ -128,16 +135,23 @@ function automateMessagesForStudents(
 }
 
 function makeURLinTextClickable(homework) {
-  // if you find class .hw-md_single_stud-work__answer-text make any text inside that is a link clickable
-  const studentsComments = homework.querySelector(
-    ".hw-md_single_stud-work__answer-text"
-  );
+  try {
+    // if you find class .hw-md_single_stud-work__answer-text make any text inside that is a link clickable
+    const studentsComments = homework.querySelector(
+      ".hw-md_single_stud-work__answer-text"
+    );
 
-  let originalText = studentsComments.innerText;
-  let newText = createUrlfromText(originalText);
+    if (studentsComments === null) return;
+    let originalText = studentsComments.innerText;
 
-  if (newText) {
-    studentsComments.innerHTML = newText;
+    if (!originalText) return;
+    let newText = createUrlfromText(originalText);
+
+    if (newText) {
+      studentsComments.innerHTML = newText;
+    }
+  } catch (error) {
+    console.log("makeURLinTextClickable error", error);
   }
 }
 
@@ -161,6 +175,7 @@ function createUrlfromText(originalText: any) {
 }
 
 function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
+  if (homework === null) return;
   // prevent doing this multiple times by adding a data-attribute alreadyEnhanced
   if (homework.getAttribute("alreadyEnhanced") === "true") {
     return;
@@ -234,23 +249,79 @@ function convertnl2br(text: string) {
   return text.replace(/(?:\r\n|\r|\n)/g, "<br>");
 }
 
-function createModalForFiles(data, url) {
-  // detect if #modal-file exists and if it does, just update the content
-  const existingModal = document.querySelector("#modal-file");
-  if (existingModal) {
-    const pre = existingModal.querySelector(".modal-pre") as HTMLPreElement;
-    let dataText = createUrlfromText(data ?? "") ?? "";
-    dataText = convertnl2br(dataText);
-    pre.innerHTML = dataText;
-    existingModal.classList.add("active");
-    let download = existingModal.querySelector(
-      ".modal-footer a"
-    ) as HTMLAnchorElement;
-    download.href = url;
-    return;
+function addOriginalEventListenerBack() {
+  function eventListenerForOldModal(event) {
+    if (event.key === "Escape") {
+      const myDialog = document.querySelector("#myDialog") as Element;
+
+      if (myDialog) myDialog.remove();
+
+      // remove event listeners from body
+      // @ts-ignore
+      document.body.removeEventListeners("keydown");
+
+      // remove class .md-dialog-is-showing from body
+      document.body.classList.remove("md-dialog-is-showing");
+    }
   }
 
-  // create modal via HTML dialog
+  document.body.addEventListener("keyup", eventListenerForOldModal);
+}
+
+function eventListenerForNewModal(event) {
+  if (event.key === "Escape") {
+    const dialogElement = document.querySelector("#modal-file") as Element;
+    dialogElement.classList.remove("active");
+  }
+}
+
+function removeEventListenerFromOriginalDialogWrapper() {
+  // TODO: works randomly, not always, needs future rework
+  // @ts-ignore
+  document.body.removeEventListeners("keydown");
+  // @ts-ignore
+  document.body.removeEventListeners("keyup");
+  // @ts-ignore
+  document.body.removeEventListeners("keypress");
+}
+
+function createEventListenerForFileModal() {
+  // removeEventListenerFromOriginalDialogWrapper();
+
+  document.addEventListener("keyup", eventListenerForNewModal);
+}
+
+function addDataToPre(type: any, data: any, pre: HTMLPreElement) {
+  if (type === "text") {
+    let dataText = createUrlfromText(data ?? "") ?? "";
+    if (!dataText) {
+      dataText = data;
+    }
+    if (!dataText) {
+      dataText =
+        "Obsah souboru se nepodařilo načíst. :( Zkuste to ještě jednou, nebo si jej stáhněte";
+    }
+    dataText = convertnl2br(dataText);
+    // @ts-ignore
+    pre.innerHTML = dataText;
+  }
+  if (type === "pdf") {
+    const iframe = document.createElement("iframe");
+    iframe.src = data;
+
+    pre.innerHTML = "";
+    pre.appendChild(iframe);
+  }
+}
+
+function createModalLayout(data: any, url: any, type: any) {
+  function eventCloseNewModal(event) {
+    event.preventDefault();
+    dialog.classList.remove("active");
+    // TODO: uncomment
+    // addOriginalEventListenerBack2(eventListenerForNewModal);
+  }
+
   const dialog = document.createElement("div");
   dialog.id = "modal-file";
   dialog.classList.add("modal-file", "active");
@@ -277,20 +348,21 @@ function createModalForFiles(data, url) {
 
   // create modal title
   const title = document.createElement("h4");
-  title.innerText = "Obsah souboru .txt";
+  if (type === "text") {
+    title.textContent = "Obsah souboru .txt";
+  }
+  if (type === "pdf") {
+    title.textContent = "Obsah souboru .pdf";
+  }
 
   // create div with class .modal-body
   const body = document.createElement("div");
   body.classList.add("modal-body");
 
   // create pre with data from file
-  const pre = document.createElement("div");
+  const pre = document.createElement("div") as unknown as HTMLPreElement;
   pre.classList.add("modal-pre");
-
-  let dataText = createUrlfromText(data ?? "") ?? "";
-  dataText = convertnl2br(dataText);
-  // @ts-ignore
-  pre.innerHTML = dataText;
+  addDataToPre(type, data, pre);
 
   // create modal-footer
   const footer = document.createElement("div");
@@ -308,22 +380,13 @@ function createModalForFiles(data, url) {
   close2.classList.add("btn-modal-close2");
   close2.innerText = "Zavřít okno";
 
-  // add button to close the modal
-  close.addEventListener("click", function (event) {
-    event.preventDefault();
-    dialog.classList.remove("active");
-  });
+  // add buttons to close the modal
+  close.addEventListener("click", eventCloseNewModal);
+  close2.addEventListener("click", eventCloseNewModal);
+  modalOverlay.addEventListener("click", eventCloseNewModal);
 
-  close2.addEventListener("click", function (event) {
-    event.preventDefault();
-    dialog.classList.remove("active");
-  });
-
-  // modal overlay click
-  modalOverlay.addEventListener("click", function (event) {
-    event.preventDefault();
-    dialog.classList.remove("active");
-  });
+  // close modal on escape key
+  createEventListenerForFileModal();
 
   // append elements
   header.appendChild(title);
@@ -339,13 +402,25 @@ function createModalForFiles(data, url) {
 
   // append modal to body
   document.body.appendChild(dialog);
+}
 
-  // close modal on escape key
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-      dialog.classList.remove("active");
-    }
-  });
+function createModalForFiles(data, url, type) {
+  // detect if #modal-file exists and if it does, just update the content
+  const existingModal = document.querySelector("#modal-file");
+  if (existingModal) {
+    const pre = existingModal.querySelector(".modal-pre") as HTMLPreElement;
+    addDataToPre(type, data, pre);
+
+    existingModal.classList.add("active");
+    let download = existingModal.querySelector(
+      ".modal-footer a"
+    ) as HTMLAnchorElement;
+    download.href = url;
+    return;
+  }
+
+  // create modal via HTML dialog
+  createModalLayout(data, url, type);
 }
 
 function manipulateWithWindowOpen() {
@@ -356,13 +431,12 @@ function manipulateWithWindowOpen() {
       // console.log("url", url, windowName, windowFeatures);
       const urlText = url as string;
 
-      // TODO: check if the modal is open?
+      // TODO FUTURE: detect open modals and close them
 
       // if url contains "https://fsx1.itstep.org/api/v1/files"
       // then open the file in javascript
       if (urlText.includes("https://fsx1.itstep.org/api/v1/files")) {
         // fetch the file
-
         // Q: how to get the filename from the response? i know the browser can do it
         fetch(urlText, {
           method: "GET",
@@ -374,6 +448,8 @@ function manipulateWithWindowOpen() {
             return response.blob();
           })
           .then((blob) => {
+            // console.log(blob.type);
+
             // create a url for the file
             if (blob.type.includes("text")) {
               // read contents of the blob via FileReader
@@ -381,10 +457,13 @@ function manipulateWithWindowOpen() {
 
               reader.addEventListener("load", function () {
                 const data = reader.result;
-                createModalForFiles(data, urlText);
+                createModalForFiles(data, urlText, "text");
               });
 
               reader.readAsText(blob);
+            } else if (blob.type.includes("pdf")) {
+              const url = URL.createObjectURL(blob);
+              createModalForFiles(url, urlText, "pdf");
             } else {
               // returning original function for other type of files such as "application/zip"
               return original(url, windowName, windowFeatures);
