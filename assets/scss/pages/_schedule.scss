@@ -172,3 +172,16 @@ html {
   //   z-index: 2;
   // }
 }
+
+#download-ical {
+  color: color.$primary;
+  text-decoration: none;
+
+  span {
+    color: color.$dark;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

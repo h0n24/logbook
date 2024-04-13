@@ -10,7 +10,11 @@
     "128": "icon_128.png"
   },
   "host_permissions": ["http://*/*", "https://*/*"],
-  "permissions": ["declarativeNetRequest", "declarativeNetRequestFeedback"],
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "storage"
+  ],
   "declarative_net_request": {
     "rule_resources": [
       {

@@ -1,5 +1,7 @@
 TODO possible:
 
+zakomponovat tisk layoutu studentů
+
 zakomponovat responder a zjednodušit práci
 
 při kliknutí na md-select, autofocus input, pokud existuje
@@ -15,6 +17,9 @@ ukazovat, jestli jsem zadal dú -> na hlavní stránce
 rework setTimeout přes https://jsfiddle.net/e7gw3Lm8/
 
 TODO probably impossible yet:
+
+zavírat modals postupně, nejvyšší nejdříve, zatím se zavírají všechny najednou
+(nepodařilo se mi annulovat event listener, který zavírá originální model)
 
 udělat offline verzi, která napíše "jste offline", zkuste restartovat VPN + online checker
 
