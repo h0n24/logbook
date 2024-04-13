@@ -201,7 +201,38 @@ function formatIsoDateString(date, withoutZatEnd = true) {
   return formatted;
 }
 
-function icalEvent(summary, notes, startDate, endDate, isOffline = false) {
+function addAlarmToEvent(isAlarm) {
+  let alarm = "";
+
+  if (isAlarm) {
+    // Example: BEGIN:VALARM
+    alarm += `BEGIN:VALARM\r\n`;
+
+    // Example: ACTION:DISPLAY
+    alarm += `ACTION:DISPLAY\r\n`;
+
+    // Example: DESCRIPTION:This is an event reminder
+    alarm += `DESCRIPTION:Nezapomeň: představit závěrečnou práci + zadat jako domácí úkol\r\n`;
+
+    // Example: TRIGGER:-P0DT0H15M0S
+    // want to trigger 7 days and 15 minutes before the event
+    alarm += `TRIGGER:-P7DT0H15M0S\r\n`;
+
+    // Example: END:VALARM
+    alarm += `END:VALARM\r\n`;
+  }
+
+  return alarm;
+}
+
+function icalEvent(
+  summary,
+  notes,
+  startDate,
+  endDate,
+  isOffline = false,
+  addAlarm = false
+) {
   // basic structure was made based on ideas from this video: https://www.youtube.com/watch?v=bgUL35CztVY
   // it was premade on the iphone and then exported to icalendar format
 
@@ -267,6 +298,14 @@ function icalEvent(summary, notes, startDate, endDate, isOffline = false) {
     // appleStructured = appleStructured.replace(/(.{74})/g, "$1\r\n ");
     event += `${appleStructured}\r\n`;
   }
+
+  // add alarm if "summary" contains "opakování"
+  let testSummary = summary.toLowerCase();
+  // convert to lowercase and remove diacritics
+  testSummary = testSummary.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  // check if testSummary contains "opakovani"
+  let isAlarm = testSummary.includes("opakovani");
+  event += addAlarmToEvent(isAlarm);
 
   // end event
   event += "END:VEVENT\r\n";
