@@ -1,5 +1,7 @@
 TODO possible:
 
+homework - možnosti rychlých přidání odpovědí, třeba "Komentáře přidány do Figmy" nebo "Děkuji"
+
 zakomponovat tisk layoutu studentů
 
 zakomponovat responder a zjednodušit práci

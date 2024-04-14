@@ -5,6 +5,7 @@ import { debounce } from "./_incl";
 // TODO FUTURE: detect multiple opened modals and close them
 
 let filesAllowedToShowAsText = [".txt", ".js", ".css", ".html", ".json", ".md"];
+let filesAllowedToShowAsImage = [".png", ".jpg", ".jpeg", ".gif", ".svg"];
 let zipBypassModal = false; // allow at the beginning to open the file
 let zipBypassModalFirstRun = true; // allow at the beginning to open the file
 
@@ -174,7 +175,6 @@ function makeURLinTextClickable(homework) {
 
     // detect if original text contains only url
     let onlyUrl = originalText.match(/(https?:\/\/[^\s]+)/g);
-    console.log({ onlyUrl });
 
     if (onlyUrl && onlyUrl.length === 1) {
       // add clickable span to the studentsComments
@@ -389,6 +389,9 @@ function addDataToPre(type: any, data: any, pre: HTMLPreElement) {
     dataText = convertnl2br(dataText);
 
     pre.innerHTML = dataText;
+  }
+  if (filesAllowedToShowAsImage.includes("." + type)) {
+    pre.innerHTML = `<img src="${data}" alt="Obrázek" />`;
   }
 
   if (type === "pdf") {
@@ -662,7 +665,7 @@ function createTrForZipFileTable(
   tbody: HTMLTableSectionElement
 ) {
   const tr = document.createElement("tr");
-  tr.title = `Klinutím zobrazíte obsah souboru ${entry.filename}. Soubor se stáhne pokud nejde o textový soubor.`;
+  tr.title = `Klinutím zobrazíte obsah souboru ${entry.filename}. Soubor se stáhne, pokud jde o neznámý typ.`;
 
   // get shortcut name from entry.filename
   let extension = getExtensionFromEntryFilename(entry);
@@ -757,11 +760,23 @@ function addClickEventToTr(tr: HTMLTableRowElement) {
       // then show the text in modal
       if (filesAllowedToShowAsText.includes("." + extension)) {
         getTextFromBlobAndCreateModal(blob, entry, extension);
+      } else if (filesAllowedToShowAsImage.includes("." + extension)) {
+        const url = URL.createObjectURL(blob);
+
+        // has to be converted to new blob so it changes the type
+        const pdfBlob = new Blob([blob], {
+          type: "image/" + extension,
+        });
+
+        // create base64 from blob
+        const newDataURL = URL.createObjectURL(pdfBlob);
+
+        createModalForFiles(newDataURL, url, extension, entry.filename, true);
       } else if (entry.filename.includes(".pdf")) {
         const url = URL.createObjectURL(blob);
 
         // has to be converted to new blob so it changes the type
-        var pdfBlob = new Blob([blob], {
+        const pdfBlob = new Blob([blob], {
           type: "application/pdf",
         });
 

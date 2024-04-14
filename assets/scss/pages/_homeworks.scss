@@ -290,6 +290,10 @@ html .md-dialog-container {
     animation: fadeIn 1.6s forwards 0.1s;
   }
 
+  .hw-md_single__btn-wrap .hw-md_single_btn-delete {
+    margin-left: -0.4rem;
+  }
+
   .flex-center.hw-md_single_btn-delete {
     user-select: none;
     opacity: 0;
@@ -817,12 +821,14 @@ body .hw-md_single__content {
   margin-top: -1rem;
   margin-right: -1rem;
   cursor: pointer;
+  transition: background-color 0.3s;
 
   &:hover {
     background: color.$secondary;
   }
   &:active,
   &:focus {
+    transition: background-color 0.125s;
     background: color.$primary-hover;
   }
 }
