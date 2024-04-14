@@ -115,12 +115,14 @@ html {
   // restyle all buttons
   .btn,
   .btn-floating {
-    background-color: color.$primary !important;
-    user-select: none;
-    border-radius: style.$border-radius;
-    padding: style.$button-padding;
-    font-weight: style.$button-weight;
-    font-size: style.$button-font-size;
+    // background-color: color.$primary !important;
+    // user-select: none;
+    // border-radius: style.$border-radius;
+    // padding: style.$button-padding;
+    // font-weight: style.$button-weight;
+    // font-size: style.$button-font-size;
+
+    @include include.button-primary;
   }
 
   .md-button {
@@ -457,6 +459,15 @@ html {
     // transition: none !important;
     opacity: 0 !important;
     transform: translate3d(0, -200%, 0);
+  }
+
+  // taking unnecessary space
+  md-input-container .md-errors-spacer {
+    display: none;
+  }
+
+  .hw-md_single_teacher__file-wrap {
+    bottom: 0 !important;
   }
 
   // internal menu

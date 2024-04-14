@@ -1,4 +1,7 @@
 import { vocative } from "./vocative";
+import * as zip from "@zip.js/zip.js";
+
+let filesAllowedToShowAsText = [".txt", ".js", ".css", ".html", ".json", ".md"];
 
 function selectRandomFromArray(array: string[]): string {
   return array[Math.floor(Math.random() * array.length)];
@@ -31,7 +34,7 @@ function enhanceSingleHomeworkFromModalAfterEvent() {
 
           if (!newHomework) return;
           enhanceHomeworkAssessment(newHomework, true);
-        }, 1);
+        }, 10);
       });
     }
   } catch (error) {}
@@ -183,12 +186,35 @@ function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
     let firstName = findStudentsFirstName(homework, single);
     let selectedMark = getSelectedMark(homework);
 
+    betterButtonsRework(homework);
+
     automateMessagesForStudents(homework, firstName, selectedMark);
 
     makeURLinTextClickable(homework);
 
     homework.setAttribute("alreadyEnhanced", "true");
   }
+}
+
+function betterButtonsRework(homework: Element) {
+  // add new class .hw-better-buttons
+  homework.classList.add("hw-better-buttons");
+
+  try {
+    // find .hw-md_stud-work__download-wrap
+    let lectorWrap = homework.querySelector(
+      ".hw-md_stud-work__download-wrap"
+    ) as HTMLDivElement;
+    // add text to it as "Stáhnout zadání od učitele"
+    lectorWrap.innerHTML = "Zadání od lektora";
+
+    // find .hw-md_single_stud-work__download-wrap
+    let studentWrap = homework.querySelector(
+      ".hw-md_single_stud-work__download-wrap"
+    ) as HTMLDivElement;
+    // add text to it as "Stáhnout studentovu práci"
+    studentWrap.innerHTML = "Stáhnout práci studenta";
+  } catch (error) {}
 }
 
 // original menu has a bug -> it doesn't update homework count
@@ -276,7 +302,7 @@ function eventListenerForNewModal(event) {
 }
 
 function removeEventListenerFromOriginalDialogWrapper() {
-  // TODO: works randomly, not always, needs future rework
+  // BUG: works randomly, not always, needs future rework
   // @ts-ignore
   document.body.removeEventListeners("keydown");
   // @ts-ignore
@@ -292,19 +318,37 @@ function createEventListenerForFileModal() {
 }
 
 function addDataToPre(type: any, data: any, pre: HTMLPreElement) {
+  function ifUnableToRead(dataText: string) {
+    if (!dataText) {
+      dataText =
+        "Obsah souboru se nepodařilo načíst. :( Zkuste to ještě jednou, nebo si jej stáhněte";
+    }
+    return dataText;
+  }
+
   if (type === "text") {
     let dataText = createUrlfromText(data ?? "") ?? "";
     if (!dataText) {
       dataText = data;
     }
-    if (!dataText) {
-      dataText =
-        "Obsah souboru se nepodařilo načíst. :( Zkuste to ještě jednou, nebo si jej stáhněte";
-    }
+    dataText = ifUnableToRead(dataText);
     dataText = convertnl2br(dataText);
     // @ts-ignore
     pre.innerHTML = dataText;
   }
+  if (filesAllowedToShowAsText.includes("." + type)) {
+    let dataText = data;
+    dataText = ifUnableToRead(dataText);
+
+    if (type === "html") {
+      dataText = dataText.replace(/</g, "&lt;");
+      dataText = dataText.replace(/>/g, "&gt;");
+    }
+
+    dataText = convertnl2br(dataText);
+    pre.innerHTML = dataText;
+  }
+
   if (type === "pdf") {
     const iframe = document.createElement("iframe");
     iframe.src = data;
@@ -312,13 +356,17 @@ function addDataToPre(type: any, data: any, pre: HTMLPreElement) {
     pre.innerHTML = "";
     pre.appendChild(iframe);
   }
+  if (type === "zip") {
+    pre.innerHTML = "";
+    pre.appendChild(data);
+  }
 }
 
-function createModalLayout(data: any, url: any, type: any) {
+function createModalLayout(data: any, url: any, type: any, filename: any = "") {
   function eventCloseNewModal(event) {
     event.preventDefault();
     dialog.classList.remove("active");
-    // TODO: uncomment
+    // BUG: doesn't work as intended :(
     // addOriginalEventListenerBack2(eventListenerForNewModal);
   }
 
@@ -348,12 +396,7 @@ function createModalLayout(data: any, url: any, type: any) {
 
   // create modal title
   const title = document.createElement("h4");
-  if (type === "text") {
-    title.textContent = "Obsah souboru .txt";
-  }
-  if (type === "pdf") {
-    title.textContent = "Obsah souboru .pdf";
-  }
+  createModalTitle(type, title);
 
   // create div with class .modal-body
   const body = document.createElement("div");
@@ -370,19 +413,20 @@ function createModalLayout(data: any, url: any, type: any) {
 
   // add button to download original file
   const download = document.createElement("a");
+  download.id = "modal-download-file";
   download.classList.add("btn", "btn-primary");
-  download.href = url;
-  download.innerText = "Stáhnout původní soubor";
+  download.target = "_blank"; // to open in new tab
+  updateDownloadButtonData(download, url, filename);
 
   // add second button to close
-  const close2 = document.createElement("a");
-  close2.href = "#close";
-  close2.classList.add("btn-modal-close2");
-  close2.innerText = "Zavřít okno";
+  // const close2 = document.createElement("a");
+  // close2.href = "#close";
+  // close2.classList.add("btn-modal-close2");
+  // close2.innerText = "Zavřít okno";
 
   // add buttons to close the modal
   close.addEventListener("click", eventCloseNewModal);
-  close2.addEventListener("click", eventCloseNewModal);
+  // close2.addEventListener("click", eventCloseNewModal);
   modalOverlay.addEventListener("click", eventCloseNewModal);
 
   // close modal on escape key
@@ -392,8 +436,8 @@ function createModalLayout(data: any, url: any, type: any) {
   header.appendChild(title);
   header.appendChild(close);
   body.appendChild(pre);
+  // footer.appendChild(close2);
   footer.appendChild(download);
-  footer.appendChild(close2);
   container.appendChild(header);
   container.appendChild(body);
   container.appendChild(footer);
@@ -404,23 +448,274 @@ function createModalLayout(data: any, url: any, type: any) {
   document.body.appendChild(dialog);
 }
 
-function createModalForFiles(data, url, type) {
+function createModalTitle(type: any, title: HTMLHeadingElement) {
+  if (type === "text") {
+    title.textContent = "Obsah souboru .txt";
+  } else if (type === "zip") {
+    title.textContent = "Obsah souboru .zip vyjma složek";
+  } else {
+    title.textContent = `Obsah souboru .${type}`;
+  }
+}
+
+function updateDownloadButtonData(
+  download: HTMLAnchorElement,
+  url: any,
+  filename: any
+) {
+  download.href = url;
+  download.setAttribute("download", filename); // to force download
+  if (filename === "") {
+    download.innerHTML = "Stáhnout původní soubor";
+  } else {
+    let shorterFilename = filename;
+    if (filename.length > 30) {
+      // shorten filename from the middle
+      const firstHalf = filename.slice(0, 15);
+      const secondHalf = filename.slice(-15);
+      shorterFilename = firstHalf + " … " + secondHalf;
+    }
+    download.title = `Celý název souboru: ${filename}`;
+    download.innerHTML = `Stáhnout soubor <span>${shorterFilename}</span>`;
+  }
+}
+
+function createModalForFiles(data, url, type, filename = "") {
   // detect if #modal-file exists and if it does, just update the content
   const existingModal = document.querySelector("#modal-file");
   if (existingModal) {
+    existingModal.classList.add("active");
+
+    const title = existingModal.querySelector("h4") as HTMLHeadingElement;
+    createModalTitle(type, title);
+
     const pre = existingModal.querySelector(".modal-pre") as HTMLPreElement;
     addDataToPre(type, data, pre);
 
-    existingModal.classList.add("active");
     let download = existingModal.querySelector(
-      ".modal-footer a"
+      ".modal-footer #modal-download-file"
     ) as HTMLAnchorElement;
-    download.href = url;
+    updateDownloadButtonData(download, url, filename);
+
     return;
   }
 
   // create modal via HTML dialog
-  createModalLayout(data, url, type);
+  createModalLayout(data, url, type, filename);
+}
+
+function createTheadForZipFileTable() {
+  const thead = document.createElement("thead");
+  const trHead = document.createElement("tr");
+
+  const thFilename = document.createElement("th");
+  thFilename.textContent = "Cesta nebo název souboru";
+  trHead.appendChild(thFilename);
+
+  const thSize = document.createElement("th");
+  thSize.textContent = "Velikost";
+  trHead.appendChild(thSize);
+
+  const thDate = document.createElement("th");
+  thDate.textContent = "Datum";
+  trHead.appendChild(thDate);
+
+  thead.appendChild(trHead);
+  return thead;
+}
+
+async function readZipFile(blob, originalFileUrl) {
+  const reader = new FileReader();
+  reader.readAsArrayBuffer(blob);
+
+  reader.addEventListener("load", function () {
+    const arrayBuffer = reader.result as ArrayBuffer;
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const zipReader = new zip.ZipReader(new zip.Uint8ArrayReader(uint8Array));
+
+    const entriesTable = document.createElement("table");
+    entriesTable.id = "zip-entries-table";
+    entriesTable.classList.add("zip-entries-table");
+
+    const thead = createTheadForZipFileTable();
+    const tbody = document.createElement("tbody");
+
+    zipReader.getEntries().then(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.directory) return; // skip directories
+        if (entry.filename.startsWith("__MACOSX")) return; // skip mac os x files
+
+        createTrForZipFileTable(entry, tbody);
+      });
+    });
+
+    // save zipReaderData to global variable
+    // @ts-ignore
+    window.zipReaderData = zipReader;
+
+    entriesTable.appendChild(thead);
+    entriesTable.appendChild(tbody);
+    createModalForFiles(entriesTable, originalFileUrl, "zip");
+  });
+}
+
+function toCzechNumber(number) {
+  return number.toLocaleString("cs-CZ", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1,
+    useGrouping: true,
+  });
+}
+
+function createTrForZipFileTable(
+  entry: zip.Entry,
+  tbody: HTMLTableSectionElement
+) {
+  const tr = document.createElement("tr");
+  tr.title = `Klinutím zobrazíte obsah souboru ${entry.filename}. Soubor se stáhne pokud nejde o textový soubor.`;
+
+  // get shortcut name from entry.filename
+  let extension = getExtensionFromEntryFilename(entry);
+
+  // create td with filename
+  const td = document.createElement("td");
+  td.classList.add("zip-entry-filename");
+
+  // detect / and replace it with <span>/</span>
+  let betterFilename = entry.filename;
+  betterFilename = betterFilename.replace(/\//g, "<span>/</span>");
+
+  // get extension length
+  const extLength = extension.length;
+  // remove extension from filename
+  betterFilename = betterFilename.slice(0, -extLength);
+  // if last character is a dot
+  let hasDot = betterFilename.slice(-1) === ".";
+  let dot = "";
+  if (hasDot) {
+    // then remove it too
+    betterFilename = betterFilename.slice(0, -1);
+    dot = ".";
+  }
+  betterFilename += `<span>${dot}${extension}</span>`;
+
+  // last part after / make <strong>
+  const lastPart = betterFilename.split("<span>/</span>").pop() ?? "";
+  betterFilename = betterFilename.replace(
+    lastPart,
+    `<strong>${lastPart}</strong>`
+  );
+
+  td.innerHTML = betterFilename;
+  tr.appendChild(td);
+
+  // create td with file size
+  const tdSize = document.createElement("td") as HTMLTableCellElement;
+
+  let originalSize = entry.uncompressedSize ?? 0;
+  let betterSize = "";
+  if (originalSize > 1000000) {
+    betterSize = toCzechNumber(originalSize / 1000000) + " MB";
+  } else if (originalSize > 1000) {
+    betterSize = toCzechNumber(originalSize / 1000) + " KB";
+  } else {
+    betterSize = originalSize + " B";
+  }
+
+  tdSize.textContent = betterSize;
+  tr.appendChild(tdSize);
+
+  // create td with last modified date
+  const tdDate = document.createElement("td") as HTMLTableCellElement;
+
+  // localize date to czech and show only day, month, hour and minute
+  let options = {
+    day: "numeric",
+    month: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  } as Intl.DateTimeFormatOptions;
+
+  tdDate.textContent = entry.lastModDate.toLocaleDateString("cs-CZ", options);
+  tr.appendChild(tdDate);
+
+  tbody.appendChild(tr);
+
+  tr.dataset.filename = entry.filename;
+
+  // when clicked on tr, show the file
+  tr.addEventListener("click", function () {
+    addClickEventToTr(tr);
+  });
+}
+
+function addClickEventToTr(tr: HTMLTableRowElement) {
+  // @ts-ignore
+  const zipReader = window.zipReaderData;
+
+  // get entry data from zipReader
+  zipReader.getEntries().then(function (entries) {
+    // find entry by filename
+    // also get filename from dataset.filename
+    const entry = entries.find((e) => e.filename === tr.dataset.filename);
+
+    entry.getData(new zip.BlobWriter()).then(function (blob) {
+      // get extension from entry.filename
+      let extension = getExtensionFromEntryFilename(entry);
+
+      // if includes .txt, .js, .css, .html, .json, .md
+      // then show the text in modal
+      if (filesAllowedToShowAsText.includes("." + extension)) {
+        getTextFromBlobAndCreateModal(blob, entry, extension);
+      } else if (entry.filename.includes(".pdf")) {
+        const url = URL.createObjectURL(blob);
+
+        // has to be converted to new blob so it changes the type
+        var pdfBlob = new Blob([blob], {
+          type: "application/pdf",
+        });
+
+        const newDataURL = URL.createObjectURL(pdfBlob);
+        createModalForFiles(newDataURL, url, "pdf", entry.filename);
+      } else {
+        // download the file defaultly
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = entry.filename;
+        link.click();
+        link.remove();
+      }
+    });
+  });
+}
+
+function getExtensionFromEntryFilename(entry: zip.Entry) {
+  let extension = "";
+
+  // split by / and get last element
+  extension = entry.filename.split("/").pop() ?? "";
+
+  // split by . and get last element
+  extension = extension.split(".").pop() ?? "";
+  return extension;
+}
+
+function getTextFromBlobAndCreateModal(blob: any, entry: any, type: any) {
+  let typeCorrections = type;
+  if (type === ".txt") {
+    typeCorrections = "text";
+  }
+  const reader = new FileReader();
+  reader.readAsText(blob);
+  reader.addEventListener("load", function () {
+    const dataUrl = URL.createObjectURL(blob);
+    createModalForFiles(
+      reader.result,
+      dataUrl,
+      typeCorrections,
+      entry.filename
+    );
+  });
 }
 
 function manipulateWithWindowOpen() {
@@ -428,53 +723,77 @@ function manipulateWithWindowOpen() {
   // @ts-ignore
   window.open = (function (original) {
     return function (url, windowName, windowFeatures) {
-      // console.log("url", url, windowName, windowFeatures);
       const urlText = url as string;
 
       // TODO FUTURE: detect open modals and close them
-
       // if url contains "https://fsx1.itstep.org/api/v1/files"
       // then open the file in javascript
       if (urlText.includes("https://fsx1.itstep.org/api/v1/files")) {
-        // fetch the file
-        // Q: how to get the filename from the response? i know the browser can do it
-        fetch(urlText, {
-          method: "GET",
-          headers: {
-            "Content-Type": "text/plain;charset=UTF-8",
-          },
-        })
-          .then((response) => {
-            return response.blob();
-          })
-          .then((blob) => {
-            // console.log(blob.type);
-
-            // create a url for the file
-            if (blob.type.includes("text")) {
-              // read contents of the blob via FileReader
-              const reader = new FileReader();
-
-              reader.addEventListener("load", function () {
-                const data = reader.result;
-                createModalForFiles(data, urlText, "text");
-              });
-
-              reader.readAsText(blob);
-            } else if (blob.type.includes("pdf")) {
-              const url = URL.createObjectURL(blob);
-              createModalForFiles(url, urlText, "pdf");
-            } else {
-              // returning original function for other type of files such as "application/zip"
-              return original(url, windowName, windowFeatures);
-            }
-          });
+        whenOpeningLinkWithFile({
+          urlText,
+          original,
+          url,
+          windowName,
+          windowFeatures,
+        });
       } else {
         // returning original function
         return original(url, windowName, windowFeatures);
       }
     };
   })(window.open);
+}
+
+function whenOpeningLinkWithFile({
+  urlText,
+  original,
+  url,
+  windowName,
+  windowFeatures,
+}: {
+  urlText: string;
+  original: ((
+    url?: string | URL,
+    target?: string,
+    features?: string
+  ) => Window | null) &
+    ((url?: string | URL, target?: string, features?: string) => Window | null);
+  url: string | URL | undefined;
+  windowName: string | undefined;
+  windowFeatures: string | undefined;
+}) {
+  // fetch the file
+  fetch(urlText, {
+    method: "GET",
+    headers: {
+      "Content-Type": "text/plain;charset=UTF-8",
+    },
+  })
+    .then((response) => {
+      return response.blob();
+    })
+    .then((blob) => {
+      // create a url for the file
+      if (blob.type.includes("text")) {
+        // read contents of the blob via FileReader
+        const reader = new FileReader();
+
+        reader.addEventListener("load", function () {
+          const data = reader.result;
+          createModalForFiles(data, urlText, "text");
+        });
+
+        reader.readAsText(blob);
+      } else if (blob.type.includes("pdf")) {
+        const url = URL.createObjectURL(blob);
+        createModalForFiles(url, urlText, "pdf");
+      } else if (blob.type.includes("zip")) {
+        readZipFile(blob, urlText);
+      } else {
+        // returning original function for other type of files (images, unreadable files, etc.)
+        return original(url, windowName, windowFeatures);
+      }
+    });
 }
 
 export function homeworkAutomation(state) {
@@ -502,5 +821,5 @@ export function homeworkAutomation(state) {
 
       manipulateWithWindowOpen();
     } catch (error) {}
-  }, 100);
+  }, 200);
 }

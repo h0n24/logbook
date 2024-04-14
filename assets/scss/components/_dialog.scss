@@ -1,5 +1,6 @@
 @use "abstracts/style";
 @use "abstracts/color";
+@use "abstracts/include";
 
 html {
   // dialog shadows
@@ -121,6 +122,19 @@ html {
   }
 }
 
+.modal-file .modal-footer {
+  .btn.btn-primary span {
+    // max width: 32characters, show ellipsis, but trim from left
+    max-width: 32ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-flex;
+    justify-content: flex-end;
+    text-align: right;
+  }
+}
+
 .modal-container .modal-header {
   color: #303742;
   padding: 0.8rem;
@@ -162,13 +176,10 @@ html {
 }
 
 .btn-modal-close2 {
-  color: color.$primary;
-  margin-left: 1rem;
-  text-decoration: none;
+  // color: color.$primary;
+  margin-right: 1rem;
 
-  &:hover {
-    text-decoration: underline;
-  }
+  @include include.button-secondary;
 }
 
 .modal-pre {

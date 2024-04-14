@@ -290,6 +290,18 @@ html .md-dialog-container {
     border-top: none;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
+
+    label.flex-center {
+      &:hover {
+        .hw-md_single_teacher__file-download {
+          filter: saturate(0.5);
+        }
+      }
+
+      .hw-md_single_teacher__file {
+        color: color.$primary;
+      }
+    }
   }
   .hw-md_single_teacher__file-count__wrap {
     width: 100%;
@@ -403,6 +415,7 @@ html .md-dialog-container {
     margin-top: 1rem !important;
     padding: 1rem;
     background-color: rgba(color.$toolbars, 0.3);
+    color: #000;
     border-radius: style.$border-radius;
   }
 
@@ -448,6 +461,111 @@ html .md-dialog-container {
       }
     }
   }
+
+  .hw-md_single_btn-delete {
+    cursor: help;
+    transition: filter 0.3s;
+    filter: brightness(1);
+    &:hover {
+      filter: brightness(0.5);
+    }
+  }
+}
+
+#myDialog.md-dialog-container.home_work_modal .hw-md_item {
+  margin-bottom: 3rem;
+  position: relative;
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    // width: calc(100% + 3rem);
+    width: 100%;
+    height: 1px;
+    // background-color: #dadee4;
+    background-color: rgba(0, 0, 0, 0.03);
+    // margin-top: 1rem;
+    // margin-left: -1.5rem;
+    // margin-right: -1.5rem;
+    // bottom: 1rem;
+    bottom: -1.5rem;
+    left: 0;
+  }
+
+  hr {
+    display: none;
+  }
+}
+
+// TODO: reworked buttons to be bigger and more visible
+#myDialog.md-dialog-container.home_work_modal .hw-better-buttons,
+md-dialog-content.hw-md_single__content.hw-better-buttons {
+  // remove unnecessary titles as buttons can do the same
+  .hw-md_stud-work__title,
+  .hw-md_single_stud-work__title {
+    display: none;
+  }
+
+  .hw-md_stud-work__wrap,
+  .hw-md_single_stud-work__outer {
+    column-gap: 1rem;
+  }
+
+  .hw-md_single_stud-work__outer {
+    margin-top: 0.5rem;
+    align-items: start;
+  }
+
+  .hw-md_stud-work__date-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  // style as big buttons
+  .hw-md_stud-work__download-wrap,
+  .hw-md_single_stud-work__download-wrap {
+    // background-color: color.$primary;
+    // color: #fff;
+    // border-radius: style.$border-radius;
+    // border: 1px solid color.$primary;
+    // padding: 0.5rem 1rem;
+    // line-height: 1;
+    // font-size: 1rem;
+    // width: 100%;
+
+    &:before {
+      display: none;
+    }
+  }
+  .hw-md_single_stud-work__download-wrap {
+    @include include.button-primary;
+    // margin-bottom: 0.5rem;
+  }
+
+  .hw-md_stud-work__download-wrap {
+    @include include.button-secondary;
+    padding: 0.5rem 1rem;
+    line-height: 1;
+  }
+
+  .hw-md_stud-work__date-wrap,
+  .hw-md_single_stud-work__date-download {
+    font-size: 0.8rem;
+    // color: lighten(color.$dark, 20%);
+    opacity: 0.3;
+    transition: opacity 0.7s;
+  }
+  .hw-md_stud-work__wrap:hover {
+    .hw-md_stud-work__date-wrap {
+      opacity: 0.7;
+    }
+  }
+  .hw-md_single_stud-work__outer:hover {
+    .hw-md_single_stud-work__date-download {
+      opacity: 0.7;
+    }
+  }
 }
 
 body {
@@ -456,11 +574,16 @@ body {
     font-size: 1rem;
   }
   .hw-md_single .btn span {
-    background-color: color.$primary;
+    // background-color: color.$primary;
+    background-color: transparent;
   }
 
   .hw-md_single__btn-wrap md-dialog .btn {
     background-color: color.$primary !important;
+  }
+
+  .hw-md_single__btn-wrap button.hw-md_single__btn-decline.md-ink-ripple:hover {
+    background-color: color.$red-hover;
   }
 
   .hw-md_single__select-mark .md-button {
@@ -474,6 +597,27 @@ body {
   .hw-md_single__select-mark .md-checked .md-button {
     background-color: color.$primary;
     border-color: color.$primary;
+
+    &:hover {
+      background-color: color.$primary-hover;
+    }
+  }
+
+  md-radio-button {
+    transition: background-color 0.3s;
+  }
+
+  md-radio-button:hover {
+    background-color: color.$secondary-alt-hover;
+
+    &:first-child {
+      border-top-left-radius: style.$border-radius;
+      border-bottom-left-radius: style.$border-radius;
+    }
+    &:last-child {
+      border-top-right-radius: style.$border-radius;
+      border-bottom-right-radius: style.$border-radius;
+    }
   }
 
   .hw-md_single__select-mark md-radio-button .md-button {
@@ -504,12 +648,74 @@ body {
 body md-dialog.hw-md_single,
 body md-dialog.hw-md {
   .btn {
-    background-color: color.$primary !important;
+    // background-color: color.$primary !important;
+    // &:hover {
+    //   background-color: color.$primary-hover !important;
+    // }
+    @include include.button-primary;
   }
 }
 
-body .hw-md_content {
+body .hw-md_content,
+body .hw-md_single__content {
   br {
     display: none;
+  }
+}
+
+#zip-entries-table {
+  width: 100%;
+}
+
+#zip-entries-table thead {
+  background-color: #fff;
+
+  th {
+    color: color.$dark;
+    text-align: left !important;
+    border-bottom: 0.05rem solid #dadee4;
+    border-bottom-width: 0.1rem;
+    padding: 0.6rem 0.4rem;
+    width: auto;
+    height: auto;
+    font-weight: 700;
+  }
+}
+#zip-entries-table tbody {
+  td {
+    text-align: left !important;
+    border-bottom: 0.05rem solid #dadee4;
+    padding: 0.6rem 0.4rem;
+    height: auto;
+    // text-transform: lowercase;
+
+    // &:first-child::before {
+    //   display: none;
+    // }
+  }
+  tr:hover {
+    background-color: rgb(255, 249, 196);
+    cursor: pointer;
+  }
+}
+
+#zip-entries-table .zip-entry-filename {
+  font-weight: 400;
+  color: color.$dark;
+  span {
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
+    // color: #66758c;
+    // color: rgb(182, 182, 182);
+    opacity: 0.4;
+    font-weight: 300;
+  }
+  strong {
+    font-weight: 600;
+    span {
+      margin: 0;
+      font-weight: 500;
+      opacity: 0.7;
+    }
   }
 }
