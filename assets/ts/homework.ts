@@ -1,7 +1,11 @@
 import { vocative } from "./vocative";
 import * as zip from "@zip.js/zip.js";
+import { debounce } from "./_incl";
+
+// TODO FUTURE: detect multiple opened modals and close them
 
 let filesAllowedToShowAsText = [".txt", ".js", ".css", ".html", ".json", ".md"];
+let zipBypassModal = true; // allow at the beginning to open the file
 
 function selectRandomFromArray(array: string[]): string {
   return array[Math.floor(Math.random() * array.length)];
@@ -20,10 +24,23 @@ function findAllUnfinishedHomeworksFromModal(homeworksWrap) {
   } catch (error) {}
 }
 
+function findAllUnfinishedHomeworksFromSingleModal(homeworksWrap) {
+  try {
+    const homeworks = homeworksWrap.querySelectorAll(
+      ".md-dialog-container[tabindex='-1'] md-dialog .hw-md_single__content"
+    );
+
+    for (let i = 0; i < homeworks.length; i++) {
+      const homework = homeworks[i];
+      enhanceHomeworkAssessment(homework, true);
+    }
+  } catch (error) {}
+}
+
 // add event listener to all homework buttons
 function enhanceSingleHomeworkFromModalAfterEvent() {
   try {
-    const homeworkButtons = document.querySelectorAll(".hw_new");
+    let homeworkButtons = document.querySelectorAll(".hw_new, .hw_checked");
     for (let i = 0; i < homeworkButtons.length; i++) {
       const homeworkButton = homeworkButtons[i];
       homeworkButton.addEventListener("click", function () {
@@ -34,7 +51,7 @@ function enhanceSingleHomeworkFromModalAfterEvent() {
 
           if (!newHomework) return;
           enhanceHomeworkAssessment(newHomework, true);
-        }, 100);
+        }, 1);
       });
     }
   } catch (error) {}
@@ -202,7 +219,7 @@ function createUrlfromText(originalText: any) {
 function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
   if (homework === null) return;
   // prevent doing this multiple times by adding a data-attribute alreadyEnhanced
-  if (homework.getAttribute("alreadyEnhanced") === "true") {
+  if (homework.getAttribute("alreadyEnhancedHomework") === "true") {
     return;
   } else {
     betterButtonsRework(homework);
@@ -221,7 +238,7 @@ function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
     let selectedMark = getSelectedMark(homework);
     automateMessagesForStudents(homework, firstName, selectedMark);
 
-    homework.setAttribute("alreadyEnhanced", "true");
+    homework.setAttribute("alreadyEnhancedHomework", "true");
   }
 }
 
@@ -280,13 +297,17 @@ function observeHomeworkCountAndUpdateMenu() {
   } catch (error) {}
 }
 
-function observeIfNewHomeworksAdded(homeworksWrap) {
+function observeIfNewHomeworksAdded(homeworksWrap, single?: boolean) {
   // if  .hw-md_item in .md-dialog in .hw-md_content is added
   // then enhance it
   const observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.type === "childList") {
-        findAllUnfinishedHomeworksFromModal(homeworksWrap);
+        if (single) {
+          findAllUnfinishedHomeworksFromSingleModal(homeworksWrap);
+        } else {
+          findAllUnfinishedHomeworksFromModal(homeworksWrap);
+        }
       }
     });
   });
@@ -800,20 +821,18 @@ function manipulateWithWindowOpen() {
   // @ts-ignore
   window.open = (function (original) {
     return function (url, windowName, windowFeatures) {
-      const urlText = url as string;
+      if (zipBypassModal) {
+        // NOTE: we have to use set timeout,
+        // otherwise it calls itself with false on return
+        setTimeout(function () {
+          zipBypassModal = false;
+        }, 100);
 
-      // @ts-ignore
-      const isZipBypassModal = window.zipBypassModal;
-
-      if (isZipBypassModal) {
-        // @ts-ignore
-        window.zipBypassModal = false;
         return original(url, windowName, windowFeatures);
       }
 
-      // TODO FUTURE: detect multiple opened modals and close them
-      // if url contains "https://fsx1.itstep.org/api/v1/files"
-      // then open the file in javascript
+      // show modal for files from fsx1.itstep.org
+      const urlText = url as string;
       if (urlText.includes("https://fsx1.itstep.org/api/v1/files")) {
         whenOpeningLinkWithFile({
           urlText,
@@ -882,6 +901,8 @@ function whenOpeningLinkWithFile({
     });
 }
 
+let debouncedTarget: HTMLElement;
+
 function bypassModalWhenRightClicked() {
   document.addEventListener("contextmenu", function (event) {
     const target = event.target as HTMLElement;
@@ -898,12 +919,49 @@ function bypassModalWhenRightClicked() {
       // prevent default context menu
       event.preventDefault();
 
-      // @ts-ignore
-      window.zipBypassModal = true;
+      if (zipBypassModal) {
+        target.click();
 
-      // trigger normal click event on the element to run via window.open
-      target.click();
+        zipBypassModal = false;
+
+        setTimeout(function () {
+          zipBypassModal = true;
+        }, 300);
+      }
     }
+  });
+}
+
+function enhanceHomeworksMain() {
+  function enhanceMultiHomeworks() {
+    const homeworksWrap = document.querySelector(".hw-md_content") as Element;
+    findAllUnfinishedHomeworksFromModal(homeworksWrap);
+    observeIfNewHomeworksAdded(homeworksWrap);
+  }
+
+  function enhanceSingleHomework() {
+    const homeworksSingleWrap = document.querySelector(".main") as Element;
+    findAllUnfinishedHomeworksFromSingleModal(homeworksSingleWrap);
+    enhanceSingleHomeworkFromModalAfterEvent();
+  }
+
+  enhanceMultiHomeworks();
+  enhanceSingleHomework();
+
+  // page_picker - add event listener to all buttons
+  // - if clicked, remove all attributes alreadyEnhancedHomework
+  // and then add them again so it will enhance all homeworks again
+  const pagePicker = document.querySelector(".page_picker") as Element;
+  pagePicker.addEventListener("click", function () {
+    // remove all attributes alreadyEnhancedHomework
+    const homeworksWrap = document.querySelectorAll(
+      "[alreadyEnhancedHomework]"
+    ) as NodeListOf<Element>;
+    homeworksWrap.forEach(function (homework) {
+      homework.removeAttribute("alreadyEnhancedHomework");
+    });
+
+    enhanceSingleHomework();
   });
 }
 
@@ -918,21 +976,15 @@ export function homeworkAutomation(state) {
   // so it would count previous rows as present
   setTimeout(function () {
     try {
-      console.log("homeworkAutomation");
+      // console.log("homeworkAutomation");
 
-      const homeworksWrap = document.querySelector(".hw-md_content") as Element;
-
-      findAllUnfinishedHomeworksFromModal(homeworksWrap);
-
-      enhanceSingleHomeworkFromModalAfterEvent();
+      enhanceHomeworksMain();
 
       observeHomeworkCountAndUpdateMenu();
-
-      observeIfNewHomeworksAdded(homeworksWrap);
 
       manipulateWithWindowOpen();
 
       bypassModalWhenRightClicked();
     } catch (error) {}
-  }, 200);
+  }, 1);
 }
