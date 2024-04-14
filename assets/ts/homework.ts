@@ -7,6 +7,7 @@ import { debounce } from "./_incl";
 let filesAllowedToShowAsText = [".txt", ".js", ".css", ".html", ".json", ".md"];
 let zipBypassModal = false; // allow at the beginning to open the file
 let zipBypassModalFirstRun = true; // allow at the beginning to open the file
+let modalFileIsOpen = false;
 
 function selectRandomFromArray(array: string[]): string {
   return array[Math.floor(Math.random() * array.length)];
@@ -328,25 +329,6 @@ function convertnl2br(text: string) {
   return text.replace(/(?:\r\n|\r|\n)/g, "<br>");
 }
 
-function addOriginalEventListenerBack() {
-  function eventListenerForOldModal(event) {
-    if (event.key === "Escape") {
-      const myDialog = document.querySelector("#myDialog") as Element;
-
-      if (myDialog) myDialog.remove();
-
-      // remove event listeners from body
-      // @ts-ignore
-      document.body.removeEventListeners("keydown");
-
-      // remove class .md-dialog-is-showing from body
-      document.body.classList.remove("md-dialog-is-showing");
-    }
-  }
-
-  document.body.addEventListener("keyup", eventListenerForOldModal);
-}
-
 function eventListenerForNewModal(event) {
   if (event.key === "Escape") {
     const dialogElement = document.querySelector("#modal-file") as Element;
@@ -354,19 +336,7 @@ function eventListenerForNewModal(event) {
   }
 }
 
-function removeEventListenerFromOriginalDialogWrapper() {
-  // BUG: works randomly, not always, needs future rework
-  // @ts-ignore
-  document.body.removeEventListeners("keydown");
-  // @ts-ignore
-  document.body.removeEventListeners("keyup");
-  // @ts-ignore
-  document.body.removeEventListeners("keypress");
-}
-
 function createEventListenerForFileModal() {
-  // removeEventListenerFromOriginalDialogWrapper();
-
   document.addEventListener("keyup", eventListenerForNewModal);
 }
 
@@ -386,7 +356,7 @@ function addDataToPre(type: any, data: any, pre: HTMLPreElement) {
     }
     dataText = ifUnableToRead(dataText);
     dataText = convertnl2br(dataText);
-    // @ts-ignore
+
     pre.innerHTML = dataText;
   }
   if (filesAllowedToShowAsText.includes("." + type)) {
@@ -399,6 +369,7 @@ function addDataToPre(type: any, data: any, pre: HTMLPreElement) {
     }
 
     dataText = convertnl2br(dataText);
+
     pre.innerHTML = dataText;
   }
 
@@ -941,6 +912,35 @@ function bypassModalWhenRightClicked() {
   });
 }
 
+function addCtrlAForNewModals() {
+  // if #modal-file has classList active
+  // add event listener to body
+  // if ctrl + a is pressed, select all text in .modal-pre
+
+  document.body.addEventListener("keydown", function (event) {
+    if (event.ctrlKey) {
+      if (event.key === "a" || event.key === "A") {
+        const homeWorks = document.querySelector(".homeWorks") as Element;
+        if (homeWorks) {
+          event.preventDefault();
+        }
+
+        const modalFile = document.querySelector("#modal-file") as Element;
+        if (modalFile) {
+          if (modalFile.classList.contains("active")) {
+            const pre = modalFile.querySelector(".modal-pre") as HTMLPreElement;
+            const selection = window.getSelection() as Selection;
+            const range = document.createRange();
+            range.selectNodeContents(pre);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+        }
+      }
+    }
+  });
+}
+
 function enhanceHomeworksMain() {
   function enhanceMultiHomeworks() {
     const homeworksWrap = document.querySelector(".hw-md_content") as Element;
@@ -997,6 +997,8 @@ export function homeworkAutomation(state) {
       manipulateWithWindowOpen();
 
       bypassModalWhenRightClicked();
+
+      addCtrlAForNewModals();
     } catch (error) {}
   }, 1);
 }
