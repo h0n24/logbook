@@ -5,7 +5,8 @@ import { debounce } from "./_incl";
 // TODO FUTURE: detect multiple opened modals and close them
 
 let filesAllowedToShowAsText = [".txt", ".js", ".css", ".html", ".json", ".md"];
-let zipBypassModal = true; // allow at the beginning to open the file
+let zipBypassModal = false; // allow at the beginning to open the file
+let zipBypassModalFirstRun = true; // allow at the beginning to open the file
 
 function selectRandomFromArray(array: string[]): string {
   return array[Math.floor(Math.random() * array.length)];
@@ -193,6 +194,8 @@ function createUrlfromText(originalText: any) {
       urlText = urlText.replace("www.", "");
       // remove everything after ? plus remove ? itself
       urlText = urlText.replace(/\?.*/, "");
+      // remove everything after # plus remove # itself
+      urlText = urlText.replace(/#.*/, "");
       // remove last / if it's there
       urlText = urlText.replace(/\/$/, "");
 
@@ -918,6 +921,11 @@ function bypassModalWhenRightClicked() {
     function bypassModal() {
       // prevent default context menu
       event.preventDefault();
+
+      if (zipBypassModalFirstRun) {
+        zipBypassModal = true;
+        zipBypassModalFirstRun = false;
+      }
 
       if (zipBypassModal) {
         target.click();
