@@ -594,6 +594,10 @@ md-dialog-content.hw-md_single__content.hw-better-buttons {
       opacity: 0.7;
     }
   }
+
+  .hw-md_single__back {
+    display: inline-flex;
+  }
 }
 
 body {
@@ -612,6 +616,8 @@ body {
 
   .hw-md_single__btn-wrap button.hw-md_single__btn-decline.md-ink-ripple:hover {
     background-color: color.$red-hover;
+    color: #fff;
+    cursor: help;
   }
 
   .hw-md_single__select-mark .md-button {

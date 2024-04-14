@@ -209,6 +209,14 @@ function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
 
     makeURLinTextClickable(homework);
 
+    if (single) {
+      // better back button than original
+      const backButton = homework.querySelector(
+        ".hw-md_single__back"
+      ) as HTMLElement;
+      btnBackCreateInnerHtml(backButton);
+    }
+
     let firstName = findStudentsFirstName(homework, single);
     let selectedMark = getSelectedMark(homework);
     automateMessagesForStudents(homework, firstName, selectedMark);
@@ -474,16 +482,12 @@ function createModalTitle(
   title: HTMLHeadingElement,
   showBackButton?: boolean
 ) {
-  console.log({ showBackButton });
   if (showBackButton) {
     // create back button
     const backButton = document.createElement("a");
     backButton.href = "#close";
-    backButton.classList.add("btn-modal-zip-back");
 
-    // add svg icon
-    const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 -6.5 38 38"><path fill="#1C1C1F" d="M11.19.58.67 11l-.08.09c-.35.34-.56.8-.59 1.35v.18c.03.43.2.84.52 1.21l.12.13 10.55 10.46a2 2 0 0 0 2.82 0 2 2 0 0 0 0-2.82l-7.28-7.23H36a2 2 0 1 0 0-3.98H6.96l7.05-6.99a2 2 0 0 0 0-2.82 2 2 0 0 0-2.82 0Z"/></svg>`;
-    backButton.innerHTML = svgIcon + "<span>Zpět</span>";
+    btnBackCreateInnerHtml(backButton);
 
     // add event listener that runs createZipFileTable();
     backButton.addEventListener("click", function (event) {
@@ -502,6 +506,13 @@ function createModalTitle(
       title.textContent = `Obsah souboru .${type}`;
     }
   }
+}
+
+function btnBackCreateInnerHtml(backButton: HTMLElement) {
+  backButton.classList.add("btn-modal-zip-back");
+  // add svg icon
+  const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 -6.5 38 38"><path fill="#1C1C1F" d="M11.19.58.67 11l-.08.09c-.35.34-.56.8-.59 1.35v.18c.03.43.2.84.52 1.21l.12.13 10.55 10.46a2 2 0 0 0 2.82 0 2 2 0 0 0 0-2.82l-7.28-7.23H36a2 2 0 1 0 0-3.98H6.96l7.05-6.99a2 2 0 0 0 0-2.82 2 2 0 0 0-2.82 0Z"/></svg>`;
+  backButton.innerHTML = svgIcon + "<span>Zpět</span>";
 }
 
 function updateDownloadButtonData(
@@ -907,7 +918,7 @@ export function homeworkAutomation(state) {
   // so it would count previous rows as present
   setTimeout(function () {
     try {
-      // console.log("homeworkAutomation");
+      console.log("homeworkAutomation");
 
       const homeworksWrap = document.querySelector(".hw-md_content") as Element;
 
