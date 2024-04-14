@@ -276,12 +276,14 @@ html main.content .homeWorks {
 
 html .md-dialog-container {
   .hw-md_single__back img {
+    user-select: none;
     width: 1rem;
     height: 1rem;
     opacity: 0;
     animation: fadeIn 1.6s forwards 0.1s;
   }
   .hw-md_single_teacher__file-download {
+    user-select: none;
     width: 1rem;
     height: 1rem;
     opacity: 0;
@@ -289,8 +291,21 @@ html .md-dialog-container {
   }
 
   .flex-center.hw-md_single_btn-delete {
+    user-select: none;
     opacity: 0;
     animation: fadeIn 1.6s forwards 0.1s;
+    transition: all 0.3s;
+    // padding: 1rem;
+    // margin-left: -1rem;
+    // border-radius: 5px;
+    // background: red;
+
+    padding: style.$button-padding;
+    border-radius: style.$border-radius;
+
+    &:hover {
+      background: color.$red-hover;
+    }
   }
 
   .hw-md_single_stud-work__answer-text {
@@ -327,6 +342,7 @@ html .md-dialog-container {
       }
 
       .hw-md_single_teacher__file {
+        user-select: none;
         color: color.$primary;
       }
     }
@@ -495,7 +511,7 @@ html .md-dialog-container {
     transition: filter 0.3s;
     filter: brightness(1);
     &:hover {
-      filter: brightness(0.5);
+      filter: brightness(1.5);
     }
   }
 }
@@ -677,6 +693,11 @@ body {
       filter: grayscale(0%);
     }
   }
+
+  .hw-md_single__add-mark,
+  .hw-md_single__add-comment {
+    user-select: none;
+  }
 }
 
 body md-dialog.hw-md_single,
@@ -768,6 +789,7 @@ body .hw-md_single__content {
   display: flex;
   margin-top: -0.5rem;
   margin-left: -0.5rem;
+  user-select: none;
 
   svg {
     width: 1.25rem !important;
@@ -784,5 +806,23 @@ body .hw-md_single__content {
 
   &:hover {
     background-color: color.$secondary-alt-hover;
+  }
+}
+
+.homework-copy-url-to-clipboard {
+  user-select: none;
+  float: right;
+  padding: 1rem;
+  border-radius: 100%;
+  margin-top: -1rem;
+  margin-right: -1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: color.$secondary;
+  }
+  &:active,
+  &:focus {
+    background: color.$primary-hover;
   }
 }

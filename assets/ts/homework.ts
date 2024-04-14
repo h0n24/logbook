@@ -7,7 +7,6 @@ import { debounce } from "./_incl";
 let filesAllowedToShowAsText = [".txt", ".js", ".css", ".html", ".json", ".md"];
 let zipBypassModal = false; // allow at the beginning to open the file
 let zipBypassModalFirstRun = true; // allow at the beginning to open the file
-let modalFileIsOpen = false;
 
 function selectRandomFromArray(array: string[]): string {
   return array[Math.floor(Math.random() * array.length)];
@@ -171,6 +170,25 @@ function makeURLinTextClickable(homework) {
 
     if (newText) {
       studentsComments.innerHTML = newText;
+    }
+
+    // detect if original text contains only url
+    let onlyUrl = originalText.match(/(https?:\/\/[^\s]+)/g);
+    console.log({ onlyUrl });
+
+    if (onlyUrl && onlyUrl.length === 1) {
+      // add clickable span to the studentsComments
+      const span = document.createElement("span");
+      span.classList.add("homework-copy-url-to-clipboard");
+      span.textContent = "📋";
+      span.title = "Kopírovat odkaz do schránky";
+      studentsComments.appendChild(span);
+
+      // add event listener to the span
+      span.addEventListener("click", function () {
+        // copy url to clipboard
+        navigator.clipboard.writeText(onlyUrl[0]);
+      });
     }
   } catch (error) {
     console.log("makeURLinTextClickable error", error);
@@ -974,6 +992,7 @@ function enhanceHomeworksMain() {
 
     // reset bypass modal
     zipBypassModal = false;
+    zipBypassModalFirstRun = true;
   });
 }
 
