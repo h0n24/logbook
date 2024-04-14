@@ -649,6 +649,7 @@ function createZipFileTable() {
     entries.forEach(function (entry) {
       if (entry.directory) return; // skip directories
       if (entry.filename.startsWith("__MACOSX")) return; // skip mac os x files
+      if (entry.filename.includes(".DS_Store")) return; // skip .DS_Store files
 
       createTrForZipFileTable(entry, tbody);
     });
@@ -970,6 +971,9 @@ function enhanceHomeworksMain() {
     });
 
     enhanceSingleHomework();
+
+    // reset bypass modal
+    zipBypassModal = false;
   });
 }
 
