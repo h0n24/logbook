@@ -1,6 +1,7 @@
 @use "abstracts/color";
 @use "abstracts/style";
 @use "abstracts/include";
+@use "abstracts/animations";
 
 html main.content .homeWorks {
   padding: 3rem !important;
@@ -274,8 +275,35 @@ html main.content .homeWorks {
 } // end of homeworks
 
 html .md-dialog-container {
+  .hw-md_single__back img {
+    width: 1rem;
+    height: 1rem;
+    opacity: 0;
+    animation: fadeIn 1.6s forwards 0.1s;
+  }
+  .hw-md_single_teacher__file-download {
+    width: 1rem;
+    height: 1rem;
+    opacity: 0;
+    animation: fadeIn 1.6s forwards 0.1s;
+  }
+
+  .flex-center.hw-md_single_btn-delete {
+    opacity: 0;
+    animation: fadeIn 1.6s forwards 0.1s;
+  }
+
   .hw-md_single_stud-work__answer-text {
     margin-bottom: 1rem;
+
+    a {
+      text-decoration: none;
+      color: color.$primary;
+      color: #0060df;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
 
     &:empty {
       display: none;
@@ -717,5 +745,38 @@ body .hw-md_single__content {
       font-weight: 500;
       opacity: 0.7;
     }
+  }
+}
+
+.btn-modal-zip-back {
+  background-color: #fff;
+  color: color.$dark;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  // padding: 0.5rem;
+  // border-radius: style.$border-radius;
+  border-radius: 1rem;
+  // margin-top: 1rem;
+  text-decoration: none;
+
+  display: flex;
+  margin-top: -0.5rem;
+  margin-left: -0.5rem;
+
+  svg {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    margin-top: -0.1rem;
+  }
+  svg path {
+    fill: color.$dark;
+  }
+
+  span {
+    margin-left: 0.5rem;
+  }
+
+  &:hover {
+    background-color: color.$secondary-alt-hover;
   }
 }

@@ -34,7 +34,7 @@ function enhanceSingleHomeworkFromModalAfterEvent() {
 
           if (!newHomework) return;
           enhanceHomeworkAssessment(newHomework, true);
-        }, 10);
+        }, 100);
       });
     }
   } catch (error) {}
@@ -167,9 +167,31 @@ function createUrlfromText(originalText: any) {
   if (url) {
     for (let i = 0; i < url.length; i++) {
       const selURL = url[i];
+
+      // make url more readable
+      let urlText = selURL;
+      // remove http:// or https://
+      urlText = urlText.replace(/(^\w+:|^)\/\//, "");
+      // remowe www.
+      urlText = urlText.replace("www.", "");
+      // remove everything after ? plus remove ? itself
+      urlText = urlText.replace(/\?.*/, "");
+      // remove last / if it's there
+      urlText = urlText.replace(/\/$/, "");
+
+      // url encode back to original
+      urlText = decodeURIComponent(urlText);
+
+      // if longer than 60 characters, shorten it in the middle with …
+      if (urlText.length > 40) {
+        const firstHalf = urlText.slice(0, 15);
+        const secondHalf = urlText.slice(-15);
+        urlText = firstHalf + " … " + secondHalf;
+      }
+
       text = text.replace(
         selURL,
-        `<a href="${selURL}" target="_blank">${selURL}</a>`
+        `<a href="${selURL}" title="Celá adresa: ${selURL}" target="_blank">${urlText}</a>`
       );
     }
 
@@ -183,14 +205,13 @@ function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
   if (homework.getAttribute("alreadyEnhanced") === "true") {
     return;
   } else {
-    let firstName = findStudentsFirstName(homework, single);
-    let selectedMark = getSelectedMark(homework);
-
     betterButtonsRework(homework);
 
-    automateMessagesForStudents(homework, firstName, selectedMark);
-
     makeURLinTextClickable(homework);
+
+    let firstName = findStudentsFirstName(homework, single);
+    let selectedMark = getSelectedMark(homework);
+    automateMessagesForStudents(homework, firstName, selectedMark);
 
     homework.setAttribute("alreadyEnhanced", "true");
   }
@@ -448,13 +469,38 @@ function createModalLayout(data: any, url: any, type: any, filename: any = "") {
   document.body.appendChild(dialog);
 }
 
-function createModalTitle(type: any, title: HTMLHeadingElement) {
-  if (type === "text") {
-    title.textContent = "Obsah souboru .txt";
-  } else if (type === "zip") {
-    title.textContent = "Obsah souboru .zip vyjma složek";
+function createModalTitle(
+  type: any,
+  title: HTMLHeadingElement,
+  showBackButton?: boolean
+) {
+  console.log({ showBackButton });
+  if (showBackButton) {
+    // create back button
+    const backButton = document.createElement("a");
+    backButton.href = "#close";
+    backButton.classList.add("btn-modal-zip-back");
+
+    // add svg icon
+    const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 -6.5 38 38"><path fill="#1C1C1F" d="M11.19.58.67 11l-.08.09c-.35.34-.56.8-.59 1.35v.18c.03.43.2.84.52 1.21l.12.13 10.55 10.46a2 2 0 0 0 2.82 0 2 2 0 0 0 0-2.82l-7.28-7.23H36a2 2 0 1 0 0-3.98H6.96l7.05-6.99a2 2 0 0 0 0-2.82 2 2 0 0 0-2.82 0Z"/></svg>`;
+    backButton.innerHTML = svgIcon + "<span>Zpět</span>";
+
+    // add event listener that runs createZipFileTable();
+    backButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      createZipFileTable();
+    });
+
+    title.innerHTML = "";
+    title.appendChild(backButton);
   } else {
-    title.textContent = `Obsah souboru .${type}`;
+    if (type === "text") {
+      title.textContent = "Obsah souboru .txt";
+    } else if (type === "zip") {
+      title.textContent = "Obsah souboru .zip";
+    } else {
+      title.textContent = `Obsah souboru .${type}`;
+    }
   }
 }
 
@@ -480,14 +526,20 @@ function updateDownloadButtonData(
   }
 }
 
-function createModalForFiles(data, url, type, filename = "") {
+function createModalForFiles(
+  data,
+  url,
+  type,
+  filename = "",
+  showBackButton = false
+) {
   // detect if #modal-file exists and if it does, just update the content
   const existingModal = document.querySelector("#modal-file");
   if (existingModal) {
     existingModal.classList.add("active");
 
     const title = existingModal.querySelector("h4") as HTMLHeadingElement;
-    createModalTitle(type, title);
+    createModalTitle(type, title, showBackButton);
 
     const pre = existingModal.querySelector(".modal-pre") as HTMLPreElement;
     addDataToPre(type, data, pre);
@@ -533,30 +585,43 @@ async function readZipFile(blob, originalFileUrl) {
     const uint8Array = new Uint8Array(arrayBuffer);
     const zipReader = new zip.ZipReader(new zip.Uint8ArrayReader(uint8Array));
 
-    const entriesTable = document.createElement("table");
-    entriesTable.id = "zip-entries-table";
-    entriesTable.classList.add("zip-entries-table");
-
-    const thead = createTheadForZipFileTable();
-    const tbody = document.createElement("tbody");
-
-    zipReader.getEntries().then(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.directory) return; // skip directories
-        if (entry.filename.startsWith("__MACOSX")) return; // skip mac os x files
-
-        createTrForZipFileTable(entry, tbody);
-      });
-    });
-
     // save zipReaderData to global variable
     // @ts-ignore
     window.zipReaderData = zipReader;
 
-    entriesTable.appendChild(thead);
-    entriesTable.appendChild(tbody);
-    createModalForFiles(entriesTable, originalFileUrl, "zip");
+    // @ts-ignore
+    window.zipOriginalFileUrl = originalFileUrl;
+
+    createZipFileTable();
   });
+}
+
+function createZipFileTable() {
+  // @ts-ignore
+  let zipReader2 = window.zipReaderData;
+
+  // @ts-ignore
+  let originalFileUrl = window.zipOriginalFileUrl;
+
+  const entriesTable = document.createElement("table");
+  entriesTable.id = "zip-entries-table";
+  entriesTable.classList.add("zip-entries-table");
+
+  const thead = createTheadForZipFileTable();
+  const tbody = document.createElement("tbody");
+
+  zipReader2.getEntries().then(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.directory) return; // skip directories
+      if (entry.filename.startsWith("__MACOSX")) return; // skip mac os x files
+
+      createTrForZipFileTable(entry, tbody);
+    });
+  });
+
+  entriesTable.appendChild(thead);
+  entriesTable.appendChild(tbody);
+  createModalForFiles(entriesTable, originalFileUrl, "zip", "", false);
 }
 
 function toCzechNumber(number) {
@@ -676,7 +741,7 @@ function addClickEventToTr(tr: HTMLTableRowElement) {
         });
 
         const newDataURL = URL.createObjectURL(pdfBlob);
-        createModalForFiles(newDataURL, url, "pdf", entry.filename);
+        createModalForFiles(newDataURL, url, "pdf", entry.filename, true);
       } else {
         // download the file defaultly
         const link = document.createElement("a");
@@ -713,7 +778,8 @@ function getTextFromBlobAndCreateModal(blob: any, entry: any, type: any) {
       reader.result,
       dataUrl,
       typeCorrections,
-      entry.filename
+      entry.filename,
+      true
     );
   });
 }
@@ -725,7 +791,16 @@ function manipulateWithWindowOpen() {
     return function (url, windowName, windowFeatures) {
       const urlText = url as string;
 
-      // TODO FUTURE: detect open modals and close them
+      // @ts-ignore
+      const isZipBypassModal = window.zipBypassModal;
+
+      if (isZipBypassModal) {
+        // @ts-ignore
+        window.zipBypassModal = false;
+        return original(url, windowName, windowFeatures);
+      }
+
+      // TODO FUTURE: detect multiple opened modals and close them
       // if url contains "https://fsx1.itstep.org/api/v1/files"
       // then open the file in javascript
       if (urlText.includes("https://fsx1.itstep.org/api/v1/files")) {
@@ -796,6 +871,31 @@ function whenOpeningLinkWithFile({
     });
 }
 
+function bypassModalWhenRightClicked() {
+  document.addEventListener("contextmenu", function (event) {
+    const target = event.target as HTMLElement;
+
+    if (target.classList.contains("hw-md_stud-work__download-wrap")) {
+      bypassModal();
+    }
+
+    if (target.classList.contains("hw-md_single_stud-work__download-wrap")) {
+      bypassModal();
+    }
+
+    function bypassModal() {
+      // prevent default context menu
+      event.preventDefault();
+
+      // @ts-ignore
+      window.zipBypassModal = true;
+
+      // trigger normal click event on the element to run via window.open
+      target.click();
+    }
+  });
+}
+
 export function homeworkAutomation(state) {
   if (state !== "homeWork") return;
 
@@ -820,6 +920,8 @@ export function homeworkAutomation(state) {
       observeIfNewHomeworksAdded(homeworksWrap);
 
       manipulateWithWindowOpen();
+
+      bypassModalWhenRightClicked();
     } catch (error) {}
   }, 200);
 }
