@@ -253,7 +253,7 @@ function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
       const backButton = homework.querySelector(
         ".hw-md_single__back"
       ) as HTMLElement;
-      btnBackCreateInnerHtml(backButton);
+      btnBackCreateInnerHtml(backButton, false);
     }
 
     let firstName = findStudentsFirstName(homework, single);
@@ -503,7 +503,7 @@ function createModalTitle(
     const backButton = document.createElement("a");
     backButton.href = "#close";
 
-    btnBackCreateInnerHtml(backButton);
+    btnBackCreateInnerHtml(backButton, true);
 
     // add event listener that runs createZipFileTable();
     backButton.addEventListener("click", function (event) {
@@ -524,11 +524,17 @@ function createModalTitle(
   }
 }
 
-function btnBackCreateInnerHtml(backButton: HTMLElement) {
+function btnBackCreateInnerHtml(backButton: HTMLElement, isZipModal?: boolean) {
   backButton.classList.add("btn-modal-zip-back");
   // add svg icon
   const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 -6.5 38 38"><path fill="#1C1C1F" d="M11.19.58.67 11l-.08.09c-.35.34-.56.8-.59 1.35v.18c.03.43.2.84.52 1.21l.12.13 10.55 10.46a2 2 0 0 0 2.82 0 2 2 0 0 0 0-2.82l-7.28-7.23H36a2 2 0 1 0 0-3.98H6.96l7.05-6.99a2 2 0 0 0 0-2.82 2 2 0 0 0-2.82 0Z"/></svg>`;
-  backButton.innerHTML = svgIcon + "<span>Zpět</span>";
+
+  if (isZipModal) {
+    backButton.title = "Klávesová zkratka: Backspace";
+    backButton.innerHTML = svgIcon + "<span>Zpět na seznam souborů</span>";
+  } else {
+    backButton.innerHTML = svgIcon + "<span>Zpět</span>";
+  }
 }
 
 function updateDownloadButtonData(
@@ -742,6 +748,46 @@ function createTrForZipFileTable(
   });
 }
 
+// Helper function to manage blob and URL creation and to open a modal
+function handleBlobAndOpenModal(
+  blob,
+  fileType,
+  entryFilename,
+  showModalBackButton
+) {
+  const newBlob = new Blob([blob], { type: fileType });
+  const objectURL = URL.createObjectURL(newBlob);
+  createModalForFiles(
+    objectURL,
+    objectURL,
+    fileType.split("/")[1],
+    entryFilename,
+    showModalBackButton
+  );
+}
+
+function downloadFile(blob, filename) {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  link.remove();
+}
+
+function processFileBasedOnType(entry, blob) {
+  let extension = getExtensionFromEntryFilename(entry);
+
+  if (filesAllowedToShowAsText.includes("." + extension)) {
+    getTextFromBlobAndCreateModal(blob, entry, extension);
+  } else if (filesAllowedToShowAsImage.includes("." + extension)) {
+    handleBlobAndOpenModal(blob, `image/${extension}`, entry.filename, true);
+  } else if (entry.filename.includes(".pdf")) {
+    handleBlobAndOpenModal(blob, "application/pdf", entry.filename, true);
+  } else {
+    downloadFile(blob, entry.filename);
+  }
+}
+
 function addClickEventToTr(tr: HTMLTableRowElement) {
   // @ts-ignore
   const zipReader = window.zipReaderData;
@@ -753,43 +799,7 @@ function addClickEventToTr(tr: HTMLTableRowElement) {
     const entry = entries.find((e) => e.filename === tr.dataset.filename);
 
     entry.getData(new zip.BlobWriter()).then(function (blob) {
-      // get extension from entry.filename
-      let extension = getExtensionFromEntryFilename(entry);
-
-      // if includes .txt, .js, .css, .html, .json, .md
-      // then show the text in modal
-      if (filesAllowedToShowAsText.includes("." + extension)) {
-        getTextFromBlobAndCreateModal(blob, entry, extension);
-      } else if (filesAllowedToShowAsImage.includes("." + extension)) {
-        const url = URL.createObjectURL(blob);
-
-        // has to be converted to new blob so it changes the type
-        const pdfBlob = new Blob([blob], {
-          type: "image/" + extension,
-        });
-
-        // create base64 from blob
-        const newDataURL = URL.createObjectURL(pdfBlob);
-
-        createModalForFiles(newDataURL, url, extension, entry.filename, true);
-      } else if (entry.filename.includes(".pdf")) {
-        const url = URL.createObjectURL(blob);
-
-        // has to be converted to new blob so it changes the type
-        const pdfBlob = new Blob([blob], {
-          type: "application/pdf",
-        });
-
-        const newDataURL = URL.createObjectURL(pdfBlob);
-        createModalForFiles(newDataURL, url, "pdf", entry.filename, true);
-      } else {
-        // download the file defaultly
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = entry.filename;
-        link.click();
-        link.remove();
-      }
+      processFileBasedOnType(entry, blob);
     });
   });
 }
@@ -945,32 +955,56 @@ function bypassModalWhenRightClicked() {
   });
 }
 
-function addCtrlAForNewModals() {
+function addKeyboardCtrlAShortcut(event: KeyboardEvent) {
+  if (event.ctrlKey) {
+    if (event.key === "a" || event.key === "A") {
+      const homeWorks = document.querySelector(".homeWorks") as Element;
+      if (homeWorks) {
+        event.preventDefault();
+      }
+
+      const modalFile = document.querySelector("#modal-file") as Element;
+      if (modalFile) {
+        if (modalFile.classList.contains("active")) {
+          const pre = modalFile.querySelector(".modal-pre") as HTMLPreElement;
+          const selection = window.getSelection() as Selection;
+          const range = document.createRange();
+          range.selectNodeContents(pre);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+      }
+    }
+  }
+}
+
+function addKeyboardBackspaceShortcut(event: KeyboardEvent) {
+  // if #modal-file has classList active
+  // when pressed backspace
+  // trigger click on .btn-modal-zip-back
+  if (event.key === "Backspace") {
+    const modalFile = document.querySelector("#modal-file") as Element;
+    if (modalFile) {
+      if (modalFile.classList.contains("active")) {
+        const backButton = modalFile.querySelector(
+          ".btn-modal-zip-back"
+        ) as HTMLElement;
+        if (backButton) {
+          backButton.click();
+        }
+      }
+    }
+  }
+}
+
+function addKeyboardShortcutsForNewModals() {
   // if #modal-file has classList active
   // add event listener to body
   // if ctrl + a is pressed, select all text in .modal-pre
 
   document.body.addEventListener("keydown", function (event) {
-    if (event.ctrlKey) {
-      if (event.key === "a" || event.key === "A") {
-        const homeWorks = document.querySelector(".homeWorks") as Element;
-        if (homeWorks) {
-          event.preventDefault();
-        }
-
-        const modalFile = document.querySelector("#modal-file") as Element;
-        if (modalFile) {
-          if (modalFile.classList.contains("active")) {
-            const pre = modalFile.querySelector(".modal-pre") as HTMLPreElement;
-            const selection = window.getSelection() as Selection;
-            const range = document.createRange();
-            range.selectNodeContents(pre);
-            selection.removeAllRanges();
-            selection.addRange(range);
-          }
-        }
-      }
-    }
+    addKeyboardCtrlAShortcut(event);
+    addKeyboardBackspaceShortcut(event);
   });
 }
 
@@ -1032,7 +1066,7 @@ export function homeworkAutomation(state) {
 
       bypassModalWhenRightClicked();
 
-      addCtrlAForNewModals();
+      addKeyboardShortcutsForNewModals();
     } catch (error) {}
   }, 1);
 }
