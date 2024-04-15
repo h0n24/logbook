@@ -316,6 +316,8 @@ html .md-dialog-container {
 
   .hw-md_single_stud-work__answer-text {
     margin-bottom: 1rem;
+    // display as pre
+    white-space: pre-wrap;
 
     a {
       text-decoration: none;
@@ -950,6 +952,7 @@ body .hw-md_single__content {
   &:hover {
     // background: rgba(color.$primary, 10%);
     background-color: color.$red-hover;
+    color: #fff;
   }
   &:focus,
   &:active,

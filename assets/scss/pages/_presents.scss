@@ -88,6 +88,15 @@ html main.content .presents {
     order: 1;
   }
 
+  span[ng-if="countRequestPresents > 0"] {
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+
+  div[ng-show="groupCount < 1 && !not_student"] {
+    margin-top: -2rem;
+  }
+
   .dialog-demo-content button,
   .set-date button {
     width: auto;

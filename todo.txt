@@ -1,10 +1,16 @@
+TODO next:
+
+ukazovat, jestli jsem zadal dú -> na hlavní stránce
+
 TODO possible:
+
+materials -> rework vyhledávání materiálů (přidat kategorie, přidat poznámky, přidat fuzzy search)
+
+při kliknutí na md-select, autofocus input, pokud existuje (viz v materiálech)
 
 zakomponovat tisk layoutu studentů
 
 zakomponovat responder a zjednodušit práci
-
-při kliknutí na md-select, autofocus input, pokud existuje
 
 předělat stud_profile controller (po kliknutí na studenta v seznamu)
 
@@ -12,7 +18,6 @@ sjednotit barvy u legendy apod
 
 groupsPage když není vybraná skupina -> legenda má opacity
 
-ukazovat, jestli jsem zadal dú -> na hlavní stránce
 
 rework setTimeout přes https://jsfiddle.net/e7gw3Lm8/
 
