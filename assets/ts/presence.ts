@@ -291,10 +291,17 @@ function detectIfNotDiamonds() {
     }
   }
 
+  function debounceDetectIfDiamods(): EventListenerOrEventListenerObject {
+    return () => {
+      // activeTabElement.removeAttribute("data-diamonds");
+      incl.debounce(detectIfNotDiamonds, 3000)();
+    };
+  }
+
   try {
     detectDiamonds();
 
-    incl.debounce(detectIfNotDiamonds, 3000)();
+    // debounceDetectIfDiamods();
   } catch (error) {}
 
   try {
@@ -302,15 +309,21 @@ function detectIfNotDiamonds() {
     const awarded = document.querySelectorAll(".awarded span i");
 
     awarded.forEach((award) => {
-      award.addEventListener("click", () => {
-        // activeTabElement.removeAttribute("data-diamonds");
-        incl.debounce(detectIfNotDiamonds, 3000)();
-      });
+      // remove previous listener
+      award.removeEventListener("click", debounceDetectIfDiamods());
+
+      award.addEventListener("click", debounceDetectIfDiamods());
     });
   } catch (error) {}
 }
 
 function detectIfNotRated() {
+  function debounceDetectIfNotRated(): EventListenerOrEventListenerObject {
+    return () => {
+      incl.debounce(detectIfNotRated, 3000)();
+    };
+  }
+
   const activeTabElement = document.querySelector(
     ".presents .pars li.active"
   ) as HTMLElement;
@@ -354,17 +367,15 @@ function detectIfNotRated() {
       ".presentr-classWork md-input-container"
     );
     classWorkSelects.forEach((select) => {
-      select.addEventListener("click", () => {
-        incl.debounce(detectIfNotRated, 3000)();
-      });
+      select.removeEventListener("click", debounceDetectIfNotRated());
+      select.addEventListener("click", debounceDetectIfNotRated());
     });
 
     const classWorkSelects2 = document.querySelector(
       selectorForWorkInClass
     ) as HTMLElement;
-    classWorkSelects2.addEventListener("click", () => {
-      incl.debounce(detectIfNotRated, 3000)();
-    });
+    classWorkSelects2.removeEventListener("click", debounceDetectIfNotRated());
+    classWorkSelects2.addEventListener("click", debounceDetectIfNotRated());
   } catch (error) {}
 }
 
@@ -603,10 +614,10 @@ export function presenceEnhancements(state) {
       whenTeacherRoleChanged();
       whenClickedOnPresenceTh();
 
+      printTable();
+
       automaticallySelectOnlineForOnlineGroups();
       detectIfNotRatedOrDiamonds();
-
-      printTable();
 
       // when clicked on .presents .pars li
       const tabs = document.querySelectorAll(".presents .pars li");
@@ -615,7 +626,9 @@ export function presenceEnhancements(state) {
       });
 
       // observe .table-wrapper for changes
-      const tableWrapper = document.querySelector(".table-wrapper");
+      const tableWrapper = document.querySelector(
+        ".table-wrapper"
+      ) as HTMLElement;
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.addedNodes.length) {
@@ -623,6 +636,11 @@ export function presenceEnhancements(state) {
             detectIfNotRatedOrDiamonds();
           }
         });
+      });
+
+      observer.observe(tableWrapper, {
+        childList: true,
+        subtree: true,
       });
     } catch (error) {}
   }, 100);
