@@ -70,3 +70,11 @@
     background-color: color.$secondary-alt-hover;
   }
 }
+
+@mixin add-focus {
+  &:focus,
+  &:active {
+    border-color: color.$primary;
+    box-shadow: 0 0 0 0.1rem rgba(color.$primary, 0.2);
+  }
+}

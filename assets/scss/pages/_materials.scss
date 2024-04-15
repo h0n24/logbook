@@ -104,4 +104,10 @@ html .binding_materials {
   #realScroll {
     padding-top: 0;
   }
+
+  // TODO: no clue what this is for
+  // it always shows empty, no reference in js, probably forgotten
+  .internal_menu {
+    display: none;
+  }
 }

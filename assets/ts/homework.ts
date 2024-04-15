@@ -4,10 +4,84 @@ import { debounce } from "./_incl";
 
 // TODO FUTURE: detect multiple opened modals and close them
 
-let filesAllowedToShowAsText = [".txt", ".js", ".css", ".html", ".json", ".md"];
-let filesAllowedToShowAsImage = [".png", ".jpg", ".jpeg", ".gif", ".svg"];
+const filesAllowedToShowAsText = [
+  ".txt",
+  ".js",
+  ".css",
+  ".html",
+  ".json",
+  ".md",
+];
+const filesAllowedToShowAsImage = [".png", ".jpg", ".jpeg", ".gif", ".svg"];
 let zipBypassModal = false; // allow at the beginning to open the file
 let zipBypassModalFirstRun = true; // allow at the beginning to open the file
+const hwAutocompleteAnswers = [
+  {
+    title: "Super",
+    choices: [
+      "Super!",
+      "Paráda!",
+      "Skvělé!",
+      "Super práce!",
+      "Parádní!",
+      "Super práce!",
+      "Parádní práce!",
+      "Dokonalé!",
+      "Perfektní!",
+      "Luxusní!",
+      "Mega dobré!",
+      "Hezké!",
+      "Výborné!",
+      "Wow!",
+      "Wow, super!",
+      "Bravo!",
+      "Skvělá práce!",
+    ],
+  },
+  {
+    title: "Díky",
+    choices: [
+      "Díky!",
+      "Děkuji!",
+      "Díky moc!",
+      "Bezva, děkuju!",
+      "Děkuji, skvělý!",
+      "Díky, super!",
+    ],
+  },
+  {
+    title: "Jejda",
+    choices: [
+      "Jejda, to se moc nepodařilo.",
+      "Jejda, to se nepovedlo. :(",
+      "Jejda, to se nepovedlo, zkus to znovu prosím.",
+    ],
+  },
+  {
+    title: "Znovu",
+    choices: [
+      "Zkus to znovu prosím.",
+      "Zkus to ještě jednou prosím.",
+      "Věřím, že to zvládneš opravit.",
+      "Prosím pošli mi to ještě jednou.",
+      "Prosím pošli mi to znovu.",
+      "Prosím zkus si to opravit.",
+    ],
+  },
+  {
+    title: "Figma",
+    choices: [
+      "Komentáře přidány do Figmy.",
+      "Rady a tipy jsem napsal do Figmy.",
+      "Komentáře a rady k nalezení ve Figmě.",
+      "Tipy přidány do Figmy jako komentáře.",
+    ],
+  },
+];
+
+let focusedElement = document.activeElement as HTMLElement;
+let lastFocusedAutocompleteAnswer = null as any;
+let keyboardShortcutsForNewModals = null as any;
 
 function selectRandomFromArray(array: string[]): string {
   return array[Math.floor(Math.random() * array.length)];
@@ -117,6 +191,14 @@ function automateMessagesForStudents(
 
   if (!textarea) return;
 
+  // if textarea already has a some text value, don't overwrite it
+  if (textarea.value) return;
+
+  // remove focus functionality
+  if (textarea.getAttribute("md-select-on-focus")) {
+    textarea.removeAttribute("md-select-on-focus");
+  }
+
   let partialInteresting = selectRandomFromArray([
     "Moc pěkná práce!",
     "Luxusní práce!",
@@ -141,19 +223,18 @@ function automateMessagesForStudents(
   const message = `Zdravím ${firstName},\n\r${partialInteresting} ${partialEnjoying} ${partialGetting} ${selectedMark} bodů.\n\rS pozdravem`;
   textarea.value = message;
 
+  // TODO: check extensively if it doesn't break anything
+  // create a copy of textarea so it prevents the original textarea onselect event
+  // create clone and replace it with original textarea
+  // if it doesn't have alreadyEnhancedHomework attribute, then enhance it
+  if (!homework.getAttribute("alreadyEnhancedHomework")) {
+    const textareaClone = textarea.cloneNode(true) as HTMLTextAreaElement;
+    textarea.replaceWith(textareaClone);
+  }
+
   // simulate input event
   textarea.dispatchEvent(new Event("input"));
   textarea.dispatchEvent(new Event("change"));
-
-  // hide message count until textarea is changed
-  const messageCount = homework.querySelector(
-    ".hw-md_single_teacher__file-count"
-  ) as HTMLSpanElement;
-  messageCount.style.display = "none";
-
-  textarea.addEventListener("input", function () {
-    messageCount.style.display = "unset";
-  });
 }
 
 function makeURLinTextClickable(homework) {
@@ -191,7 +272,7 @@ function makeURLinTextClickable(homework) {
       });
     }
   } catch (error) {
-    console.log("makeURLinTextClickable error", error);
+    console.warn("makeURLinTextClickable error", error);
   }
 }
 
@@ -259,6 +340,16 @@ function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
     let firstName = findStudentsFirstName(homework, single);
     let selectedMark = getSelectedMark(homework);
     automateMessagesForStudents(homework, firstName, selectedMark);
+
+    // add autocomplete
+    const textarea = homework.querySelector(
+      ".hw-md_single_teacher__comment"
+    ) as HTMLTextAreaElement;
+
+    // when textarea is focused, show autocomplete
+    textarea.addEventListener("focus", function () {
+      createAnswersAutocomplete(textarea, true);
+    });
 
     homework.setAttribute("alreadyEnhancedHomework", "true");
   }
@@ -960,7 +1051,12 @@ function addKeyboardCtrlAShortcut(event: KeyboardEvent) {
     if (event.key === "a" || event.key === "A") {
       const homeWorks = document.querySelector(".homeWorks") as Element;
       if (homeWorks) {
-        event.preventDefault();
+        // if not textarea is focused
+        focusedElement = document.activeElement as HTMLElement;
+
+        if (focusedElement.tagName !== "TEXTAREA") {
+          event.preventDefault();
+        }
       }
 
       const modalFile = document.querySelector("#modal-file") as Element;
@@ -997,15 +1093,230 @@ function addKeyboardBackspaceShortcut(event: KeyboardEvent) {
   }
 }
 
-function addKeyboardShortcutsForNewModals() {
-  // if #modal-file has classList active
-  // add event listener to body
-  // if ctrl + a is pressed, select all text in .modal-pre
+function regenerateMessageOnCtrlShiftSpace(target: HTMLElement) {
+  let targetDialog = target.closest(".hw-better-buttons") as HTMLElement;
 
-  document.body.addEventListener("keydown", function (event) {
+  // detect if target dialog has child with class .hw-md_content or .hw-md_single__content
+  if (targetDialog === null) return;
+  // if has class .hw-md_single__content
+  let isSingle = targetDialog.classList.contains("hw-md_single__content");
+
+  // get firstName and selectedMark
+  let firstName = findStudentsFirstName(targetDialog, isSingle);
+  let selectedMark = getSelectedMark(targetDialog);
+
+  // add random message to the textarea
+  automateMessagesForStudents(targetDialog, firstName, selectedMark);
+}
+
+// Helper function to determine if a space should be added
+function shouldAddSpace(character, isStart) {
+  // List of whitespace characters where we don't want to add an extra space
+  const whitespaceChars = [" ", "\n", "\t"];
+
+  // Check if the character at the specified position is not a space or is one of the whitespace characters
+  if (isStart) {
+    return !whitespaceChars.includes(character) ? " " : "";
+  } else {
+    return whitespaceChars.includes(character) ? "" : " ";
+  }
+}
+
+function addTextAnswerToTextarea(target: HTMLElement, addedText: string) {
+  let textarea = target as HTMLTextAreaElement;
+  let cursorPosition = textarea.selectionStart;
+  let text = textarea.value;
+  let textBefore = text.substring(0, cursorPosition);
+  let textAfter = text.substring(cursorPosition);
+
+  // if user also selected a text, remove it
+  // @ts-ignore
+  let selectedText = window.getSelection().toString();
+  if (selectedText) {
+    textAfter = text.substring(cursorPosition + selectedText.length);
+  }
+
+  let addSpaceBefore = shouldAddSpace(textBefore.slice(-1), false);
+  let addSpaceAfter = shouldAddSpace(textAfter.slice(0, 1), true);
+
+  // detect if selectedText is the whole text in textarea
+  // if so, remove it
+  if (selectedText === text) {
+    addSpaceBefore = "";
+    addSpaceAfter = "";
+  }
+
+  // if textBefore is empty, dont add space before
+  if (textBefore === "") {
+    addSpaceBefore = "";
+  }
+
+  let textToAdd = addSpaceBefore + addedText + addSpaceAfter;
+  let newText = textBefore + textToAdd + textAfter;
+
+  textarea.value = newText;
+  textarea.dispatchEvent(new Event("input"));
+  textarea.dispatchEvent(new Event("change"));
+
+  // set cursor position after the added text
+  textarea.selectionStart = cursorPosition + textToAdd.length;
+  textarea.selectionEnd = cursorPosition + textToAdd.length;
+
+  textarea.focus();
+}
+
+function createAnswersAutocomplete(target, skipFocus = false) {
+  // find parent .hw-better-buttons
+  let targetDialog = target.closest(".hw-better-buttons") as HTMLElement;
+
+  // add element to the textarea
+  let teacherWrap = targetDialog.querySelector(
+    ".hw-md_single_teacher__file-wrap"
+  );
+
+  if (teacherWrap) {
+    // detect if element already exists
+    let addedWrapElement = teacherWrap.querySelector(
+      ".added-autocomplete-wrap"
+    );
+    if (addedWrapElement) {
+      // set first element as active
+      if (!skipFocus) {
+        let firstElement = addedWrapElement.querySelector(
+          ".added-autocomplete-answer"
+        ) as HTMLElement;
+        firstElement.focus();
+      }
+
+      return;
+    }
+
+    // create wrap element
+    addedWrapElement = document.createElement("div");
+    addedWrapElement.classList.add("added-autocomplete-wrap");
+    addedWrapElement.classList.add("added-autocomplete-wrap-active");
+
+    // create items from hwAutocompleteAnswers variable
+    for (let i = 0; i < hwAutocompleteAnswers.length; i++) {
+      let answer = hwAutocompleteAnswers[i];
+      let answerText = answer.title;
+
+      // crate new a href element
+      let addedAnswerElement = document.createElement("a") as HTMLAnchorElement;
+      addedAnswerElement.href = "#";
+      addedAnswerElement.classList.add("added-autocomplete-answer");
+      addedAnswerElement.textContent = answerText;
+
+      const addClickForAnswerElement = function (
+        this: HTMLAnchorElement,
+        event: MouseEvent
+      ): void {
+        event.preventDefault();
+        let answerChoice =
+          answer.choices[Math.floor(Math.random() * answer.choices.length)];
+        addTextAnswerToTextarea(target, answerChoice);
+      };
+      // when clicked
+      addedAnswerElement.addEventListener("click", addClickForAnswerElement);
+
+      addedWrapElement.appendChild(addedAnswerElement);
+    }
+
+    // add close element
+    let addedCloseElement = document.createElement("a");
+    addedCloseElement.href = "#";
+    addedCloseElement.classList.add("added-autocomplete-close");
+    addedCloseElement.textContent = "";
+    addedCloseElement.title = "Zavřít rychlé odpovědi";
+
+    addedCloseElement.addEventListener("click", function (event) {
+      event.preventDefault();
+      addedWrapElement.remove();
+    });
+
+    addedWrapElement.appendChild(addedCloseElement);
+    teacherWrap.appendChild(addedWrapElement);
+
+    // add info about keyboard shortcuts
+    // to the closest .hw-md_single__add-comment element
+    const addCommentElements = targetDialog.querySelectorAll(
+      ".hw-md_single__add-comment"
+    ) as NodeListOf<HTMLElement>;
+    for (let i = 0; i < addCommentElements.length; i++) {
+      const addCommentElement = addCommentElements[i] as HTMLElement;
+      const textContent = addCommentElement.textContent ?? "";
+
+      if (textContent.includes("Přidat komentář")) {
+        addCommentElement.classList.add("added-autocomplete-info");
+        addCommentElement.title =
+          "Klávesové zkratky: Ctrl + mezerník pro rychlé odpovědi. Ctrl + Shift + mezerník pro náhodnou zprávu (je nutné předem vše smazat).";
+      }
+    }
+
+    if (!skipFocus) {
+      // set first element as active
+      let firstElement = addedWrapElement.querySelector(
+        ".added-autocomplete-answer"
+      ) as HTMLElement;
+      firstElement.focus();
+    }
+  }
+}
+
+function keyboardShortcutsForNewModalsBase(): (
+  this: HTMLElement,
+  ev: KeyboardEvent
+) => any {
+  return function (event) {
     addKeyboardCtrlAShortcut(event);
     addKeyboardBackspaceShortcut(event);
-  });
+
+    // when pressing ctrl+space inside .hw-md_single_teacher__comment
+    // add random message to the textarea
+    if (event.ctrlKey && event.key === " ") {
+      // get textarea from event target
+      let target = event.target as HTMLElement;
+
+      // if target is textarea
+      if (target.classList.contains("hw-md_single_teacher__comment")) {
+        // if user also pressed shift key
+        if (event.shiftKey) {
+          // find closest parent target "md-dialog"
+          regenerateMessageOnCtrlShiftSpace(target);
+          event.preventDefault();
+        } else {
+          createAnswersAutocomplete(target);
+          event.preventDefault();
+        }
+      }
+    } else if (event.key === " ") {
+      // if any .added-autocomplete-answer is focused, then click on it
+      focusedElement = document.activeElement as HTMLElement;
+      if (focusedElement.classList.contains("added-autocomplete-answer")) {
+        event.preventDefault();
+        focusedElement.click();
+      }
+      if (focusedElement.classList.contains("added-autocomplete-close")) {
+        event.preventDefault();
+        focusedElement.click();
+      }
+    }
+  };
+}
+function addKeyboardShortcutsForNewModals() {
+  // Remove the previous event listener if it exists
+  if (keyboardShortcutsForNewModals) {
+    document.body.removeEventListener("keydown", keyboardShortcutsForNewModals);
+  }
+
+  // Create a new instance of the function
+  keyboardShortcutsForNewModals = keyboardShortcutsForNewModalsBase();
+
+  document.body.addEventListener(
+    "keydown",
+    keyboardShortcutsForNewModalsBase(),
+    { once: true }
+  );
 }
 
 function enhanceHomeworksMain() {
@@ -1067,6 +1378,30 @@ export function homeworkAutomation(state) {
       bypassModalWhenRightClicked();
 
       addKeyboardShortcutsForNewModals();
+
+      // TODO: probably unnecessary?
+      // observe body and if it loses class ".md-dialog-is-showing", then remove .added-autocomplete-wrap
+      const bodyObserver = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (!document.body.classList.contains("md-dialog-is-showing")) {
+            const addedWrapElement = document.querySelectorAll(
+              ".added-autocomplete-wrap"
+            );
+            addedWrapElement.forEach(function (element) {
+              element.remove();
+            });
+          }
+        });
+      });
+
+      const config = {
+        attributes: true,
+        attributeFilter: ["class"],
+        childList: false,
+        subtree: false,
+      };
+
+      bodyObserver.observe(document.body, config);
     } catch (error) {}
   }, 1);
 }

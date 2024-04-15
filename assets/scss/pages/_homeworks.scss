@@ -310,6 +310,8 @@ html .md-dialog-container {
     &:hover {
       background: color.$red-hover;
     }
+
+    @include include.add-focus;
   }
 
   .hw-md_single_stud-work__answer-text {
@@ -831,4 +833,148 @@ body .hw-md_single__content {
     transition: background-color 0.125s;
     background: color.$primary-hover;
   }
+}
+
+.added-autocomplete-wrap {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+
+  box-sizing: border-box;
+  width: 100%;
+  // background: color.$yellow-hover;
+  // background-color: lighten(color.$yellow-hover, 7%);
+  background: transparent;
+
+  height: 45px;
+  user-select: none;
+  padding: 0 1rem;
+  overflow-x: auto;
+
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  // border: 1px solid rgba(0, 0, 0, 0.15);
+  // border-top-color: color.$yellow-hover;
+  z-index: 2;
+
+  &.added-autocomplete-wrap-active {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+
+  &:before {
+    content: "";
+    z-index: 1;
+    display: block;
+    position: absolute;
+    width: 120px;
+    height: 20px;
+    background-color: #fdfdfd;
+    bottom: 10px;
+    left: 10px;
+  }
+}
+
+.added-autocomplete-answer {
+  display: inline-flex;
+  align-items: center;
+  background-color: #eef0f3;
+  // background-color: color.$inputs;
+  color: color.$dark;
+  // background-color: #fff;
+  border-radius: 5rem;
+  font-size: 90%;
+  height: 1.2rem;
+  line-height: 0.8rem;
+  margin: 0.1rem;
+  max-width: 320px;
+  overflow: hidden;
+  padding: 0.2rem 0.4rem;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 2;
+
+  &.added-autocomplete-wrap-active {
+    display: inline-flex;
+  }
+
+  &:hover {
+    background: rgba(color.$primary, 10%);
+  }
+  &:focus,
+  &:active,
+  .active {
+    // box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+    box-shadow: 0 0 0 0.1rem rgba(color.$primary, 0.8);
+  }
+}
+
+.added-autocomplete-close {
+  display: inline-flex;
+  align-items: center;
+  // background-color: #eef0f3;
+  // background-color: color.$inputs;
+  color: color.$dark;
+  // background-color: #fff;
+  border-radius: 5rem;
+  font-size: 90%;
+  height: 1.2rem;
+  width: 1.2rem;
+  line-height: 0.8rem;
+  margin: 0.1rem;
+  max-width: 320px;
+  overflow: hidden;
+  padding: 0.4rem;
+  text-decoration: none;
+  vertical-align: middle;
+
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  position: relative;
+  justify-self: flex-end;
+  margin-left: auto; // pushes to the end
+
+  &.added-autocomplete-wrap-active {
+    display: inline-flex;
+  }
+
+  &:hover {
+    // background: rgba(color.$primary, 10%);
+    background-color: color.$red-hover;
+  }
+  &:focus,
+  &:active,
+  .active {
+    // box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+    box-shadow: 0 0 0 0.1rem rgba(color.$primary, 0.8);
+  }
+
+  &:before {
+    content: "✕";
+    display: inline-block;
+    position: absolute;
+    margin-left: 0.25rem;
+  }
+}
+
+.added-autocomplete-info {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: color.$inputs;
+}
+
+// TODO: show after javascript rework?
+.hw-md_single_teacher__file-count {
+  display: none !important;
 }
