@@ -85,8 +85,60 @@ function testPing() {
 }
 
 // check ping regularly
+// beware, this function is very CPU intensive
+// on a low-end computer it can cause around 5-6% CPU usage
 export function checkPing() {
   const body = document.body as HTMLElement;
+
+  // skip if computer is running on less than 2 cores
+  if (navigator.hardwareConcurrency < 2) {
+    return;
+  }
+
+  // we want to do a performance test, check how fast the computer is
+  // and run the code only if it can handle the load
+  let performance = window.performance;
+  if (!performance) {
+    console.log("Performance API is not supported.");
+    return;
+  }
+  let canRun = false;
+
+  let skip = false;
+  const howLong = 10;
+  const howMany = 200;
+  const startTest = performance.now();
+
+  for (let i = 1; i < howMany; i++) {
+    if (skip) {
+      continue;
+    }
+    // generate array of 1000 random numbers
+    const arr = Array.from({ length: howMany }, () =>
+      Math.floor(Math.random() * howMany)
+    );
+    // sort the array
+    arr.sort();
+
+    if (performance.now() - startTest > howLong) {
+      skip = true;
+    }
+
+    if (i === howMany - 1) {
+      canRun = true;
+    }
+  }
+
+  const endTest = performance.now();
+  setTimeout(() => {
+    if (endTest - startTest < howLong) {
+      canRun = true;
+    }
+  }, howLong);
+
+  if (!canRun) {
+    return;
+  }
 
   // init
   const pulseElement = document.createElement("div");

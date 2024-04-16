@@ -230,30 +230,42 @@ function automaticallySelectOnlineForOnlineGroups() {
   const groupNameText = groupName.textContent as string;
   if (groupNameText.includes("JAO")) {
     // automatically set student as online to every online group
-    const mainCheckbox = document.querySelector(
-      "#isAllOnline"
-    ) as HTMLInputElement;
-    if (mainCheckbox) {
-      if (!mainCheckbox.checked) {
-        try {
-          const checkboxes = document.querySelectorAll(
+
+    // if no checkbox in class .check-techers is checked, return
+    const checkboxes = document.querySelectorAll(".check-techers input");
+    let isAnyChecked = false;
+    checkboxes.forEach((checkbox) => {
+      if ((checkbox as HTMLInputElement).checked) {
+        isAnyChecked = true;
+      }
+    });
+
+    if (!isAnyChecked) return;
+
+    // when clicked on .presents .presents span
+    const presents = document.querySelectorAll(".presents .presents span");
+    presents.forEach((present) => {
+      present.addEventListener("click", () => {
+        setTimeout(() => {
+          // select closest tr
+          const tr = present.closest("tr") as HTMLElement;
+          if (!tr) return;
+
+          // select checkbox
+          const checkbox = tr.querySelector(
             ".presents-online input[type='checkbox']"
           );
-          checkboxes.forEach((checkbox) => {
-            // set every checkbox to checked
-            if (!(checkbox as HTMLInputElement).checked) {
-              // simulate click
-              (checkbox as HTMLElement).click();
-            }
-          });
+          if (!checkbox) return;
 
-          mainCheckbox.checked = true;
-        } catch (error) {
-          console.error("Error while setting online groups");
-        }
-      }
-    }
+          // if only one checkbox is not checked, click on it
+          if (!(checkbox as HTMLInputElement).checked) {
+            (checkbox as HTMLElement).click();
+          }
+        }, 500);
+      });
+    });
 
+    // for design purposes -> to change color/opacity
     // add class hide-cell-online to class .wrapper-students
     const wrapperStudents = document.querySelector(
       ".wrapper-students"
@@ -261,6 +273,26 @@ function automaticallySelectOnlineForOnlineGroups() {
 
     if (wrapperStudents) {
       wrapperStudents.classList.add("hide-cells-online");
+    }
+
+    // for UX purposes -> add title to every checkbox
+    const checkbox = document.querySelectorAll(
+      ".presents-online input[type='checkbox']"
+    );
+    if (checkbox) {
+      checkbox.forEach((check) => {
+        let checkBox = check as HTMLElement;
+        checkBox.title =
+          "Pokud je student na hodině, automaticky se zaškrtne při přítomnosti, netřeba nic dalšího dělat.";
+      });
+    }
+
+    const checkboxLabel = document.querySelector(
+      'label[for="isAllOnline"]'
+    ) as HTMLElement;
+    if (checkboxLabel) {
+      checkboxLabel.title =
+        "U online skupin je automaticky zaškrtnuto online při přítomnosti";
     }
   }
 }
@@ -311,7 +343,6 @@ function detectIfNotDiamonds() {
     awarded.forEach((award) => {
       // remove previous listener
       award.removeEventListener("click", debounceDetectIfDiamods());
-
       award.addEventListener("click", debounceDetectIfDiamods());
     });
   } catch (error) {}

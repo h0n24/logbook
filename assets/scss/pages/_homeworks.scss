@@ -970,11 +970,7 @@ body .hw-md_single__content {
 }
 
 .added-autocomplete-info {
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  text-decoration-color: color.$inputs;
+  @include include.add-text-underline-dotted;
 }
 
 // TODO: show after javascript rework?

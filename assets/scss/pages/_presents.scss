@@ -427,9 +427,9 @@ html main.content .presents {
   }
 
   .wrapper-students.hide-cells-online {
-    // thead tr th.online,
-    // tbody tr td.presents-online {
-    // }
+    label {
+      @include include.add-text-underline-dotted;
+    }
 
     thead tr th.online .visit_online {
       opacity: 0.5;
@@ -453,11 +453,7 @@ html main.content .presents {
     &:hover {
       th.number,
       th:nth-child(8) {
-        text-decoration: underline;
-        text-decoration-style: dotted;
-        text-decoration-thickness: 1px;
-        text-decoration-color: color.$inputs;
-        text-underline-offset: 4px;
+        @include include.add-text-underline-dotted;
       }
     }
 

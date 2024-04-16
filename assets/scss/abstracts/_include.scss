@@ -78,3 +78,11 @@
     box-shadow: 0 0 0 0.1rem rgba(color.$primary, 0.2);
   }
 }
+
+@mixin add-text-underline-dotted {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color.$inputs;
+  text-underline-offset: 4px;
+}
