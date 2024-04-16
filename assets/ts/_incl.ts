@@ -70,19 +70,25 @@ export function trapAddEventListeners() {
     let symbolHidden = Symbol("hidden");
 
     function hidden(instance) {
-      if (instance[symbolHidden] === undefined) {
-        let area = {};
-        instance[symbolHidden] = area;
-        return area;
-      }
+      try {
+        if (instance === undefined) return null;
 
-      return instance[symbolHidden];
+        if (instance[symbolHidden] === undefined) {
+          let area = {};
+          instance[symbolHidden] = area;
+          return area;
+        }
+        return instance[symbolHidden];
+      } catch (error) {
+        console.error("Error in hidden function", error);
+        return null;
+      }
     }
 
     function listenersFrom(instance) {
       let area = hidden(instance);
-      if (!area.listeners) {
-        area.listeners = [];
+      if (area == null || area.listeners === undefined) {
+        return [];
       }
       return area.listeners;
     }

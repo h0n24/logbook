@@ -429,6 +429,14 @@ function copyTableForPrinting() {
   tableCopy.id = "print-table";
   tableCopy.classList.add("print-table");
 
+  // remove hidden + uncheck
+  const presentsOnline = tableCopy.querySelectorAll(".presents-online input");
+  presentsOnline.forEach((input) => {
+    let inputElement = input as HTMLInputElement;
+    inputElement.classList.remove("ng-hide");
+    inputElement.checked = false;
+  });
+
   // append new body to html with table
   const newBody = document.createElement("body");
   newBody.id = "print-table-body";
