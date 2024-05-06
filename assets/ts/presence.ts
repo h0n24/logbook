@@ -655,6 +655,11 @@ export function presenceEnhancements(state) {
 
       printTable();
 
+      // @ts-ignore
+      window.getPresenceAsText = function () {
+        console.log("test");
+      };
+
       automaticallySelectOnlineForOnlineGroups();
       detectIfNotRatedOrDiamonds();
 

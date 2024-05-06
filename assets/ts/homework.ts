@@ -223,15 +223,6 @@ function automateMessagesForStudents(
   const message = `Zdravím ${firstName},\n\r${partialInteresting} ${partialEnjoying} ${partialGetting} ${selectedMark} bodů.\n\rS pozdravem`;
   textarea.value = message;
 
-  // TODO: check extensively if it doesn't break anything
-  // create a copy of textarea so it prevents the original textarea onselect event
-  // create clone and replace it with original textarea
-  // if it doesn't have alreadyEnhancedHomework attribute, then enhance it
-  if (!homework.getAttribute("alreadyEnhancedHomework")) {
-    const textareaClone = textarea.cloneNode(true) as HTMLTextAreaElement;
-    textarea.replaceWith(textareaClone);
-  }
-
   // simulate input event
   textarea.dispatchEvent(new Event("input"));
   textarea.dispatchEvent(new Event("change"));
@@ -346,6 +337,13 @@ function enhanceHomeworkAssessment(homework: Element, single?: boolean) {
       ".hw-md_single_teacher__comment"
     ) as HTMLTextAreaElement;
 
+    // select parent
+    const parent = textarea.parentElement as HTMLElement;
+    parent.addEventListener("onchange", function () {
+      createAnswersAutocomplete(textarea, true);
+    });
+
+    // TODO: add back after solving the focus all bug
     // when textarea is focused, show autocomplete
     textarea.addEventListener("focus", function () {
       createAnswersAutocomplete(textarea, true);

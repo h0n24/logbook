@@ -15,7 +15,7 @@ function examsCtrl($scope, examsHttp, $compile, $sce, $templateRequest, $filter,
     $scope.baseExamsMark = [];
     $scope.EXAM_MARKS = EXAM_MARKS;
     $scope.MAX_FILES_SIZE = 10000000; //максимальный размер загруженных файлов 10MB (пример 155288 - 155 кб )
-    $scope.examFile = {}; // эказменационная работа
+    $scope.examFile = {}; // экзаменационная работа
     $scope.download_url = $rootScope.download_url;
     $scope.commentModel = {}; //комментарий к экзаменационной работе
     $scope.MAX_COMMENT_CHARS = 255; // максимальное количество символов комментария
@@ -31,7 +31,7 @@ function examsCtrl($scope, examsHttp, $compile, $sce, $templateRequest, $filter,
     });
 
     /**
-     * Если строка имеет спецсимволы html то этот вызова дает возможность вывести коректный вид строки
+     * Если строка имеет спецсимволы html, то этот вызов дает возможность вывести корректный вид строки
      * @param str
      * @returns {*}
      */
@@ -40,7 +40,7 @@ function examsCtrl($scope, examsHttp, $compile, $sce, $templateRequest, $filter,
     };
 
     /**
-     * Инициализвция оценок для выпадающих списков
+     * Инициализация оценок для выпадающих списков
      */
     $scope.initMarks = function () {
         $scope.examsMark = [];
@@ -163,10 +163,10 @@ function examsCtrl($scope, examsHttp, $compile, $sce, $templateRequest, $filter,
 
     $scope.th_colums = [
         {date: '№'},
-        {date: $filter('translate')('group')},
-        {date: $filter('translate')('subject')},
-        {date: $filter('translate')('date_start')},
-        {date: $filter('translate')('date_end')}
+        {date: 'group'},
+        {date: 'subject'},
+        {date: 'date_start'},
+        {date: 'date_end'}
     ];
 
     $scope.public = {showNowMarksForm : true};
@@ -302,7 +302,7 @@ function examsCtrl($scope, examsHttp, $compile, $sce, $templateRequest, $filter,
     };
 
     /**
-     * Проверка длины комметария
+     * Проверка длины комментария
      * @param comment
      * @returns {*}
      */

@@ -2,6 +2,22 @@
 var app_module = angular.module('app');
 app_module.controller('reportCtrl', ['$scope', '$sce', 'reportHttp', reportCtrl]);
 
+app_module.filter('translateDay', function() {
+  var translations = {
+      'Mon': 'day_short_0',
+      'Tue': 'day_short_1',
+      'Wed': 'day_short_2',
+      'Thu': 'day_short_3',
+      'Fri': 'day_short_4',
+      'Sat': 'day_short_5',
+      'Sun': 'day_short_6'
+  };
+
+  return function(input) {
+      return translations[input];
+  };
+});
+
 function reportCtrl($scope, $sce, reportHttp){
 
     $scope.getWidthStartPosition = getWidthStartPosition;

@@ -141,6 +141,8 @@ function profileCtrl($scope, profileHttp, $filter, baseHttp, $mdToast, SOCIAL_MA
     $scope.getContentAuthorData = function() {
         contentAuthorHttp.getContentAuthorData().success(function (r) {
             $scope.contentData = r;
+            $scope.contentData.additional_phone = null;
+            $scope.contentData.additional_email = null;
         })
     };
 
@@ -149,6 +151,9 @@ function profileCtrl($scope, profileHttp, $filter, baseHttp, $mdToast, SOCIAL_MA
      */
     $scope.sendContent = function () {
         let data = {};
+        $scope.contentData.current_form = $scope.current_form;
+        $scope.contentData.current_direction = $scope.current_direction;
+        $scope.contentData.specialization = $scope.specialization;
         data['ContentAuthorForm'] = $scope.contentData;
         contentAuthorHttp.sendContent(angular.toJson(data)).success(function (r) {
             if (r.error) {

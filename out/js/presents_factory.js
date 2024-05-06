@@ -110,6 +110,9 @@ app_module.factory('presentsHttp', ['$http', '$rootScope', function($http, $root
         },
         getUnitVersions : function(data){
             return $http.get('/dom-zad-auto-unit/versions', data);
-        }
+        },
+        testingUnit : function(data){
+            return $http.post('/presents/testing-unit', data);
+        },
     };
 }]);

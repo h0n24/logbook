@@ -1,9 +1,9 @@
 var app = angular.module('app');
-app.controller('addHomeWorkCtrl', ['$scope','presentsHttp', 'localStorageService', '$rootScope', '$filter', 'baseHttp', 'OVERDUE_DAYS', '$mdToast', '$mdDialog', 'DIRECTORY_TYPE', addHomeWorkCtrl])
+app.controller('addHomeWorkCtrl', ['$scope','presentsHttp', 'localStorageService', '$rootScope', '$filter', '$sce', 'baseHttp', 'OVERDUE_DAYS', '$mdToast', '$mdDialog', 'DIRECTORY_TYPE', addHomeWorkCtrl])
 
 const ALLOWED_COVER_TYPES = ["image/jpeg", "image/png"];
 
-function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, $filter, baseHttp, OVERDUE_DAYS, $mdToast, $mdDialog, DIRECTORY_TYPE){
+function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, $filter, $sce, baseHttp, OVERDUE_DAYS, $mdToast, $mdDialog, DIRECTORY_TYPE){
     $scope.form = {};
     $scope.cur_group     = localStorageService.get('cur_group_pr');
     $scope.cur_lenta     = localStorageService.get('cur_lenta_pr');
@@ -12,17 +12,26 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
     $scope.cur_spec      = localStorageService.get('cur_spec_pr');
     $scope.theme         = localStorageService.get('theme');
     $scope.form.deadline = 0;
-    $scope.SELECT_FILE = $filter('translate')('select_file_dz');
+    $scope.SELECT_FILE = $filter('translate')('select_file');
     $scope.file_hw_filename = $scope.SELECT_FILE;
     $scope.file_cover = $scope.SELECT_FILE;
 
     $scope.autotestValues = {
-        is_autotest: 0,// по умолчанию автотесты не выбраны
+        is_autotest: 0, // по умолчанию автотесты не выбраны
         unit_language: null,
         unit_type: null,
         unit_test: null,
+        unit_code: null,
         select_unit_version: null,
     };
+
+    $scope.autotestResponseError = '';
+    $scope.autotestResponseErrorStatusEnum = {
+        NONE: 0,
+        SUCCESS: 1,
+        FAILED: 2
+    };
+    $scope.autotestResponseErrorStatus = $scope.autotestResponseErrorStatusEnum.NONE;
 
     // данные для селектов
     $scope.autotestLists = {
@@ -117,12 +126,30 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
                     }
                 }
             }
+            //проверка поля тема
+            if (!$scope.form.dz_theme) {
+                $mdToast.show({
+                    hideDelay   : 4000,
+                    position    : 'top right',
+                    template: '<md-toast class="md-toast red">' + $filter('translate')('invalid_them') + '</md-toast>',
+                });
+                return false;
+            }
             //проверка типа файла
             if ($scope.form.filename_cover && !ALLOWED_COVER_TYPES.includes($scope.form.filename_cover.type)) {
                 $mdToast.show({
                     hideDelay   : 4000,
                     position    : 'top right',
                     template: '<md-toast class="md-toast red">' + $filter('translate')('invalid_file_cover') + '</md-toast>',
+                });
+                return false;
+            }
+            //проверка типа файла
+            if ($scope.autotestValues.is_autotest===1 && (!$scope.autotestValues.unit_type || !$scope.autotestValues.unit_test)) {
+                $mdToast.show({
+                    hideDelay   : 4000,
+                    position    : 'top right',
+                    template: '<md-toast class="md-toast red">' + $filter('translate')(!$scope.autotestValues.unit_type ? 'invalid_unit_type' : 'invalid_unit_test') + '</md-toast>',
                 });
                 return false;
             }
@@ -345,8 +372,47 @@ function addHomeWorkCtrl($scope, presentsHttp, localStorageService, $rootScope, 
         $scope.getUnitLanguages = function () {
             presentsHttp.getUnitLanguages().success(function (r) {
                 $scope.autotestLists.unitLanguages = r;
+                if (Object.keys($scope.autotestLists.unitLanguages).length) {
+                    $scope.autotestValues.unit_language = Object.keys($scope.autotestLists.unitLanguages)[0];
+                }
             });
         };
+
+        $scope.nit_test_hw = function () {
+            $scope.autotestResponseErrorStatus = $scope.autotestResponseErrorStatusEnum.NONE;
+            $scope.autotestResponseError = ''; // reset autotest response
+
+            const data = {
+                language: $scope.autotestValues.unit_language,
+                unit: $scope.autotestValues.unit_test,
+                code: $scope.autotestValues.unit_code,
+                type: $scope.autotestValues.unit_type,
+            };
+
+            presentsHttp.testingUnit(data).success(function (r) {
+                if (r.success) {
+                    $scope.autotestResponseErrorStatus = $scope.autotestResponseErrorStatusEnum.SUCCESS;
+                } else if (r?.error) {
+                    $scope.autotestResponseErrorStatus = $scope.autotestResponseErrorStatusEnum.ERROR;
+                    $mdToast.show({
+                        hideDelay : 4000,
+                        position : 'top right',
+                        template : '<md-toast class="md-toast red">' + r.error + '</md-toast>',
+                    });
+
+                }
+            }).error(function (r) {
+                $scope.autotestResponseErrorStatus = $scope.autotestResponseErrorStatusEnum.ERROR;
+                $scope.autotestResponseError = $sce.trustAsHtml(r.error.replace(/<br>\s*/g, "\n").trim());
+                if (!r.error && r.message) {
+                    $mdToast.show({
+                        hideDelay : 4000,
+                        position : 'top right',
+                        template : '<md-toast class="md-toast red">' + r.message + '</md-toast>',
+                    });
+                }
+            });
+        }
 
         // раскомментировать когда понадобится
         // получить версии для автотестов

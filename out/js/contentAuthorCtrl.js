@@ -29,6 +29,8 @@ function contentAuthorCtrl($scope, profileHttp, $filter, baseHttp, $mdToast, SOC
     $scope.getContentAuthorData = function() {
         contentAuthorHttp.getContentAuthorData().success(function (r) {
             $scope.contentData = r;
+            $scope.contentData.additional_phone = null;
+            $scope.contentData.additional_email = null;
         })
     };
 
