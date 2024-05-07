@@ -1240,6 +1240,8 @@ html main.content .presents {
       // div zpráva pro studenty
       .col.s12[ng-init="form.descr = ''"] {
         order: 7;
+        margin-bottom: 1rem;
+
         &:before {
           content: "Zpráva pro studenty";
         }
