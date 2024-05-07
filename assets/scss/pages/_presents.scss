@@ -1078,6 +1078,8 @@ html main.content .presents {
       grid-template-rows: auto;
       grid-template-areas: "header header" "input button" "attention attention";
 
+      margin-bottom: 0 !important;
+
       .attention.ng-binding {
         grid-area: attention;
         margin-top: 0.5rem;
@@ -1097,10 +1099,12 @@ html main.content .presents {
         float: none;
         padding: 0 1rem;
         text-transform: none;
+        // background: color.$primary !important;
 
         display: inline-flex;
         place-items: center;
         height: 2.2rem !important;
+        // height: auto !important;
 
         span {
           font-size: 1rem;
@@ -1118,6 +1122,10 @@ html main.content .presents {
         }
       }
 
+      span.margin-bottom {
+        display: none !important;
+      }
+
       // &::before {
 
       // }
@@ -1127,6 +1135,13 @@ html main.content .presents {
       display: flex;
       flex-direction: column;
       margin-top: 2rem;
+
+      .addHomeWork-inner-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
 
       .form-field:nth-child(3),
       .recomend_home_tasks,
@@ -1147,49 +1162,118 @@ html main.content .presents {
         order: 1;
 
         &:before {
-          content: "Téma lekce";
+          content: "Nadpis domácího úkolu";
         }
       }
 
       .recomend_home_tasks {
         order: 2;
+        margin-top: 2rem;
         &:before {
           content: "Vyberte z přednastavených úkolů";
         }
       }
 
-      .form-field:nth-child(3) {
+      .form-field.file-field:nth-child(3) {
         order: 3;
+        margin-top: 3rem;
+
         &:before {
           content: "Nebo nahrejte vlastní úkol";
           grid-area: header;
           grid-column: 1 / span 2;
           justify-self: flex-start;
+          display: block;
+        }
+
+        .btn.btn-hidden {
+          @include include.button-primary;
+          height: auto !important;
+          line-height: normal !important;
+        }
+
+        .btn.btn-hidden:before {
+          font-size: 1rem;
+          content: "Nahrát zadání úkolu";
         }
       }
-      .form-field:nth-child(4) {
+
+      .form-field.file-field:nth-child(4) {
         order: 4;
+
+        .btn.btn-hidden {
+          background-color: #fff !important;
+          color: color.$primary !important;
+          border: 1px solid color.$primary;
+
+          &:hover {
+            background-color: color.$primary-hover !important;
+            color: #fff !important;
+          }
+        }
+
+        .btn.btn-hidden:before {
+          font-size: 1rem;
+          content: "Nahrát náhledový obrázek úkolu";
+        }
+      }
+
+      // div "s bez autotestu"
+      div[ng-show="!form.recommended"][aria-hidden="false"]:not(.file-field) {
+        order: 5;
+        margin-bottom: 2rem;
+
+        .margin-bottom.d-flex.flex-between {
+          display: block;
+          margin-bottom: 0.5rem !important;
+        }
       }
 
       .calendar_desctop {
-        order: 5;
+        order: 6;
         &:before {
           content: "Datum odevzdání";
           // margin-right: 1ex;
         }
       }
 
+      // div zpráva pro studenty
       .col.s12[ng-init="form.descr = ''"] {
-        order: 6;
+        order: 7;
         &:before {
           content: "Zpráva pro studenty";
         }
       }
 
       .form-field.buttons {
-        order: 7;
+        order: 8;
       }
-    }
+
+      // uzávěrka domácího úkolu
+      .margin-bottom-20 {
+        order: 9;
+
+        .margin-bottom.d-flex.flex-between {
+          display: block;
+          margin-bottom: 0.5rem !important;
+        }
+      }
+
+      // labels
+      label {
+        display: block;
+      }
+
+      // "fake" labels
+      span.display-inline-block {
+        display: block !important;
+      }
+
+      .md-datepicker-input-container input::placeholder {
+        color: rgb(188, 188, 188);
+        color: #969696;
+      }
+    } // .addHomeWork-inner
   }
 
   @media (min-width: 920px) {
