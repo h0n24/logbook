@@ -1031,6 +1031,7 @@ html main.content .presents {
       gap: 0.5rem;
       width: 100%;
       justify-content: space-between;
+      flex-wrap: wrap;
 
       button,
       a.btn {
@@ -1048,6 +1049,44 @@ html main.content .presents {
         background-color: #fff !important;
         color: color.$primary !important;
         border: 1px solid color.$primary;
+      }
+
+      .loaded-material {
+        width: 100%;
+        flex-shrink: 0;
+        margin-top: 3rem;
+
+        h3 {
+          display: inline-block;
+          // color: rgb(59, 67, 81);
+          font-size: 1.25rem;
+          line-height: 110%;
+          font-weight: 700;
+          color: color.$dark;
+          margin-bottom: 1rem;
+        }
+
+        .table thead tr > th:nth-child(2) {
+          text-indent: unset;
+        }
+
+        .table thead tr th {
+          text-transform: capitalize;
+          height: auto;
+        }
+
+        .table tbody tr td {
+          width: fit-content;
+          min-width: none;
+          height: auto;
+        }
+
+        .table tbody .long_cell {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+        }
       }
     }
 
